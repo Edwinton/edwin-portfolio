@@ -114,6 +114,27 @@ def prepare(site):
     if "facts" in about:
         about["facts_html"] = facts_html(about["facts"])
 
+
+    prof = about.get("profile", {})
+    if prof:
+        facts = []
+        for f in prof.get("facts", []):
+            facts.append(
+                f'<div class="profile-card-fact">'
+                f'<dt>{f["label"]}</dt><dd>{f["value"]}</dd></div>'
+            )
+        prof["facts_html"] = "\n".join(facts)
+
+        links = []
+        for l in prof.get("links", []):
+            target = ' target="_blank" rel="noopener"' if l["href"].startswith("http") else ""
+            links.append(
+                f'<a class="profile-card-link" href="{l["href"]}"{target}>'
+                f'<i data-lucide="{l.get("icon", "link")}"></i>'
+                f'<span>{l["label"]}</span></a>'
+            )
+        prof["links_html"] = "\n".join(links)
+
     for page_data in pages.values():
         if "body" in page_data:
             page_data["body_html"] = paragraphs_html(page_data["body"])
@@ -249,6 +270,15 @@ def build_all():
                 print(f"  (skipped locked {existing.name})")
     print("Copying static assets...")
     shutil.copytree(STATIC, OUT / "static", dirs_exist_ok=True)
+
+    # Generate CV PDF from site.json
+    print("Generating CV PDF...")
+    try:
+        import importlib, build_pdf
+        importlib.reload(build_pdf)
+        build_pdf.build()
+    except Exception as e:
+        print(f"  WARN: PDF generation failed: {e}")
     print(f"\nDone -> {OUT}")
 
 
