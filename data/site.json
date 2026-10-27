@@ -119,7 +119,60 @@
       ],
       "sections": [
         "about"
-      ]
+      ],
+      "profile": {
+        "initials": "ET",
+        "name": "Edwin Tony",
+        "role": "Computer Science Student · Aspiring Software Developer",
+        "status": "Currently exploring AI-assisted development and building small web tools.",
+        "facts": [
+          {
+            "label": "Location",
+            "value": "Kottayam, Kerala, India"
+          },
+          {
+            "label": "Focus",
+            "value": "Software development · AI & ML"
+          },
+          {
+            "label": "Studying",
+            "value": "Integrated M.Sc. CS (AI & ML)"
+          },
+          {
+            "label": "College",
+            "value": "BVM, Cherpunkal"
+          },
+          {
+            "label": "Expected",
+            "value": "2031"
+          },
+          {
+            "label": "Languages",
+            "value": "English, Malayalam"
+          },
+          {
+            "label": "Open to",
+            "value": "Internships · Remote roles"
+          }
+        ],
+        "links": [
+          {
+            "label": "Email",
+            "href": "mailto:edwinveedon@gmail.com",
+            "icon": "mail"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/Edwinton",
+            "icon": "github"
+          },
+          {
+            "label": "LinkedIn",
+            "href": "https://www.linkedin.com/in/edwin-tony-267977393/",
+            "icon": "linkedin"
+          }
+        ]
+      }
     },
     "skills": {
       "title": "Skills — Edwin Tony",
@@ -425,7 +478,7 @@
   },
   "section_templates": {
     "hero": "<section class=\"hero\">\n  <div class=\"container hero-inner\">\n    <div class=\"hero-text\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h1>{{ page.heading }}</h1>\n      <h2 class=\"hero-title\">{{ page.subtitle }}</h2>\n      <p class=\"hero-intro\">{{ page.intro }}</p>\n      <p class=\"hero-note\">{{ page.note }}</p>\n      <div class=\"hero-actions\">\n        {{ page.actions_html }}\n      </div>\n    </div>\n    <div class=\"hero-card\">\n      <div class=\"profile-circle\">{{ page.initials }}</div>\n      <h3>{{ site.name }}</h3>\n      <p class=\"profile-role\">{{ page.role }}</p>\n      <ul class=\"profile-meta\">\n        {{ page.meta_html }}\n      </ul>\n    </div>\n  </div>\n</section>",
-    "about": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n    <div class=\"about-grid\">\n      <div class=\"about-text\">{{ page.paragraphs_html }}</div>\n      <ul class=\"about-facts\">{{ page.facts_html }}</ul>\n    </div>\n  </div>\n</section>\n",
+    "about": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n\n    <div class=\"about-layout\">\n      <div class=\"about-text\">{{ page.paragraphs_html }}</div>\n\n      <aside class=\"profile-card\">\n        <div class=\"profile-card-head\">\n          <div class=\"profile-card-avatar\">{{ page.profile.initials }}</div>\n          <div>\n            <h3 class=\"profile-card-name\">{{ page.profile.name }}</h3>\n            <p class=\"profile-card-role\">{{ page.profile.role }}</p>\n          </div>\n        </div>\n\n        <p class=\"profile-card-status\">{{ page.profile.status }}</p>\n\n        <dl class=\"profile-card-facts\">\n          {{ page.profile.facts_html }}\n        </dl>\n\n        <div class=\"profile-card-links\">\n          {{ page.profile.links_html }}\n        </div>\n      </aside>\n    </div>\n\n    <ul class=\"about-facts\">{{ page.facts_html }}</ul>\n  </div>\n</section>",
     "skills": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n    <div class=\"skills-grid\">{{ skill_cards }}</div>\n    <p class=\"skills-note\">{{ page.note }}</p>\n  </div>\n</section>\n",
     "projects": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n      <p class=\"section-sub\">{{ page.subheading }}</p>\n    </div>\n    <div class=\"projects-grid\">{{ project_cards }}</div>\n  </div>\n</section>",
     "timeline": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n    <div class=\"timeline\">{{ timeline_items }}</div>\n  </div>\n</section>\n",
