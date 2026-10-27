@@ -2,80 +2,54 @@
   <div class="container">
 
     <div class="cv-toolbar no-print">
-      <button type="button" class="btn btn-primary" id="downloadCvBtn">{{ page.download_label }}</button>
-      <p class="cv-toolbar-hint">Opens your browser's print dialog — choose "Save as PDF".</p>
+      <a class="btn btn-mono" href="Edwin_Tony_CV.pdf" download>Download PDF</a>
     </div>
 
-    <article class="cv-doc">
+    <article class="cv-doc" id="cvDoc">
 
       <header class="cv-header">
-        <div class="cv-header-main">
-          <h1>{{ page.heading }}</h1>
-          <p class="cv-subtitle">{{ page.subtitle }}</p>
-        </div>
+        <h1>{{ page.heading }}</h1>
+        <p class="cv-subtitle">{{ page.subtitle }}</p>
         <p class="cv-contact">
-          <a href="mailto:{{ site.email }}" class="cv-contact-link">
-            <span class="cv-contact-label">Email</span>{{ site.email }}
-          </a>
-          <span class="cv-contact-sep">·</span>
-          <a href="{{ site.github }}" target="_blank" rel="noopener" class="cv-contact-link">
-            <span class="cv-contact-label">GitHub</span>{{ site.github_short }}
-          </a>
-          <span class="cv-contact-sep">·</span>
-          <a href="{{ site.linkedin }}" target="_blank" rel="noopener" class="cv-contact-link">
-            <span class="cv-contact-label">LinkedIn</span>{{ site.linkedin_short }}
-          </a>
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+          <span>|</span>
+          <a href="{{ site.github }}" target="_blank" rel="noopener">{{ site.github_short }}</a>
+          <span>|</span>
+          <a href="{{ site.linkedin }}" target="_blank" rel="noopener">{{ site.linkedin_short }}</a>
         </p>
       </header>
 
       <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.summary_heading }}</h2>
-        <table class="cv-table">
-          <tbody>
-            <tr><td class="cv-td-full" colspan="2">{{ page.summary }}</td></tr>
-          </tbody>
-        </table>
+        <h2>{{ page.summary_heading }}</h2>
+        <p>{{ page.summary }}</p>
       </section>
 
       <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.education_heading }}</h2>
-        <table class="cv-table cv-table-edu">
-          <thead><tr><th class="cv-th-period">Period</th><th class="cv-th-main">Qualification</th></tr></thead>
+        <h2>{{ page.education_heading }}</h2>
+        <table class="cv-table">
+          <thead><tr><th class="col-period">Period</th><th class="col-main">Qualification</th></tr></thead>
           <tbody>{{ cv_education_items }}</tbody>
         </table>
       </section>
 
       <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.skills_heading }}</h2>
-        <table class="cv-table cv-table-skills">
+        <h2>{{ page.skills_heading }}</h2>
+        <table class="cv-table">
           <tbody>{{ cv_skill_items }}</tbody>
         </table>
       </section>
 
       <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.projects_heading }}</h2>
-        <table class="cv-table cv-table-projects">
-          <thead><tr><th class="cv-th-project">Project</th><th class="cv-th-desc">Description</th></tr></thead>
+        <h2>{{ page.projects_heading }}</h2>
+        <table class="cv-table">
+          <thead><tr><th class="col-project">Project</th><th class="col-desc">Description</th></tr></thead>
           <tbody>{{ cv_project_items }}</tbody>
         </table>
       </section>
 
       <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.interests_heading }}</h2>
-        <table class="cv-table">
-          <tbody>
-            <tr><td class="cv-td-full" colspan="2"><ul class="cv-interests">{{ page.interests_html }}</ul></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="cv-section">
-        <h2 class="cv-section-title">{{ page.references_heading }}</h2>
-        <table class="cv-table">
-          <tbody>
-            <tr><td class="cv-td-full" colspan="2">{{ page.references_text }}</td></tr>
-          </tbody>
-        </table>
+        <h2>{{ page.interests_heading }}</h2>
+        <ul class="cv-interests">{{ page.interests_html }}</ul>
       </section>
 
     </article>
