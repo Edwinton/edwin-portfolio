@@ -1,0 +1,113 @@
+/* ============================================
+   Projects — richer card layout
+   ============================================ */
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--s-5);
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-6);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.project-card:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+.project-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s-4);
+  gap: var(--s-3);
+}
+.project-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-900);
+  background: var(--green-100);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.project-card[data-status="draft"] .project-badge {
+  background: var(--surface-2);
+  color: var(--ink-mute);
+}
+
+.project-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: var(--s-4);
+  letter-spacing: -0.01em;
+}
+
+.project-details {
+  display: grid;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+  flex-grow: 1;
+}
+.project-details > div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: var(--s-3);
+  align-items: start;
+}
+.project-details dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  padding-top: 3px;
+}
+.project-details dd {
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.project-card .tag-list {
+  margin-bottom: var(--s-5);
+}
+
+.project-links {
+  display: flex;
+  gap: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--border);
+}
+.link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.link::after { content: "→"; transition: transform 0.15s ease; }
+.link:hover { color: var(--green-700); }
+.link:hover::after { transform: translateX(2px); }
+.link.disabled {
+  color: var(--ink-mute);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.link.disabled::after { content: ""; }
+
+@media (max-width: 520px) {
+  .project-details > div { grid-template-columns: 1fr; gap: 2px; }
+  .project-details dt { padding-top: 0; }
+}

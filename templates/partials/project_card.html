@@ -1,0 +1,13 @@
+<article class="project-card" {{ item.status_attr }}>
+  <div class="project-top">
+    <span class="project-badge">{{ item.badge }}</span>
+  </div>
+  <h3>{{ item.title }}</h3>
+  <dl class="project-details">
+    <div><dt>Problem</dt><dd>{{ item.problem }}</dd></div>
+    <div><dt>My role</dt><dd>{{ item.contribution }}</dd></div>
+    <div><dt>Learned</dt><dd>{{ item.learned }}</dd></div>
+  </dl>
+  <ul class="tag-list small">{{ item.tags_html }}</ul>
+  <div class="project-links">{{ item.links_html }}</div>
+</article>

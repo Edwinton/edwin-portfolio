@@ -1,0 +1,91 @@
+/* CV — print / PDF styles (A4, table-driven) */
+@page { size: A4; margin: 15mm 14mm; }
+
+@media print {
+  .site-header, .site-footer, .cv-toolbar, .back-top, .nav-toggle, .no-print { display: none !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body { background: #fff !important; color: #1a1a1a !important; font-size: 10pt; line-height: 1.4; }
+  .container { max-width: 100% !important; padding: 0 !important; }
+  .page-section, .cv-page { padding: 0 !important; }
+
+  .cv-doc {
+    max-width: 100% !important; border: none !important; padding: 0 !important;
+    border-radius: 0 !important; background: transparent !important;
+  }
+
+  .cv-header { border-bottom: 2pt solid #1f3f2b !important; padding-bottom: 6pt !important; margin-bottom: 10pt !important; }
+  .cv-header h1 { font-size: 20pt !important; color: #1a1a1a !important; letter-spacing: -0.02em; margin: 0 !important; }
+  .cv-subtitle { font-size: 10.5pt !important; color: #2d5a3d !important; font-weight: 600; margin: 2pt 0 0 !important; }
+  .cv-contact { font-size: 8.5pt !important; color: #444 !important; margin-top: 4pt !important; }
+
+  .cv-section { margin-bottom: 12pt !important; page-break-inside: avoid; }
+  .cv-section-title {
+    font-size: 9pt !important; color: #1f3f2b !important; border-bottom: 1pt solid #2d5a3d !important;
+    padding-bottom: 2pt !important; margin-bottom: 6pt !important; letter-spacing: 0.1em;
+  }
+
+  .cv-table { width: 100%; font-size: 9pt !important; border-collapse: collapse; color: #222 !important; line-height: 1.45; }
+  .cv-table thead th {
+    font-size: 7.5pt !important; color: #555 !important;
+    border-bottom: 0.5pt solid #ccc !important; padding-bottom: 3pt !important;
+  }
+  .cv-table tbody td, .cv-table tbody th {
+    padding: 5pt 0 !important; border-bottom: 0.5pt solid #e0e0e0 !important; vertical-align: top;
+  }
+  .cv-table tbody tr:last-child td, .cv-table tbody tr:last-child th { border-bottom: none !important; }
+
+  .cv-td-period { font-size: 8pt !important; color: #2d5a3d !important; font-weight: 700; letter-spacing: 0.04em; }
+  .cv-td-main strong { font-size: 10pt !important; color: #1a1a1a !important; font-weight: 700; }
+  .cv-td-place { font-size: 8.5pt !important; color: #2d5a3d !important; font-weight: 500; }
+  .cv-td-desc { font-size: 9pt !important; color: #333 !important; }
+
+  .cv-th-skill { font-size: 9pt !important; color: #1a1a1a !important; font-weight: 700; }
+  .cv-td-skill ul { gap: 4pt !important; }
+  .cv-td-skill li {
+    font-size: 8pt !important; padding: 1.5pt 6pt !important;
+    background: #f2f2ee !important; border: 0.5pt solid #dcdcd6 !important;
+    color: #222 !important; border-radius: 6pt;
+  }
+
+  .cv-td-project a { font-size: 9.5pt !important; color: #1f3f2b !important; text-decoration: none !important; font-weight: 700; }
+  .cv-td-project a::after { content: " (" attr(href) ")"; font-size: 7pt !important; font-weight: 400; color: #666 !important; }
+  .cv-td-tags li {
+    font-size: 7.5pt !important; padding: 1pt 5pt !important;
+    background: #eef0eb !important; color: #1f3f2b !important; border-radius: 4pt; font-weight: 600;
+  }
+  .cv-td-project-desc { font-size: 9pt !important; color: #333 !important; }
+
+  .cv-interests li {
+    font-size: 8.5pt !important; padding: 2pt 8pt !important;
+    background: #f2f2ee !important; border: 0.5pt solid #dcdcd6 !important; color: #333 !important;
+  }
+
+  .cv-th-period { width: 20% !important; } .cv-th-main { width: 80% !important; }
+  .cv-th-project { width: 32% !important; } .cv-th-desc { width: 68% !important; }
+  .cv-th-skill { width: 28% !important; }
+
+  h1, h2, h3 { page-break-after: avoid; }
+  tr { page-break-inside: avoid; }
+}
+/* --- Clickable contact links in printed CV --- */
+.cv-contact {
+  font-size: 8.5pt !important;
+  line-height: 1.6 !important;
+  margin-top: 5pt !important;
+}
+.cv-contact-link {
+  color: #2d5a3d !important;
+  text-decoration: none !important;
+  font-weight: 600;
+}
+.cv-contact-label {
+  font-size: 7pt !important;
+  color: #666 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 3pt;
+}
+.cv-contact-sep {
+  color: #999 !important;
+  margin: 0 4pt;
+}

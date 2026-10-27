@@ -1,0 +1,28 @@
+# Generated site — never commit
+public/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Backups from our patches
+*.bak
+*.broken
+
+# Secrets — CRITICAL
+admin_auth.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Environment
+.env
+.venv/
+venv/

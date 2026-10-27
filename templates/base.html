@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page.title }}</title>
+  <meta name="description" content="{{ page.description }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/css/main.css" />
+  <link rel="stylesheet" href="static/css/sections.css" />
+  <link rel="stylesheet" href="static/css/projects.css" />
+  <link rel="stylesheet" href="static/css/cv.css" />
+  <link rel="stylesheet" href="static/css/cv-print.css" media="print" />
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="index.html" class="nav-logo">ET<span>.</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        {{ nav_items }}
+      </ul>
+    </nav>
+  </header>
+
+  <main>{{ content }}</main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><span class="footer-logo">ET<span>.</span></span> &nbsp;·&nbsp; &copy; <span id="year"></span> {{ site.name }}</p>
+      <a href="#" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  
+
+  <script src="static/js/main.js"></script>
+</body>
+</html>
