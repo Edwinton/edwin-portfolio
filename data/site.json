@@ -325,14 +325,59 @@
       ]
     },
     {
-      "badge": "Draft",
-      "title": "EventFlow",
-      "status": "draft",
-      "problem": "TODO — what problem does EventFlow address?",
-      "contribution": "TODO — what did you build? Front end, back end, database?",
-      "learned": "TODO — one or two things you learned.",
-      "tags": [],
-      "links": []
+      "badge": "Full-stack",
+      "title": "OmniShare — Secure Share Portal",
+      "status": "",
+      "problem": "Three common sharing tasks (QR codes, shortened URLs, secure file/text sharing) each require separate tools, most of which want an account. Built one app that does all three without registration.",
+      "contribution": "Built end-to-end: Flask backend with QR generation (qrcode + Pillow), URL shortener with click tracking and 96-hour expiry, secure share with password protection and automatic cleanup, plus an HTMX + Tailwind frontend. Deployed with Gunicorn.",
+      "learned": "How to structure a multi-feature Flask app, manage in-memory vs. on-disk state, run background cleanup with threading, use HTMX for partial-page updates, and ship a Python web app to production.",
+      "tags": [
+        "Flask",
+        "Python",
+        "HTMX",
+        "Tailwind",
+        "Pillow",
+        "Gunicorn"
+      ],
+      "links": [
+        {
+          "label": "Live Demo",
+          "href": "https://omni-share.onrender.com",
+          "external": true
+        },
+        {
+          "label": "Source Code",
+          "href": "https://github.com/Edwinton/omni-share",
+          "external": true
+        }
+      ]
+    },
+    {
+      "badge": "Full-stack",
+      "title": "LeaveMail — Smart Leave Assistant",
+      "status": "",
+      "problem": "Parents often struggle to write formal leave emails — mobile typing is slow, formatting is unclear, and email clients are complex. Existing tools assume desktop use and English fluency.",
+      "contribution": "Built a mobile-first Flask app with four email templates, six visual themes, Web Speech API voice input, quick presets, and a full accessibility layer (high contrast, large text, reduced motion). Includes settings, local history, and PIN/password/pattern lock with server-side hashing.",
+      "learned": "How to design for accessibility-first use, handle session-cookie limits safely, hash credentials before storage, escape user input to prevent XSS in previews, and ship a Flask app on Render.",
+      "tags": [
+        "Flask",
+        "Python",
+        "JavaScript",
+        "Web Speech API",
+        "Render"
+      ],
+      "links": [
+        {
+          "label": "Live Demo",
+          "href": "https://leavemail.onrender.com",
+          "external": true
+        },
+        {
+          "label": "Source Code",
+          "href": "https://github.com/Edwinton/leavemail",
+          "external": true
+        }
+      ]
     }
   ],
   "education": [
@@ -465,6 +510,28 @@
           "Python"
         ],
         "href": "https://github.com/Edwinton"
+      },
+      {
+        "title": "OmniShare — Secure Share Portal",
+        "description": "Full-stack Flask app: QR generation, URL shortener with click tracking, secure file/text sharing with password protection and automatic expiry. HTMX + Tailwind frontend, deployed with Gunicorn.",
+        "tags": [
+          "Flask",
+          "Python",
+          "HTMX",
+          "Tailwind",
+          "Gunicorn"
+        ],
+        "href": "https://github.com/Edwinton/omni-share"
+      },
+      {
+        "title": "LeaveMail — Smart Leave Assistant",
+        "description": "Mobile-first Flask app helping parents send formal leave emails. Four templates, six themes, voice input, accessibility features, PIN/password/pattern lock with server-side hashing.",
+        "tags": [
+          "Flask",
+          "Python",
+          "Web Speech API"
+        ],
+        "href": "https://github.com/Edwinton/leavemail"
       }
     ]
   },
@@ -478,7 +545,7 @@
   },
   "section_templates": {
     "hero": "<section class=\"hero\">\n  <div class=\"container hero-inner\">\n    <div class=\"hero-text\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h1>{{ page.heading }}</h1>\n      <h2 class=\"hero-title\">{{ page.subtitle }}</h2>\n      <p class=\"hero-intro\">{{ page.intro }}</p>\n      <p class=\"hero-note\">{{ page.note }}</p>\n      <div class=\"hero-actions\">\n        {{ page.actions_html }}\n      </div>\n    </div>\n    <div class=\"hero-card\">\n      <div class=\"profile-circle\">{{ page.initials }}</div>\n      <h3>{{ site.name }}</h3>\n      <p class=\"profile-role\">{{ page.role }}</p>\n      <ul class=\"profile-meta\">\n        {{ page.meta_html }}\n      </ul>\n    </div>\n  </div>\n</section>",
-    "about": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n\n    <div class=\"about-layout\">\n      <div class=\"about-text\">{{ page.paragraphs_html }}</div>\n\n      <aside class=\"profile-card\">\n        <div class=\"profile-card-head\">\n          <div class=\"profile-card-avatar\">{{ page.profile.initials }}</div>\n          <div>\n            <h3 class=\"profile-card-name\">{{ page.profile.name }}</h3>\n            <p class=\"profile-card-role\">{{ page.profile.role }}</p>\n          </div>\n        </div>\n\n        <p class=\"profile-card-status\">{{ page.profile.status }}</p>\n\n        <dl class=\"profile-card-facts\">\n          {{ page.profile.facts_html }}\n        </dl>\n\n        <div class=\"profile-card-links\">\n          {{ page.profile.links_html }}\n        </div>\n      </aside>\n    </div>\n\n    <ul class=\"about-facts\">{{ page.facts_html }}</ul>\n  </div>\n</section>",
+    "about": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n\n    <div class=\"about-layout\">\n      <div class=\"about-text\">{{ page.paragraphs_html }}</div>\n\n      <aside class=\"profile-card\">\n        <div class=\"profile-card-head\">\n          <div class=\"profile-card-avatar\">{{ page.profile.initials }}</div>\n          <div>\n            <h3 class=\"profile-card-name\">{{ page.profile.name }}</h3>\n            <p class=\"profile-card-role\">{{ page.profile.role }}</p>\n          </div>\n        </div>\n\n        <p class=\"profile-card-status\">{{ page.profile.status }}</p>\n\n        <dl class=\"profile-card-facts\">\n          {{ page.profile.facts_html }}\n        </dl>\n\n        <div class=\"profile-card-links\">\n          {{ page.profile.links_html }}\n        </div>\n      </aside>\n    </div>\n\n  </div>\n</section>\n",
     "skills": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n    <div class=\"skills-grid\">{{ skill_cards }}</div>\n    <p class=\"skills-note\">{{ page.note }}</p>\n  </div>\n</section>\n",
     "projects": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n      <p class=\"section-sub\">{{ page.subheading }}</p>\n    </div>\n    <div class=\"projects-grid\">{{ project_cards }}</div>\n  </div>\n</section>",
     "timeline": "<section class=\"section page-section\">\n  <div class=\"container\">\n    <div class=\"section-head\">\n      <p class=\"eyebrow\">{{ page.eyebrow }}</p>\n      <h2>{{ page.heading }}</h2>\n    </div>\n    <div class=\"timeline\">{{ timeline_items }}</div>\n  </div>\n</section>\n",
