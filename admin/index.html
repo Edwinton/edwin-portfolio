@@ -102,7 +102,14 @@ let currentPath = null;
 const dirty = { value: false };
 
 async function apiGet(){const r=await fetch("/api/site");if(!r.ok)throw new Error("Load failed");return r.json()}
-async function apiSave(){const r=await fetch("/api/site",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(site)});const j=await r.json();if(!r.ok)throw new Error(j.error||"Save failed");return j}
+function syncEducationArrays(){
+  if(!site)return;
+  var m=site.education||[];
+  var c=(site.cv&&site.cv.education)||[];
+  if(m.length>=c.length){if(site.cv)site.cv.education=JSON.parse(JSON.stringify(m));}
+  else{site.education=JSON.parse(JSON.stringify(c));}
+}
+async function apiSave(){syncEducationArrays();const r=await fetch("/api/site",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(site)});const j=await r.json();if(!r.ok)throw new Error(j.error||"Save failed");return j}
 async function apiBuild(){const r=await fetch("/api/build",{method:"POST"});const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.stderr||j.error||"Build failed");return j}
 const $=(s)=>document.querySelector(s);
 const el=(tag,attrs={},...children)=>{
