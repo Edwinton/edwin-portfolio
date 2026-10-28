@@ -384,14 +384,20 @@
     {
       "period": "Current · Expected 2031",
       "title": "Integrated M.Sc. Computer Science (AI & ML)",
-      "place": "Bishop Vayalil Memorial Holy Cross College (BVM) · Cherpunkal, Kerala",
-      "description": "Core CS curriculum with a focus on Artificial Intelligence and Machine Learning, alongside software development fundamentals."
+      "place": "Bishop Vayalil Memorial Holy Cross College (BVM), Cherpunkal",
+      "description": "Core CS curriculum with focus on AI and Machine Learning, plus software development fundamentals."
     },
     {
-      "period": "Previous",
+      "period": "2024-2026",
       "title": "Higher Secondary Education",
-      "place": "St. Antony's H.S.S. · Plassanal, Kerala",
-      "description": "Completed higher secondary schooling with a foundation in mathematics and science."
+      "place": "St. Antony's H.S.S., Plassanal",
+      "description": "Completed My Class 12th Higher secondary Education"
+    },
+    {
+      "period": "2023-2024",
+      "title": "SSLC",
+      "place": "St Antony's High School Plassanal",
+      "description": "Completed my SSLC "
     }
   ],
   "contacts": [
