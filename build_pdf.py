@@ -90,6 +90,11 @@ def build():
     # Languages
     add_h1("Languages")
     story.append(Paragraph(page.get("languages", ""), body_style))
+    # Achievements
+    if page.get("achievements"):
+        add_h1(page.get("achievements_heading", "Achievements"))
+        for item in page["achievements"]:
+            story.append(Paragraph(f"• {strip_html(item)}", bullet_style))
 
     doc.build(story)
     print(f"  ok Edwin_Tony_CV.pdf ({OUT.stat().st_size} bytes)")
