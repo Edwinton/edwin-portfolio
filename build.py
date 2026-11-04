@@ -209,6 +209,7 @@ def prepare(site):
               <p>{ev.get("summary", "")}</p>
               <div class="project-links" style="margin-top: auto;">
                 <a href="{ev.get("link", "#")}" class="link">Read Case Study →</a>
+                {f'<a href="{ev["repo"]}" target="_blank" class="link" style="margin-left: 16px;">Source Code</a>' if ev.get("repo") else ''}
               </div>
             </article>
             """
