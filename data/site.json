@@ -2,7 +2,7 @@
   "title": "Edwin Tony — Computer Science Student & Aspiring Software Developer",
   "description": "Portfolio of Edwin Tony, Computer Science student specialising in AI & ML, building practical software projects.",
   "name": "Edwin Tony",
-  "email": "edwinveedon@gmail.com",
+  "email": "edwinvedon@gmail.com",
   "github": "https://github.com/Edwinton",
   "github_short": "github.com/Edwinton",
   "linkedin": "https://www.linkedin.com/in/edwin-tony-267977393/",
@@ -209,9 +209,9 @@
       "eyebrow": "Curriculum Vitae",
       "heading": "Edwin Tony",
       "subtitle": "Computer Science Student · Aspiring Software Developer",
-      "contact_line": "edwinveedon@gmail.com  |  github.com/Edwinton  |  linkedin.com/in/edwin-tony-267977393",
+      "contact_line": "Aruvithura, Kottayam, Kerala  |  edwinvedon@gmail.com  |  9061054750  |  edwinton.github.io/edwin-portfolio  |  github.com/Edwinton  |  linkedin.com/in/edwin-tony-267977393",
       "summary_heading": "Summary",
-      "summary": "Computer Science student (Integrated M.Sc., AI & ML) with about two years of hands-on project experience alongside academic study. Comfortable with Python, Java, C, JavaScript, and modern web fundamentals. Actively seeking an internship or junior software development role, ideally remote, based in Kerala.",
+      "summary": "CS student (AI & ML) who designs and ships real web products — from full-stack apps to responsive multi-page sites. Comfortable across the design-to-code pipeline: Canva, GIMP and Inkscape for visuals; HTML, CSS and JavaScript for build. District-level web design competitor.",
       "education_heading": "Education",
       "skills_heading": "Technical Skills",
       "projects_heading": "Selected Projects",
@@ -225,7 +225,14 @@
       "sections": [
         "cv"
       ],
-      "references_show": false
+      "references_show": false,
+      "achievements_heading": "Achievements",
+      "achievements": [
+        "District-level web design competition — competitor",
+        "ASSET — CS Department Association member (staff & student tech empowerment)"
+      ],
+      "languages_heading": "Languages",
+      "languages": "Malayalam (Native) · English (Fluent) · Hindi (Basic) · Tamil (Basic)"
     },
     "contact": {
       "title": "Contact — Edwin Tony",
@@ -431,72 +438,89 @@
   "cv": {
     "education": [
       {
-        "period": "Current · Expected 2031",
-        "title": "Integrated M.Sc. Computer Science (AI & ML)",
-        "place": "Bishop Vayalil Memorial Holy Cross College (BVM), Cherpunkal",
-        "description": "Core CS curriculum with focus on AI and Machine Learning, plus software development fundamentals."
-      },
-      {
-        "period": "2024-2026",
-        "title": "Higher Secondary Education",
-        "place": "St. Antony's H.S.S., Plassanal",
-        "description": "Completed My Class 12th Higher secondary Education"
-      },
-      {
-        "period": "2023-2024",
-        "title": "SSLC",
-        "place": "St Antony's High School Plassanal",
-        "description": "Completed my SSLC "
+        "period": "Current",
+        "title": "Integrated MSc, Computer Science (AI & ML)",
+        "place": "Bishop Vayalil Memorial Holy Cross College, Palai",
+        "description": ""
       }
     ],
     "skills": [
       {
-        "title": "Languages",
+        "title": "Design",
         "tags": [
-          "Python",
-          "Java",
-          "C",
-          "JavaScript"
+          "Web design",
+          "UI design",
+          "Responsive layout",
+          "Canva",
+          "GIMP",
+          "Inkscape"
         ]
       },
       {
-        "title": "Web",
+        "title": "Code",
         "tags": [
-          "HTML5",
-          "CSS3",
+          "HTML",
+          "CSS",
           "JavaScript",
-          "Responsive Design"
+          "Python"
         ]
       },
       {
-        "title": "Databases",
+        "title": "Frameworks",
         "tags": [
-          "SQL",
-          "Supabase"
+          "Flask",
+          "Node.js",
+          "Tailwind CSS",
+          "Supabase",
+          "Gunicorn"
         ]
       },
       {
-        "title": "Tools",
+        "title": "Other",
         "tags": [
-          "Git",
-          "GitHub",
-          "VS Code",
-          "Command Line"
-        ]
-      },
-      {
-        "title": "AI & ML",
-        "tags": [
-          "Fundamentals",
-          "Python for AI",
-          "AI-assisted dev"
+          "Git/GitHub",
+          "Static site generation"
         ]
       }
     ],
     "projects": [
       {
-        "title": "THE EXEMPTION",
-        "description": "College event project on digital privacy — interactive data-broker competition concept with HTML, CSS, JavaScript, Node.js/serverless, and Supabase.",
+        "title": "OmniShare — Secure Share Portal",
+        "description": "Built and deployed a full-stack app replacing three paid tools: QR generation, URL shortening with click tracking and 96-hour expiry, and password-protected file sharing — no sign-up required.",
+        "tags": [
+          "Flask",
+          "Python",
+          "HTML",
+          "Tailwind",
+          "Gunicorn"
+        ],
+        "href": "https://github.com/Edwinton/omni-share"
+      },
+      {
+        "title": "LeaveMail — Smart Leave Assistant",
+        "description": "Built and deployed on Render a mobile-first tool for users who struggle with formal email — four templates, six themes, voice input, and full accessibility support (high contrast, large text, reduced motion).",
+        "tags": [
+          "Flask",
+          "Python",
+          "JavaScript",
+          "Web Speech API"
+        ],
+        "href": "https://github.com/Edwinton/leavemail"
+      },
+      {
+        "title": "Portfolio Website",
+        "description": "Designed and built a responsive multi-page portfolio from scratch, with a Python static site generator that renders pages from JSON — content lives in one place.",
+        "tags": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Python"
+        ],
+        "href": "https://github.com/Edwinton/edwin-portfolio"
+      },
+      {
+        "title": "The Exemption",
+        "description": "Interactive data-broker competition concept on digital privacy and tracking, built with serverless backend on Supabase.",
         "tags": [
           "HTML",
           "CSS",
@@ -505,39 +529,6 @@
           "Supabase"
         ],
         "href": "https://github.com/Edwinton/the-exemption"
-      },
-      {
-        "title": "This Portfolio",
-        "description": "Responsive multi-page site built from scratch with HTML, CSS, and JavaScript, rendered by a small Python static site generator.",
-        "tags": [
-          "HTML",
-          "CSS",
-          "JavaScript",
-          "Python"
-        ],
-        "href": "https://github.com/Edwinton"
-      },
-      {
-        "title": "OmniShare — Secure Share Portal",
-        "description": "Full-stack Flask app: QR generation, URL shortener with click tracking, secure file/text sharing with password protection and automatic expiry. HTMX + Tailwind frontend, deployed with Gunicorn.",
-        "tags": [
-          "Flask",
-          "Python",
-          "HTMX",
-          "Tailwind",
-          "Gunicorn"
-        ],
-        "href": "https://github.com/Edwinton/omni-share"
-      },
-      {
-        "title": "LeaveMail — Smart Leave Assistant",
-        "description": "Mobile-first Flask app helping parents send formal leave emails. Four templates, six themes, voice input, accessibility features, PIN/password/pattern lock with server-side hashing.",
-        "tags": [
-          "Flask",
-          "Python",
-          "Web Speech API"
-        ],
-        "href": "https://github.com/Edwinton/leavemail"
       }
     ]
   },
