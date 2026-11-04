@@ -210,7 +210,12 @@ def build_nav(nav, current_file):
         if item.get("file") == current_file:
             classes.append("active")
         cls = f' class="{" ".join(classes)}"' if classes else ""
-        out.append(f'<li><a href="{item["href"]}"{cls}>{item["label"]}</a></li>')
+        href = item["href"]
+        # Add the repo prefix if it doesn't start with http or /
+        if not href.startswith("http") and not href.startswith("/"):
+            href = "/edwin-portfolio/" + href
+            
+        out.append(f'<li><a href="{href}"{cls}>{item["label"]}</a></li>')
     return "\n        ".join(out)
 
 
