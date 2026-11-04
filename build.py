@@ -187,6 +187,14 @@ def prepare(site):
             )
             site["section_templates"]["cv"] = tpl
 
+    # Achievements list formatting
+    achv = pages.get("achievements", {})
+    if "content" in achv:
+        achv["content_html"] = "".join(
+            f'<div class="timeline-content" style="border-left: 3px solid var(--green-500); padding: var(--s-4);"><p style="margin:0; font-size:1.05rem;">{item}</p></div>'
+            for item in achv["content"]
+        )
+
     footer = site.get("footer", {})
     footer["copyright_html"] = footer.get("copyright", "").replace("{year}", str(year))
 
@@ -247,7 +255,7 @@ def build_page(page_key, page_data, site):
         "content": content,
         "nav_items": build_nav(site["nav"], out_file),
     })
-    (OUT / out_file).write_text(final, encoding="utf-8")
+    (OUT / out_file).parent.mkdir(parents=True, exist_ok=True)`n    (OUT / out_file).write_text(final, encoding="utf-8")
     print(f"  ok {out_file}")
     return out_file
 
