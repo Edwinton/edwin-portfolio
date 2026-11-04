@@ -215,12 +215,8 @@
       "education_heading": "Education",
       "skills_heading": "Technical Skills",
       "projects_heading": "Selected Projects",
-      "interests_heading": "Interests",
       "references_heading": "References",
       "references_text": "Available on request.",
-      "interests": [
-        "Listening to Music"
-      ],
       "download_label": "Download as PDF",
       "sections": [
         "cv"
