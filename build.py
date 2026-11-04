@@ -255,7 +255,8 @@ def build_page(page_key, page_data, site):
         "content": content,
         "nav_items": build_nav(site["nav"], out_file),
     })
-    (OUT / out_file).parent.mkdir(parents=True, exist_ok=True)`n    (OUT / out_file).write_text(final, encoding="utf-8")
+    (OUT / out_file).parent.mkdir(parents=True, exist_ok=True)
+    (OUT / out_file).write_text(final, encoding="utf-8")
     print(f"  ok {out_file}")
     return out_file
 
