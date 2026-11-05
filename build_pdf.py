@@ -1,4 +1,4 @@
-"""Generate Edwin_Tony_CV.pdf — from site.json."""
+"""Generate Edwin_Tony_CV.pdf — strict 1-page layout."""
 import json
 import re
 from pathlib import Path
@@ -26,25 +26,29 @@ def build():
     cv = data["cv"]
     styles = getSampleStyleSheet()
 
-    # Styles
-    name_style = ParagraphStyle("Name", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=24, leading=28, textColor=NAVY, spaceAfter=4)
-    subtitle_style = ParagraphStyle("Subtitle", parent=styles["Normal"], fontName="Helvetica", fontSize=10.5, leading=14, textColor=NAVY, spaceAfter=2)
-    contact_style = ParagraphStyle("Contact", parent=styles["Normal"], fontName="Helvetica", fontSize=9, leading=12, textColor=MUTED, spaceAfter=6)
-    h1_style = ParagraphStyle("H1", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=11, leading=13, textColor=NAVY, spaceBefore=12, spaceAfter=2)
-    body_style = ParagraphStyle("Body", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=14, textColor=colors.black, alignment=TA_JUSTIFY, spaceAfter=4)
-    h2_style = ParagraphStyle("H2", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=10, leading=13, textColor=colors.black, spaceBefore=6, spaceAfter=2)
-    h3_style = ParagraphStyle("H3", parent=styles["Normal"], fontName="Helvetica-Oblique", fontSize=9, leading=12, textColor=MUTED, spaceAfter=2)
-    bullet_style = ParagraphStyle("Bullet", parent=styles["Normal"], fontName="Helvetica", fontSize=10, leading=14, textColor=colors.black, leftIndent=12, spaceAfter=2)
+    # Tightened styles for 1-page fit
+    name_style = ParagraphStyle("Name", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=22, leading=24, textColor=NAVY, spaceAfter=2)
+    subtitle_style = ParagraphStyle("Subtitle", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9.5, leading=12, textColor=NAVY, spaceAfter=2)
+    contact_style = ParagraphStyle("Contact", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=MUTED, spaceAfter=4)
+    
+    h1_style = ParagraphStyle("H1", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9.5, leading=11, textColor=NAVY, spaceBefore=8, spaceAfter=1)
+    
+    body_style = ParagraphStyle("Body", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=colors.black, alignment=TA_JUSTIFY, spaceAfter=2)
+    bullet_style = ParagraphStyle("Bullet", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=colors.black, leftIndent=8, spaceAfter=2)
+    
+    h2_style = ParagraphStyle("H2", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9, leading=11, textColor=colors.black, spaceBefore=4, spaceAfter=1)
+    h3_style = ParagraphStyle("H3", parent=styles["Normal"], fontName="Helvetica-Oblique", fontSize=8, leading=10, textColor=MUTED, spaceAfter=1)
 
-    doc = SimpleDocTemplate(str(OUT), pagesize=A4, leftMargin=18*mm, rightMargin=18*mm, topMargin=16*mm, bottomMargin=16*mm)
+    # Tighter margins
+    doc = SimpleDocTemplate(str(OUT), pagesize=A4, leftMargin=15*mm, rightMargin=15*mm, topMargin=12*mm, bottomMargin=12*mm)
     story = []
 
     def add_h1(text):
         story.append(Paragraph(text.upper(), h1_style))
-        rule = Table([[""]], colWidths=[doc.width], rowHeights=[1])
+        rule = Table([[""]], colWidths=[doc.width], rowHeights=[0.5])
         rule.setStyle(TableStyle([("LINEABOVE", (0, 0), (-1, 0), 0.8, NAVY), ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 0)]))
         story.append(rule)
-        story.append(Spacer(1, 4))
+        story.append(Spacer(1, 2))
 
     # Header
     story.append(Paragraph(page["heading"], name_style))
@@ -63,9 +67,9 @@ def build():
         title_html = f'<link href="{href}" color="#1a2332"><b>{title}</b></link>' if href else f"<b>{title}</b>"
         tags = " · ".join(strip_html(t) for t in item.get("tags", []))
         
-        story.append(Paragraph(title_html, h2_style))
-        if tags:
-            story.append(Paragraph(tags, h3_style))
+        # Put title and tags on one line if possible to save space
+        header_line = f"{title_html} <font color='#5a5a5a' size='8'>({tags})</font>"
+        story.append(Paragraph(header_line, h2_style))
         story.append(Paragraph(strip_html(item.get("description", "")), body_style))
 
     # Skills
@@ -83,16 +87,8 @@ def build():
         story.append(Paragraph(f"<b>{title}</b> — {place}", body_style))
 
     # Achievements
-    add_h1("Achievements")
-    for item in page.get("achievements", []):
-        story.append(Paragraph(f"• {strip_html(item)}", bullet_style))
-
-    # Languages
-    add_h1("Languages")
-    story.append(Paragraph(page.get("languages", ""), body_style))
-    # Achievements
     if page.get("achievements"):
-        add_h1(page.get("achievements_heading", "Achievements"))
+        add_h1("Achievements")
         for item in page["achievements"]:
             story.append(Paragraph(f"• {strip_html(item)}", bullet_style))
 
