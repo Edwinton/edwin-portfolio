@@ -229,14 +229,20 @@
       "references_show": false,
       "achievements_heading": "Achievements",
       "achievements": [
-        "UI/UX Design Programme (Sapphire IQ) — Completed a 2-month certification focused on user research, information architecture, and design thinking (Gurully App case study).",
         "The Exemption: Who Watches Your Data? — Presented an interactive digital privacy programme at BVM Holy Cross College.",
         "District-level web design competition — competitor",
         "ASSET — CS Department Association member (staff & student tech empowerment)"
       ],
       "languages_heading": "Languages",
       "languages": "Malayalam (Native) · English (Fluent) · Hindi (Basic) · Tamil (Basic)",
-      "achievements_html": "<li>UI/UX Design Programme (Sapphire IQ) — Completed a 2-month certification focused on user research, information architecture, and design thinking (Gurully App case study).</li><li>The Exemption: Who Watches Your Data? — Presented an interactive digital privacy programme at BVM Holy Cross College.</li><li>District-level web design competition — competitor</li><li>ASSET — CS Department Association member (staff & student tech empowerment)</li>"
+      "achievements_html": "<li>The Exemption: Who Watches Your Data? — Presented an interactive digital privacy programme at BVM Holy Cross College.</li><li>District-level web design competition — competitor</li><li>ASSET — CS Department Association member (staff & student tech empowerment)</li>",
+      "technical_interests_heading": "Technical Interests",
+      "technical_interests": "Currently exploring: Integrating LLM APIs into web workflows.",
+      "certifications_heading": "Certifications",
+      "certifications": [
+        "UI/UX Design Programme — Sapphire IQ (Completed a 2-month certification focused on user research, information architecture, and design thinking)."
+      ],
+      "certifications_html": "<li>UI/UX Design Programme — Sapphire IQ (Completed a 2-month certification focused on user research, information architecture, and design thinking).</li>"
     },
     "contact": {
       "title": "Contact — Edwin Tony",

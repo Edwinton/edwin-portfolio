@@ -1,4 +1,4 @@
-"""Generate Edwin_Tony_CV.pdf — strict 1-page layout."""
+"""Generate Edwin_Tony_CV.pdf — strict 1-page layout with feedback applied."""
 import json
 import re
 from pathlib import Path
@@ -15,7 +15,6 @@ OUT = ROOT / "public" / "Edwin_Tony_CV.pdf"
 
 NAVY = colors.HexColor("#1a2332")
 MUTED = colors.HexColor("#5a5a5a")
-LIGHT_RULE = colors.HexColor("#e8e8e8")
 
 def strip_html(s):
     return re.sub(r"<[^>]+>", "", s).strip() if s else ""
@@ -30,16 +29,11 @@ def build():
     name_style = ParagraphStyle("Name", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=22, leading=24, textColor=NAVY, spaceAfter=2)
     subtitle_style = ParagraphStyle("Subtitle", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9.5, leading=12, textColor=NAVY, spaceAfter=2)
     contact_style = ParagraphStyle("Contact", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=MUTED, spaceAfter=4)
-    
     h1_style = ParagraphStyle("H1", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9.5, leading=11, textColor=NAVY, spaceBefore=8, spaceAfter=1)
-    
     body_style = ParagraphStyle("Body", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=colors.black, alignment=TA_JUSTIFY, spaceAfter=2)
     bullet_style = ParagraphStyle("Bullet", parent=styles["Normal"], fontName="Helvetica", fontSize=8.5, leading=11, textColor=colors.black, leftIndent=8, spaceAfter=2)
-    
     h2_style = ParagraphStyle("H2", parent=styles["Normal"], fontName="Helvetica-Bold", fontSize=9, leading=11, textColor=colors.black, spaceBefore=4, spaceAfter=1)
-    h3_style = ParagraphStyle("H3", parent=styles["Normal"], fontName="Helvetica-Oblique", fontSize=8, leading=10, textColor=MUTED, spaceAfter=1)
 
-    # Tighter margins
     doc = SimpleDocTemplate(str(OUT), pagesize=A4, leftMargin=15*mm, rightMargin=15*mm, topMargin=12*mm, bottomMargin=12*mm)
     story = []
 
@@ -55,20 +49,26 @@ def build():
     story.append(Paragraph("WEB DESIGNER &amp; DEVELOPER — AVAILABLE WEEKDAYS FROM 3 PM (15–20 HRS/WEEK); WEEKENDS FLEXIBLE", subtitle_style))
     story.append(Paragraph(page["contact_line"], contact_style))
     
-    # Summary
+    # Profile
     add_h1("Profile")
     story.append(Paragraph(page["summary"], body_style))
+
+    # Technical Interests (New Section)
+    if page.get("technical_interests"):
+        add_h1("Technical Interests")
+        story.append(Paragraph(page["technical_interests"], body_style))
 
     # Projects
     add_h1("Projects")
     for item in cv["projects"]:
         title = strip_html(item.get("title", ""))
         href = item.get("href", "")
-        title_html = f'<link href="{href}" color="#1a2332"><b>{title}</b></link>' if href else f"<b>{title}</b>"
+        
+        # Ensure link is clickable, use display text "Source" if needed
+        link_text = f'<link href="{href}" color="#1a2332"><b>{title}</b></link>' if href else f"<b>{title}</b>"
         tags = " · ".join(strip_html(t) for t in item.get("tags", []))
         
-        # Put title and tags on one line if possible to save space
-        header_line = f"{title_html} <font color='#5a5a5a' size='8'>({tags})</font>"
+        header_line = f"{link_text} <font color='#5a5a5a' size='8'>({tags})</font>"
         story.append(Paragraph(header_line, h2_style))
         story.append(Paragraph(strip_html(item.get("description", "")), body_style))
 
@@ -86,7 +86,13 @@ def build():
         place = strip_html(item.get("place", ""))
         story.append(Paragraph(f"<b>{title}</b> — {place}", body_style))
 
-    # Achievements
+    # Certifications (New Section)
+    if page.get("certifications"):
+        add_h1("Certifications")
+        for item in page["certifications"]:
+            story.append(Paragraph(f"• {strip_html(item)}", bullet_style))
+
+    # Achievements (Decluttered)
     if page.get("achievements"):
         add_h1("Achievements")
         for item in page["achievements"]:
