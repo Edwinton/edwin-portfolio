@@ -552,7 +552,8 @@
           "Tailwind CSS",
           "Gunicorn"
         ],
-        "href": "https://omni-share-5ua4.onrender.com/"
+        "live": "https://omni-share-5ua4.onrender.com/",
+        "source": "https://github.com/Edwinton/omni-share"
       },
       {
         "title": "LeaveMail — Smart Leave Assistant",
@@ -563,7 +564,8 @@
           "JavaScript",
           "Web Speech API"
         ],
-        "href": "https://leavemail-bz0z.onrender.com"
+        "live": "https://leavemail-bz0z.onrender.com",
+        "source": "https://github.com/Edwinton/leavemail"
       },
       {
         "title": "Portfolio Website",
@@ -574,7 +576,8 @@
           "JavaScript",
           "Python"
         ],
-        "href": "https://edwinton.github.io/edwin-portfolio/"
+        "live": "https://edwinton.github.io/edwin-portfolio/",
+        "source": "https://github.com/Edwinton/edwin-portfolio"
       },
       {
         "title": "The Exemption",
@@ -586,7 +589,8 @@
           "Node.js",
           "Supabase"
         ],
-        "href": "https://github.com/Edwinton/the-exemption"
+        "live": "",
+        "source": "https://github.com/Edwinton/the-exemption"
       }
     ]
   },

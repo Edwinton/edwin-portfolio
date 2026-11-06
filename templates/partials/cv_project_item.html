@@ -2,6 +2,10 @@
   <td class="cv-td-project">
     {{ item.title_html }}
     <ul class="cv-td-tags">{{ item.tags_html }}</ul>
+    <div style="margin-top: 4px; font-size: 0.75rem;">
+      {% if item.live %}<a href="{{ item.live }}" target="_blank" style="margin-right: 8px; text-decoration: underline;">Live</a>{% endif %}
+      {% if item.source %}<a href="{{ item.source }}" target="_blank" style="text-decoration: underline;">Source</a>{% endif %}
+    </div>
   </td>
   <td class="cv-td-project-desc">{{ item.description }}</td>
 </tr>
