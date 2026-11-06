@@ -144,6 +144,18 @@ def prepare(site):
 
     for project in site.get("projects", []):
         project["tags_html"] = tags_html(project["tags"])
+
+        # Format links for CV projects (Live and Source)
+        links_arr = []
+        if project.get("live"):
+            links_arr.append(f'<a href="{project["live"]}" target="_blank" rel="noopener" style="margin-right: 12px; text-decoration: underline; color: #2d5a3d; font-weight: bold;">Live</a>')
+        if project.get("source"):
+            links_arr.append(f'<a href="{project["source"]}" target="_blank" rel="noopener" style="text-decoration: underline; color: #2d5a3d; font-weight: bold;">Source</a>')
+        
+        project["links_html"] = " ".join(links_arr)
+        
+        # Make the project title clickable (pointing to source or live)
+        project["title_html"] = f'<a href="{project.get("source") or project.get("live") or "#"}" target="_blank" rel="noopener">{project["title"]}</a>'
         project["links_html"] = links_html(project["links"])
         project["placeholder_class"] = (
             "project-placeholder" if project.get("placeholder") else ""
@@ -163,6 +175,18 @@ def prepare(site):
         skill["tags_html"] = tags_html(skill["tags"])
     for project in cv.get("projects", []):
         project["tags_html"] = tags_html(project["tags"])
+
+        # Format links for CV projects (Live and Source)
+        links_arr = []
+        if project.get("live"):
+            links_arr.append(f'<a href="{project["live"]}" target="_blank" rel="noopener" style="margin-right: 12px; text-decoration: underline; color: #2d5a3d; font-weight: bold;">Live</a>')
+        if project.get("source"):
+            links_arr.append(f'<a href="{project["source"]}" target="_blank" rel="noopener" style="text-decoration: underline; color: #2d5a3d; font-weight: bold;">Source</a>')
+        
+        project["links_html"] = " ".join(links_arr)
+        
+        # Make the project title clickable (pointing to source or live)
+        project["title_html"] = f'<a href="{project.get("source") or project.get("live") or "#"}" target="_blank" rel="noopener">{project["title"]}</a>'
         if project.get("href"):
             project["title_html"] = (
                 f'<a href="{project["href"]}" target="_blank" rel="noopener">{project["title"]}</a>'
