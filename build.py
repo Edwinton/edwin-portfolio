@@ -257,7 +257,7 @@ def build_nav(nav, current_file):
         href = item["href"]
         # Add the repo prefix if it doesn't start with http or /
         if not href.startswith("http") and not href.startswith("/"):
-            href = "/edwin-portfolio/" + href
+            href = href
             
         out.append(f'<li><a href="{href}"{cls}>{item["label"]}</a></li>')
     return "\n        ".join(out)

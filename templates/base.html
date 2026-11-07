@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <base href="{{ base_url }}/">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ page.title }}</title>
@@ -8,13 +9,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/edwin-portfolio/static/css/main.css" />
-  <link rel="stylesheet" href="/edwin-portfolio/static/css/sections.css" />
-  <link rel="stylesheet" href="/edwin-portfolio/static/css/projects.css" />
-  <link rel="stylesheet" href="/edwin-portfolio/static/css/cv.css" />
-  <link rel="stylesheet" href="/edwin-portfolio/static/css/cv-print.css" media="print" />
-  <!-- CursorSwarm Animation -->
-  <script src="static/js/cursor-swarm.js"></script>
+  <link rel="stylesheet" href="static/css/main.css" />
+  <link rel="stylesheet" href="static/css/sections.css" />
+  <link rel="stylesheet" href="static/css/projects.css" />
+  <link rel="stylesheet" href="static/css/cv.css" />
+  <link rel="stylesheet" href="static/css/cv-print.css" media="print" />
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof CursorSwarm !== 'undefined') {
@@ -53,6 +52,25 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   
 
-  <script src="/edwin-portfolio/static/js/main.js"></script>
+  <script src="static/js/main.js"></script>
+  <!-- CursorSwarm Animation -->
+  <script src="static/js/cursor-swarm.js"></script>
+  <script>
+    // Delay slightly to ensure the DOM is fully painted
+    setTimeout(function() {
+      if (typeof CursorSwarm !== 'undefined') {
+        window.swarm = new CursorSwarm({ 
+          cursors: 5, 
+          palette: 'neon',
+          startPosition: 'center',
+          respectReducedMotion: false,
+          hud: false
+        }).init();
+        console.log("CursorSwarm initialized!");
+      } else {
+        console.error("CursorSwarm library not found.");
+      }
+    }, 100);
+  </script>
 </body>
 </html>
