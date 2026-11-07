@@ -222,7 +222,7 @@
   </script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      if (!window.location.pathname.includes("cv.html")) return;
+      if (window.location.pathname.includes("cv.html")) return;
 
       setTimeout(function() {
         if (typeof CursorSwarm !== 'undefined') {
