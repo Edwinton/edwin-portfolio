@@ -355,5 +355,54 @@
       });
     });
   </script>
+  <!-- New Easter Eggs -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // Easter Egg 1: Right-click the Email link
+      document.body.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('a[href^="mailto:"]')) {
+          e.preventDefault();
+          alert("Wait! Don't copy my email. Just click it to open your mail app!");
+        }
+      });
+
+      // Easter Egg 2 & 3: Typing secret words
+      let keyBuffer = "";
+      document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        
+        keyBuffer += e.key.toLowerCase();
+        if (keyBuffer.length > 10) keyBuffer = keyBuffer.slice(-6);
+
+        // Type "hire"
+        if (keyBuffer.includes("hire")) {
+          keyBuffer = "";
+          const mainTitle = document.querySelector('h1');
+          if (mainTitle) {
+            const originalText = mainTitle.innerText;
+            mainTitle.innerText = "Hire Me? Let's Talk!";
+            mainTitle.style.color = "#ff7b00";
+            mainTitle.style.transition = "color 0.3s ease";
+            setTimeout(() => { 
+              mainTitle.innerText = originalText; 
+              mainTitle.style.color = ""; 
+            }, 2500);
+          }
+        }
+
+        // Type "matrix"
+        if (keyBuffer.includes("matrix")) {
+          keyBuffer = "";
+          document.body.style.transition = 'filter 1s ease';
+          document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+          setTimeout(() => {
+            document.body.style.filter = 'none';
+          }, 3000);
+        }
+      });
+
+    });
+  </script>
 </body>
 </html>
