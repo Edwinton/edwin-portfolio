@@ -6,11 +6,13 @@
   <title>{{ page.title }}</title>
   <meta name="description" content="{{ page.description }}" />
   
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
+  <!-- Stylesheets -->
   <base href="{{ base_url }}/">
   <link rel="stylesheet" href="static/css/main.css" />
   <link rel="stylesheet" href="static/css/sections.css" />
@@ -22,6 +24,7 @@
     /* Smooth page fade-in on load */
     body { opacity: 0; animation: fadeInPage 0.8s ease-in forwards; }
     @keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
   </style>
 </head>
 <body>
@@ -47,188 +50,59 @@
     </div>
   </footer>
 
+  <!-- Core JavaScript -->
   <script src="static/js/main.js"></script>
   <script>
     if (window.lucide) { lucide.createIcons(); }
   </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) lucide.createIcons();
-
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const revealItems = document.querySelectorAll('.hero-text > *, .hero-card, .section-head, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
-      if (!reduceMotion && 'IntersectionObserver' in window) {
-        revealItems.forEach((item, index) => {
-          item.classList.add('motion-reveal');
-          item.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
-        });
-        const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        }), { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
-        revealItems.forEach(item => observer.observe(item));
-      }
-
-      if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
-        document.querySelectorAll('.project-card, .skill-card, .profile-card, .contact-card').forEach(card => {
-          card.addEventListener('pointermove', event => {
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`);
-            card.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`);
-          });
-        });
-      }
-
-      const cvDoc = document.getElementById('cvDoc');
-      if (cvDoc && !reduceMotion && matchMedia('(pointer: fine)').matches) {
-        cvDoc.addEventListener('pointermove', event => {
-          const rect = cvDoc.getBoundingClientRect();
-          cvDoc.style.setProperty('--tilt-x', `${((event.clientY - rect.top) / rect.height - .5) * -1.4}deg`);
-          cvDoc.style.setProperty('--tilt-y', `${((event.clientX - rect.left) / rect.width - .5) * 1.4}deg`);
-        });
-        cvDoc.addEventListener('pointerleave', () => {
-          cvDoc.style.setProperty('--tilt-x', '0deg');
-          cvDoc.style.setProperty('--tilt-y', '0deg');
-        });
-      }
-
-      const isCv = /(?:^|\/)cv\.html$/.test(location.pathname);
-      const swarmRoot = isCv ? document.querySelector('#cvDoc') : document.querySelector('main');
-      if (swarmRoot && typeof CursorSwarm !== 'undefined' && !reduceMotion) {
-        if (isCv) document.querySelectorAll('.cv-table').forEach(table => table.setAttribute('data-cs', 'skip'));
-        const swarm = new CursorSwarm({
-          cursors: 3,
-          palette: isCv ? 'mono:#2d5a3d' : 'forest',
-          startPosition: 'outside',
-          respectReducedMotion: true,
-          hud: false,
-          deconstruct: false,
-          trigger: isCv ? 0.72 : 0.88,
-          speed: isCv ? 2 : 1,
-          typeDuration: isCv ? 0.65 : 1.6,
-          root: swarmRoot,
-          ignore: isCv ? 'table' : 'nav, footer',
-          onDone: () => setTimeout(() => swarm.destroy(), 900)
-        }).init();
-        if (isCv && swarm.state === 'running') swarm.buildAll({ animate: true });
-        if (!isCv && swarm.state === 'running') setTimeout(() => swarm.destroy(), 6500);
-        if (isCv && swarm.state === 'running') setTimeout(() => swarm.destroy(), 12000);
-      }
-    });
-  </script>
-  <!-- Lumo.js: Cursor, Magnetic, and Text Reveal -->
-  <script src="https://cdn.jsdelivr.net/npm/lumojs/dist/lumo.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (typeof lumo !== 'undefined') {
-        
-        // 1. Custom Cursor with Magnetic Hover (Orange Theme)
-        lumo.snake({
-          cursorType: "dot",
-          color: "#ff7b00",             // Orange cursor
-          trailColor: "rgba(255,123,0,0.4)",
-          size: 10,
-          trailSize: 6,
-          trailCount: 8,
-          hideDefaultCursor: true,
-          clickEffect: true,
-          hoverGrow: true,
-          magnetic: true,               // Magnetic pull on buttons/links
-          hoverSelector: ".btn, .nav-menu a, .back-top"
-        });
-
-        // 2. Text Reveal on CV Page (Safe for Tables)
-        if (window.location.pathname.includes("cv.html")) {
-          lumo.textReveal(".cv-section p, .cv-section > ul", {
-            preset: "fade",             // Simple fade-in, no layout breaking
-            direction: "up",
-            speed: 600,
-            stagger: 100                // Delays between each paragraph
-          });
-        }
-
-        // 3. Text Reveal on Homepage Hero
-        if (!window.location.pathname.includes("cv.html")) {
-          lumo.textReveal(".hero-text h1, .hero-text h2, .hero-title", {
-            preset: "slide",
-            direction: "up",
-            speed: 800,
-            stagger: 150
-          });
-        }
-      }
-    });
-  </script>
-  <!-- Ultimate Interactive Effects & Easter Eggs -->
+  <!-- Interactive Effects & Easter Eggs -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       
-      // ==========================================
-      // 1. 3D TILT EFFECT (Optimized for GPU)
-      // ==========================================
+      // 1. 3D TILT EFFECT
       const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
       cards.forEach(card => {
-        let rafId = null;
-        
         card.style.transformStyle = 'preserve-3d';
         card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-        card.style.willChange = 'transform';
         
         card.addEventListener('mousemove', (e) => {
-          if (rafId) cancelAnimationFrame(rafId);
-          
-          rafId = requestAnimationFrame(() => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-            const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-            card.style.transition = 'transform 0.1s linear';
-            card.style.boxShadow = '0 10px 20px rgba(255, 123, 0, 0.1)'; // Lighter shadow
-          });
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease';
+          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)';
         });
 
         card.addEventListener('mouseleave', () => {
-          if (rafId) cancelAnimationFrame(rafId);
           card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
           card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
           card.style.boxShadow = '';
         });
       });
 
-      // ==========================================
-      // 2. MAGNETIC BUTTONS & NAV LINKS
-      // ==========================================
+      // 2. MAGNETIC BUTTONS & NAV
       const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
       magneticElements.forEach(el => {
         el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        
         el.addEventListener('mousemove', (e) => {
           const rect = el.getBoundingClientRect();
           const x = e.clientX - rect.left - rect.width / 2;
           const y = e.clientY - rect.top - rect.height / 2;
-          
           el.style.transition = 'none';
           el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
         });
-
         el.addEventListener('mouseleave', () => {
           el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           el.style.transform = `translate(0px, 0px)`;
         });
-        
         el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
       });
 
-      // ==========================================
-      // 3. CV CURSOR FLOW EFFECT
-      // ==========================================
+      // 3. CV FLOW EFFECT
       const cvDoc = document.getElementById("cvDoc");
       if (cvDoc) {
         cvDoc.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
@@ -248,10 +122,10 @@
       }
 
       // ==========================================
-      // 4. EASTER EGGS
+      // EASTER EGGS
       // ==========================================
       
-      // Easter Egg 1: The Logo Click (The Konami Code Lite)
+      // 4. The Logo Spin (3 Clicks)
       let logoClicks = 0;
       const logo = document.querySelector('.nav-logo');
       if (logo) {
@@ -263,12 +137,11 @@
             document.body.style.transform = 'rotate(360deg)';
             setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
             logoClicks = 0;
-            console.log("🚀 You found the spin easter egg!");
           }
         });
       }
 
-      // Easter Egg 2: The Title Typing (Press 'h' for Hello)
+      // 5. Type "hire"
       let keysPressed = "";
       document.addEventListener('keydown', (e) => {
         keysPressed += e.key.toLowerCase();
@@ -279,16 +152,13 @@
             const originalText = title.innerText;
             title.innerText = "Hire Me? Let's Talk!";
             title.style.color = "#ff7b00";
-            setTimeout(() => {
-              title.innerText = originalText;
-              title.style.color = "";
-            }, 2500);
+            setTimeout(() => { title.innerText = originalText; title.style.color = ""; }, 2500);
           }
         }
         if (keysPressed.length > 10) keysPressed = keysPressed.slice(-5);
       });
 
-      // Easter Egg 3: The Confetti Click (Only on the Footer Copyright)
+      // 6. Double Click Confetti
       const footer = document.querySelector('.site-footer p');
       if (footer) {
         footer.addEventListener('dblclick', () => {
@@ -303,224 +173,49 @@
             confetti.style.zIndex = '9999';
             confetti.style.transition = 'transform 2s linear, opacity 2s linear';
             document.body.appendChild(confetti);
-            
-            setTimeout(() => {
-              confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`;
-              confetti.style.opacity = '0';
-            }, 50);
-            
+            setTimeout(() => { confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`; confetti.style.opacity = '0'; }, 50);
             setTimeout(() => confetti.remove(), 2000);
           }
         });
       }
 
-    });
-  </script>
-  <!-- Ultimate Interactive Effects & Easter Eggs -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      
-      // ==========================================
-      // 1. 3D TILT EFFECT (Optimized for GPU)
-      // ==========================================
-      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
-      cards.forEach(card => {
-        let rafId = null;
-        
-        card.style.transformStyle = 'preserve-3d';
-        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-        card.style.willChange = 'transform';
-        
-        card.addEventListener('mousemove', (e) => {
-          if (rafId) cancelAnimationFrame(rafId);
-          
-          rafId = requestAnimationFrame(() => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-            const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-            card.style.transition = 'transform 0.1s linear';
-            card.style.boxShadow = '0 10px 20px rgba(255, 123, 0, 0.1)'; // Lighter shadow
-          });
-        });
-
-        card.addEventListener('mouseleave', () => {
-          if (rafId) cancelAnimationFrame(rafId);
-          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-          card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
-          card.style.boxShadow = '';
-        });
-      });
-
-      // ==========================================
-      // 2. MAGNETIC BUTTONS & NAV LINKS
-      // ==========================================
-      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
-      magneticElements.forEach(el => {
-        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        
-        el.addEventListener('mousemove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          
-          el.style.transition = 'none';
-          el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
-
-        el.addEventListener('mouseleave', () => {
-          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-          el.style.transform = `translate(0px, 0px)`;
-        });
-        
-        el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
-      });
-
-      // ==========================================
-      // 3. CV CURSOR FLOW EFFECT
-      // ==========================================
-      const cvDoc = document.getElementById("cvDoc");
-      if (cvDoc) {
-        cvDoc.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        cvDoc.addEventListener('mousemove', (e) => {
-          const rect = cvDoc.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          cvDoc.style.transition = 'transform 0.1s ease-out';
-          cvDoc.style.transform = `translate(${x * 0.03}px, ${y * 0.03}px)`;
-          cvDoc.style.boxShadow = '0 20px 40px rgba(0,0,0,0.08)';
-        });
-        cvDoc.addEventListener('mouseleave', () => {
-          cvDoc.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s ease';
-          cvDoc.style.transform = `translate(0px, 0px)`;
-          cvDoc.style.boxShadow = '';
-        });
-      }
-
-      // ==========================================
-      // 4. EASTER EGGS
-      // ==========================================
-      
-      // Easter Egg 1: The Logo Click (The Konami Code Lite)
-      let logoClicks = 0;
-      const logo = document.querySelector('.nav-logo');
-      if (logo) {
-        logo.addEventListener('click', (e) => {
-          logoClicks++;
-          if (logoClicks === 3) {
-            e.preventDefault();
-            document.body.style.transition = 'transform 1s ease';
-            document.body.style.transform = 'rotate(360deg)';
-            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
-            logoClicks = 0;
-            console.log("🚀 You found the spin easter egg!");
-          }
-        });
-      }
-
-      // Easter Egg 2: The Title Typing (Press 'h' for Hello)
-      let keysPressed = "";
-      document.addEventListener('keydown', (e) => {
-        keysPressed += e.key.toLowerCase();
-        if (keysPressed.includes("hire")) {
-          keysPressed = "";
-          const title = document.querySelector('.hero-text h1');
-          if (title) {
-            const originalText = title.innerText;
-            title.innerText = "Hire Me? Let's Talk!";
-            title.style.color = "#ff7b00";
-            setTimeout(() => {
-              title.innerText = originalText;
-              title.style.color = "";
-            }, 2500);
-          }
-        }
-        if (keysPressed.length > 10) keysPressed = keysPressed.slice(-5);
-      });
-
-      // Easter Egg 3: The Confetti Click (Only on the Footer Copyright)
-      const footer = document.querySelector('.site-footer p');
-      if (footer) {
-        footer.addEventListener('dblclick', () => {
-          for (let i = 0; i < 30; i++) {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'fixed';
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.top = '-10px';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = ['#ff7b00', '#d65a00', '#ff9e40', '#ffffff'][Math.floor(Math.random() * 4)];
-            confetti.style.zIndex = '9999';
-            confetti.style.transition = 'transform 2s linear, opacity 2s linear';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => {
-              confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`;
-              confetti.style.opacity = '0';
-            }, 50);
-            
-            setTimeout(() => confetti.remove(), 2000);
-          }
-        });
-      }
-      // ==========================================
-      // 5. EASTER EGG: The Konami Code (Arrow Keys)
-      // ==========================================
+      // 7. Konami Code
       let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
       let konamiIndex = 0;
-      
       document.addEventListener('keydown', (e) => {
         if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
           konamiIndex++;
           if (konamiIndex === konamiCode.length) {
-            // Trigger the egg!
             document.body.style.transition = 'filter 1s ease';
             document.body.style.filter = 'invert(1) hue-rotate(180deg)';
             setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
             konamiIndex = 0;
-            console.log("👾 Konami Code Activated!");
           }
-        } else {
-          konamiIndex = 0;
-        }
+        } else { konamiIndex = 0; }
       });
 
-      // ==========================================
-      // 6. EASTER EGG: The Trail (Hold 'Shift' and move mouse)
-      // ==========================================
+      // 8. Shift Trail
       let isDrawing = false;
       document.addEventListener('keydown', (e) => { if (e.key === 'Shift') isDrawing = true; });
       document.addEventListener('keyup', (e) => { if (e.key === 'Shift') isDrawing = false; });
-      
       document.addEventListener('mousemove', (e) => {
-        if (!isDrawing) return;
-        if (Math.random() > 0.3) return; // only draw sometimes
-        
+        if (!isDrawing || Math.random() > 0.3) return;
         const dot = document.createElement('div');
         dot.style.position = 'fixed';
         dot.style.left = e.clientX + 'px';
         dot.style.top = e.clientY + 'px';
-        dot.style.width = '10px';
-        dot.style.height = '10px';
+        dot.style.width = '10px'; dot.style.height = '10px';
         dot.style.backgroundColor = '#ff7b00';
         dot.style.borderRadius = '50%';
         dot.style.pointerEvents = 'none';
         dot.style.zIndex = '9999';
         dot.style.transition = 'opacity 1s ease';
-        
         document.body.appendChild(dot);
-        
         setTimeout(() => { dot.style.opacity = '0'; }, 10);
         setTimeout(() => { dot.remove(); }, 1000);
       });
 
-      // ==========================================
-      // 7. EASTER EGG: Type "matrix" to turn the background black
-      // ==========================================
+      // 9. Type "matrix"
       let matrixKeys = "";
       document.addEventListener('keydown', (e) => {
         matrixKeys += e.key.toLowerCase();
@@ -528,57 +223,32 @@
           matrixKeys = "";
           const body = document.body;
           if (body.style.backgroundColor === 'black') {
-            body.style.backgroundColor = '';
-            body.style.color = '';
+            body.style.backgroundColor = ''; body.style.color = '';
           } else {
-            body.style.backgroundColor = '#000';
-            body.style.color = '#0f0';
+            body.style.backgroundColor = '#000'; body.style.color = '#0f0';
             body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
-            setTimeout(() => {
-              body.style.backgroundColor = '';
-              body.style.color = '';
-            }, 4000); // Reverts after 4 seconds
+            setTimeout(() => { body.style.backgroundColor = ''; body.style.color = ''; }, 4000);
           }
         }
         if (matrixKeys.length > 10) matrixKeys = matrixKeys.slice(-6);
       });
 
-      // ==========================================
-      // 8. EASTER EGG: Secret Console Message
-      // ==========================================
-      console.log(
-        "%c👋 Hey there, curious developer!%c\n\nLooks like you know how to use DevTools. \nIf you're reading this, you're exactly the kind of person I want to work with.\n\nLet's build something great together.\n\n📧 edwinvedon@gmail.com", 
-        "font-size: 20px; font-weight: bold; color: #ff7b00;", 
-        "font-size: 14px; color: inherit;"
-      );
-      // ==========================================
-      // 9. EASTER EGG: The Shake (Type "party")
-      // ==========================================
+      // 10. Console Message
+      console.log("%c👋 Hey there, curious developer!%c\n\nLooks like you know how to use DevTools. \nIf you're reading this, you're exactly the kind of person I want to work with.\n\nLet's build something great together.\n\n📧 edwinvedon@gmail.com", "font-size: 20px; font-weight: bold; color: #ff7b00;", "font-size: 14px; color: inherit;");
+
+      // 11. Type "party"
       let partyKeys = "";
       document.addEventListener('keydown', (e) => {
         partyKeys += e.key.toLowerCase();
         if (partyKeys.includes("party")) {
           partyKeys = "";
-          const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card');
-          cards.forEach(card => {
-            card.style.animation = 'shake 0.5s ease-in-out infinite';
-          });
+          cards.forEach(card => { card.style.animation = 'shake 0.5s ease-in-out infinite'; });
           setTimeout(() => { cards.forEach(c => c.style.animation = ''); }, 3000);
         }
         if (partyKeys.length > 8) partyKeys = partyKeys.slice(-5);
       });
 
-      // Add keyframes for shake if not present
-      if (!document.getElementById('shakeStyles')) {
-        const style = document.createElement('style');
-        style.id = 'shakeStyles';
-        style.innerHTML = `@keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }`;
-        document.head.appendChild(style);
-      }
-
-      // ==========================================
-      // 10. EASTER EGG: Zoomies (Type "zoom")
-      // ==========================================
+      // 12. Type "zoom"
       let zoomKeys = "";
       document.addEventListener('keydown', (e) => {
         zoomKeys += e.key.toLowerCase();
@@ -593,47 +263,21 @@
         if (zoomKeys.length > 8) zoomKeys = zoomKeys.slice(-4);
       });
 
-      // ==========================================
-      // 11. EASTER EGG: Secret Color Picker (Right-click Logo)
-      // ==========================================
-      const logo = document.querySelector('.nav-logo');
+      // 13. Right-click Logo
       if (logo) {
         logo.addEventListener('contextmenu', (e) => {
-          e.preventDefault(); // Stop the normal right-click menu
+          e.preventDefault();
           const colors = ['#ff7b00', '#2d5a3d', '#1a2332', '#d65a00', '#ff9e40'];
-          const randomColor = colors[Math.floor(Math.random() * colors.length)];
-          document.body.style.backgroundColor = randomColor;
-          setTimeout(() => {
-            document.body.style.backgroundColor = 'var(--surface, #faf9f7)';
-          }, 2000);
+          document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          setTimeout(() => { document.body.style.backgroundColor = 'var(--surface, #faf9f7)'; }, 2000);
         });
       }
 
-      // ==========================================
-      // 12. EASTER EGG: URL Admin Trick (?admin)
-      // ==========================================
+      // 14. URL ?admin
       if (window.location.search.includes("?admin")) {
         const footer = document.querySelector('.footer-inner p');
-        if (footer) {
-          footer.innerHTML += '<br><br><span style="color: #ff7b00; font-weight: bold;">🕵️ Secret Admin Mode Activated. Shh!</span>';
-        }
+        if (footer) footer.innerHTML += '<br><br><span style="color: #ff7b00; font-weight: bold;">🕵️ Secret Admin Mode Activated. Shh!</span>';
       }
-
-      // ==========================================
-      // 13. EASTER EGG: Time Traveler (Dark Mode at Midnight)
-      // ==========================================
-      const hour = new Date().getHours();
-      if (hour >= 0 && hour < 4) {
-        const style = document.createElement('style');
-        style.innerHTML = 'body { filter: invert(0.9) hue-rotate(180deg); background: #111 !important; } img, .profile-circle { filter: invert(1) hue-rotate(180deg); }';
-        document.head.appendChild(style);
-        console.log("🌙 Midnight Mode Activated: It's late! Go to sleep.");
-      }
-
-    });
-  </script>
-
-
 
     });
   </script>
