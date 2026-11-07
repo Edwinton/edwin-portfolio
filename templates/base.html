@@ -300,8 +300,6 @@
       }, 200);
     });
   </script>
-  <!-- CursorSwarm Animation (Targeted) -->
-  <script src="static/js/cursor-swarm.js?v=11"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       setTimeout(function() {
@@ -363,5 +361,73 @@
       }, 200);
     });
   </script>
+  <!-- Bulletproof CV Animation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const isCV = window.location.pathname.includes("cv.html");
+      
+      if (isCV) {
+        const cvDoc = document.getElementById("cvDoc");
+        if (!cvDoc) return;
+
+        // Add CSS for the smooth fade-in and the scanning cursors
+        const style = document.createElement('style');
+        style.innerHTML = `
+          .cv-section { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+          .cv-section.loaded { opacity: 1; transform: translateY(0); }
+          .cv-scan-cursor {
+            position: absolute; width: 12px; height: 12px; background: #ff7b00;
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            opacity: 0; transition: top 0.3s ease, left 0.3s ease, opacity 0.2s ease;
+            box-shadow: 0 0 10px rgba(255,123,0,0.5);
+          }
+        `;
+        document.head.appendChild(style);
+
+        const cursors = [];
+        for (let i = 0; i < 3; i++) {
+          const c = document.createElement("div");
+          c.className = "cv-scan-cursor";
+          cvDoc.appendChild(c);
+          cursors.push(c);
+        }
+
+        const sections = cvDoc.querySelectorAll(".cv-section");
+        
+        // Quickly scan and fade in each section
+        sections.forEach((sec, index) => {
+          setTimeout(() => {
+            const cursor = cursors[index % 3];
+            cursor.style.opacity = "1";
+            cursor.style.top = `${sec.offsetTop + 20}px`;
+            cursor.style.left = `${sec.offsetWidth - 20}px`;
+            
+            // Reveal the section
+            sec.classList.add('loaded');
+            
+            setTimeout(() => { cursor.style.opacity = "0"; }, 200);
+          }, index * 150); // 150ms delay between sections
+        });
+
+        // Remove cursors after they finish
+        setTimeout(() => {
+          cursors.forEach(c => c.remove());
+        }, (sections.length * 150) + 500);
+      } else {
+        // Standard CursorSwarm for the homepage
+        if (typeof CursorSwarm !== 'undefined') {
+          setTimeout(() => {
+            window.mainSwarm = new CursorSwarm({ 
+              cursors: 3, palette: 'mono:#ff7b00', startPosition: 'outside',
+              hud: false, deconstruct: false, trigger: 0,
+              onDone: function() { setTimeout(() => window.mainSwarm.destroy(), 500); }
+            }).init();
+            setTimeout(() => { if(window.mainSwarm) window.mainSwarm.destroy(); }, 5000);
+          }, 100);
+        }
+      }
+    });
+  </script>
+  <script src="static/js/cursor-swarm.js?v=12"></script>
 </body>
 </html>
