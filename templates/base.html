@@ -353,92 +353,40 @@
       }
     });
   </script>
-  <!-- Custom CV Mini-Cursor Animation -->
-  <style>
-    .mini-cursor {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      background: #2d5a3d;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0;
-      box-shadow: 0 0 8px rgba(45,90,61,0.6);
-      transition: transform 0.1s ease-out, opacity 0.2s ease;
-    }
-    .cv-section-highlight {
-      position: relative;
-      transition: background-color 0.4s ease;
-      border-radius: 8px;
-    }
-    .cv-section-highlight.active {
-      background-color: rgba(45, 90, 61, 0.03);
-    }
-  </style>
-  
+  <!-- CursorSwarm (The correct way) -->
+  <script src="static/js/cursor-swarm.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Only run on the CV page
       if (!window.location.pathname.includes("cv.html")) return;
 
-      const cvDoc = document.getElementById("cvDoc");
-      if (!cvDoc) return;
-
-      // Get the sections to animate
-      const sections = cvDoc.querySelectorAll('.cv-section');
-      if (sections.length === 0) return;
-
-      // Create 3 mini cursors
-      const cursors = [];
-      for (let i = 0; i < 3; i++) {
-        const c = document.createElement('div');
-        c.className = 'mini-cursor';
-        document.body.appendChild(c);
-        cursors.push(c);
-      }
-
-      let completedSections = 0;
-
-      // Animate each section sequentially
-      sections.forEach((section, index) => {
-        const cursor = cursors[index % 3];
-        
-        // Set the starting position to the center of the screen
-        cursor.style.left = '50%';
-        cursor.style.top = '50%';
-        cursor.style.opacity = '1';
-        cursor.style.transform = 'scale(1)';
-
-        // After a slight delay, move the cursor to the section
-        setTimeout(() => {
-          const rect = section.getBoundingClientRect();
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
           
-          // Move cursor to the top left of the section
-          cursor.style.left = `${rect.left - 20}px`;
-          cursor.style.top = `${rect.top + window.scrollY + (rect.height / 2)}px`;
-          cursor.style.transform = 'scale(2.5)'; // Grow cursor like it's clicking
+          // Prevent the library from breaking tables by telling it to treat them as unbreakable blocks
+          const tables = document.querySelectorAll('.cv-table');
+          tables.forEach(t => t.setAttribute('data-cs', 'none'));
 
-          // Highlight the section
-          section.classList.add('active');
-
-          // After moving, fade the cursor out
-          setTimeout(() => {
-            cursor.style.opacity = '0';
-            cursor.style.transform = 'scale(1)';
-            section.classList.remove('active');
-            
-            completedSections++;
-            // If all sections are done, remove cursors from DOM
-            if (completedSections === sections.length) {
-              setTimeout(() => {
-                cursors.forEach(c => c.remove());
-              }, 500);
+          window.cvSwarm = new CursorSwarm({ 
+            cursors: 3, 
+            palette: 'mono:#2d5a3d',
+            startPosition: 'outside',
+            respectReducedMotion: false, 
+            hud: false,
+            deconstruct: false,
+            root: '#cvDoc', 
+            trigger: 0,
+            onDone: function() {
+              // Instantly remove cursors when the whole page is finished
+              setTimeout(function() {
+                if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                  window.cvSwarm.destroy();
+                }
+              }, 1000);
             }
-          }, 600);
-
-        }, (index * 400) + 300); // Stagger the sections by 400ms
-      });
+          }).init();
+        }
+      }, 300);
     });
   </script>
 </body>
