@@ -1,2 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ page.title }}</title>
+  <meta name="description" content="{{ page.description }}" />
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Stylesheets -->
+  <base href="{{ base_url }}/">
+  <link rel="stylesheet" href="static/css/main.css" />
+  <link rel="stylesheet" href="static/css/sections.css" />
+  <link rel="stylesheet" href="static/css/projects.css" />
+  <link rel="stylesheet" href="static/css/cv.css" />
+  <link rel="stylesheet" href="static/css/cv-print.css" media="print" />
+
+  <!-- Custom Cursor CSS -->
+  <style>
+    @media (pointer: fine) {
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: url('static/img/cursor.png'), auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="index.html" class="nav-logo">{{ site.brand.wordmark }}<span>{{ site.brand.wordmark_accent }}</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        {{ nav_items }}
+      </ul>
+    </nav>
+  </header>
+
+  <main>{{ content }}</main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><span class="footer-logo">{{ site.brand.wordmark }}<span>{{ site.brand.wordmark_accent }}</span></span> &nbsp;·&nbsp; {{ site.footer.copyright_html }}</p>
+      <a href="#" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">{{ site.footer.back_to_top_label }}</a>
+    </div>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="static/js/main.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    if (window.lucide) { lucide.createIcons(); }
+  </script>
+
+  <!-- CursorSwarm Animation -->
+  <script src="static/js/cursor-swarm.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
+          window.swarm = new CursorSwarm({ 
+            cursors: 3, 
+            palette: 'forest',
+            startPosition: 'outside',
+            respectReducedMotion: true,
+            hud: false,
+            deconstruct: false,
+            onDone: function() {
+              setTimeout(function() {
+                if (window.swarm && window.swarm.state !== 'destroyed') {
+                  window.swarm.destroy();
+                }
+              }, 500);
+            }
+          }).init();
+          
+          setTimeout(function() {
+            if (window.swarm && window.swarm.state !== 'destroyed') {
+              window.swarm.destroy();
+            }
+          }, 4000);
+        }
+      }, 100);
+    });
+  </script>
+
+  <!-- ScrollReveal Animations -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card, .profile-card', {
+        delay: 200, distance: '20px', duration: 600, origin: 'bottom', interval: 100, reset: false
+      });
+    });
+  </script>
+
+  <!-- Magnetic Buttons -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = `translate(0px, 0px)`;
+          btn.style.transition = 'transform 0.3s ease';
+        });
+        btn.addEventListener('mouseenter', () => {
+          btn.style.transition = 'none';
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
