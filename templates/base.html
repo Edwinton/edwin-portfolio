@@ -260,8 +260,6 @@
       }, 200);
     });
   </script>
-  <!-- CursorSwarm Animation -->
-  <script src="static/js/cursor-swarm.js?v=9"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Universal CursorSwarm setup
@@ -298,6 +296,69 @@
               window.mainSwarm.destroy();
             }
           }, 6000);
+        }
+      }, 200);
+    });
+  </script>
+  <!-- CursorSwarm Animation (Targeted) -->
+  <script src="static/js/cursor-swarm.js?v=11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
+          
+          const isCV = window.location.pathname.includes("cv.html");
+          
+          if (isCV) {
+            // On CV page: ONLY animate the text sections, completely ignore tables
+            const textSections = document.querySelectorAll('.cv-section p, .cv-section ul');
+            textSections.forEach(el => el.setAttribute('data-cs', 'words')); // Force word-by-word typing
+
+            window.mainSwarm = new CursorSwarm({ 
+              cursors: 3, 
+              palette: 'mono:#ff7b00',
+              startPosition: 'outside',
+              respectReducedMotion: false, 
+              hud: false,
+              deconstruct: false,
+              targets: '.cv-section p, .cv-section ul', // ONLY build these elements
+              ignore: 'table, h2, .cv-toolbar',         // Ignore tables, headers, and the download button
+              trigger: 0, 
+              onDone: function() {
+                setTimeout(function() {
+                  if (window.mainSwarm && window.mainSwarm.state !== 'destroyed') {
+                    window.mainSwarm.destroy();
+                  }
+                }, 1000);
+              }
+            }).init();
+          } else {
+            // On other pages, build the whole page normally
+            window.mainSwarm = new CursorSwarm({ 
+              cursors: 3, 
+              palette: 'mono:#ff7b00',
+              startPosition: 'outside',
+              respectReducedMotion: false, 
+              hud: false,
+              deconstruct: false,
+              trigger: 0, 
+              onDone: function() {
+                setTimeout(function() {
+                  if (window.mainSwarm && window.mainSwarm.state !== 'destroyed') {
+                    window.mainSwarm.destroy();
+                  }
+                }, 1000);
+              }
+            }).init();
+          }
+
+          // Fail-safe cleanup after 6 seconds
+          setTimeout(function() {
+            if (window.mainSwarm && window.mainSwarm.state !== 'destroyed') {
+              window.mainSwarm.destroy();
+            }
+          }, 6000);
+          
         }
       }, 200);
     });
