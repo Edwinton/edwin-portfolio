@@ -535,5 +535,184 @@
       });
     });
   </script>
+  <!-- Secret Achievement System -->
+  <style>
+    #achievement-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .achievement-toast {
+      background: #1a1a1a;
+      color: white;
+      padding: 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-left: 4px solid #ff7b00;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    }
+
+    .achievement-toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .achievement-icon {
+      font-size: 24px;
+    }
+
+    .achievement-text h4 {
+      color: #ff7b00;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .achievement-text p {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .achievement-xp {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+      display: block;
+    }
+  </style>
+
+  <div id="achievement-container"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Set up the container
+      if (!document.getElementById('achievement-container')) {
+        const container = document.createElement('div');
+        container.id = 'achievement-container';
+        document.body.appendChild(container);
+      }
+
+      // Get unlocked achievements from localStorage
+      let unlocked = JSON.parse(localStorage.getItem('edwin_achievements')) || [];
+      let visitedPages = JSON.parse(localStorage.getItem('edwin_visited_pages')) || [];
+
+      // Function to show the toast
+      function unlockAchievement(id, title, desc, icon, xp) {
+        if (unlocked.includes(id)) return; // Already unlocked
+        
+        unlocked.push(id);
+        localStorage.setItem('edwin_achievements', JSON.stringify(unlocked));
+
+        const container = document.getElementById('achievement-container');
+        const toast = document.createElement('div');
+        toast.className = 'achievement-toast';
+        toast.innerHTML = `
+          <div class="achievement-icon">${icon}</div>
+          <div class="achievement-text">
+            <h4>🏆 Achievement Unlocked!</h4>
+            <p>${title}</p>
+            <span class="achievement-xp">${desc} (+${xp} XP)</span>
+          </div>
+        `;
+        container.appendChild(toast);
+
+        // Animate in
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Remove after 4 seconds
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 500);
+        }, 4000);
+      }
+
+      // 1. Night Owl
+      const hour = new Date().getHours();
+      if (hour >= 0 && hour < 4) {
+        setTimeout(() => unlockAchievement('night_owl', 'Night Owl', 'You are browsing at 3 AM.', '🌙', 50), 2000);
+      }
+
+      // 2. Explorer (Visit all main pages)
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      if (['index.html', 'about.html', 'skills.html', 'projects.html', 'education.html', 'contact.html', 'cv.html'].includes(currentPath)) {
+        if (!visitedPages.includes(currentPath)) {
+          visitedPages.push(currentPath);
+          localStorage.setItem('edwin_visited_pages', JSON.stringify(visitedPages));
+        }
+        
+        // Check if all 7 pages are visited
+        if (visitedPages.length >= 7) {
+          setTimeout(() => unlockAchievement('explorer', 'Explorer', 'You visited every page.', '🧭', 100), 2000);
+        }
+      }
+
+      // 3. Keyboard Ninja
+      let tabPresses = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          tabPresses++;
+          if (tabPresses === 3) {
+            unlockAchievement('keyboard_ninja', 'Keyboard Ninja', 'You know how to navigate with a keyboard.', '⌨️', 75);
+          }
+        }
+        
+        // 4. Konami Master & 5. Hire Me (Re-using your existing listeners)
+        if (e.key === 'ArrowUp') {
+            if (!window._konami) window._konami = [];
+            window._konami.push(e.key);
+            if (window._konami.join('') === 'ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba') {
+                unlockAchievement('konami', 'Konami Master', 'You entered the ancient code.', '🎮', 150);
+            }
+            if (window._konami.length > 10) window._konami.shift();
+        } else if (window._konami) {
+            window._konami = [];
+        }
+
+        if (e.key.toLowerCase() === 'h') {
+            if (!window._hireBuffer) window._hireBuffer = "";
+            window._hireBuffer += e.key.toLowerCase();
+            if (window._hireBuffer.includes('hire')) {
+                unlockAchievement('hire_me', 'Ready to Hire', 'You typed the magic word.', '💼', 100);
+            }
+            if (window._hireBuffer.length > 4) window._hireBuffer = window._hireBuffer.slice(-4);
+        }
+      });
+
+      // 6. Curious Mind (Terminal)
+      // We hook into the Ctrl+K command
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'k') {
+            unlockAchievement('terminal', 'Curious Mind', 'You discovered the developer terminal.', '💻', 100);
+        }
+      });
+      
+      // Listen for the word "terminal"
+      let termBuffer = "";
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        termBuffer += e.key.toLowerCase();
+        if (termBuffer.includes("terminal")) {
+            unlockAchievement('terminal', 'Curious Mind', 'You discovered the developer terminal.', '💻', 100);
+            termBuffer = "";
+        }
+        if (termBuffer.length > 10) termBuffer = termBuffer.slice(-8);
+      });
+
+    });
+  </script>
 </body>
 </html>
