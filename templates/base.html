@@ -91,5 +91,25 @@
       }
     }, 100);
   </script>
+  <!-- ScrollReveal Animation -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    // Only initialize ScrollReveal after the DOM is ready
+    document.addEventListener("DOMContentLoaded", function() {
+      // Wait a few seconds for CursorSwarm to finish its initial build, 
+      // so they don't fight each other
+      setTimeout(function() {
+        ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card', {
+          delay: 200,
+          distance: '30px',
+          duration: 800,
+          easing: 'cubic-bezier(0.5, 0, 0, 1)',
+          origin: 'bottom',
+          interval: 100, // Adds a nice stagger effect between cards
+          reset: false   // Only animate once
+        });
+      }, 2500); // 2.5 second delay lets the cursors do their thing first
+    });
+  </script>
 </body>
 </html>
