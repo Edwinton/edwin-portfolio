@@ -282,171 +282,6 @@
     });
   </script>
 
-  <!-- Easter Eggs -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      
-      // 1. The Logo Spin (3 Clicks)
-      let logoClicks = 0;
-      const logo = document.querySelector('.nav-logo');
-      if (logo) {
-        logo.addEventListener('click', (e) => {
-          logoClicks++;
-          if (logoClicks === 3) {
-            e.preventDefault();
-            document.body.style.transition = 'transform 1s ease';
-            document.body.style.transform = 'rotate(360deg)';
-            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
-            logoClicks = 0;
-          }
-        });
-      }
-
-      // 2. Type "hire"
-      let keysPressed = "";
-      document.addEventListener('keydown', (e) => {
-        keysPressed += e.key.toLowerCase();
-        if (keysPressed.includes("hire")) {
-          keysPressed = "";
-          const title = document.querySelector('.hero-text h1');
-          if (title) {
-            const originalText = title.innerText;
-            title.innerText = "Hire Me? Let's Talk!";
-            title.style.color = "#ff7b00";
-            setTimeout(() => { title.innerText = originalText; title.style.color = ""; }, 2500);
-          }
-        }
-        if (keysPressed.length > 10) keysPressed = keysPressed.slice(-5);
-      });
-
-      // 3. Double Click Confetti
-      const footer = document.querySelector('.site-footer p');
-      if (footer) {
-        footer.addEventListener('dblclick', () => {
-          for (let i = 0; i < 30; i++) {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'fixed';
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.top = '-10px';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = ['#ff7b00', '#d65a00', '#ff9e40', '#ffffff'][Math.floor(Math.random() * 4)];
-            confetti.style.zIndex = '9999';
-            confetti.style.transition = 'transform 2s linear, opacity 2s linear';
-            document.body.appendChild(confetti);
-            setTimeout(() => { confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`; confetti.style.opacity = '0'; }, 50);
-            setTimeout(() => confetti.remove(), 2000);
-          }
-        });
-      }
-
-      // 4. Konami Code
-      let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-      let konamiIndex = 0;
-      document.addEventListener('keydown', (e) => {
-        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
-          konamiIndex++;
-          if (konamiIndex === konamiCode.length) {
-            document.body.style.transition = 'filter 1s ease';
-            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
-            setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
-            konamiIndex = 0;
-          }
-        } else { konamiIndex = 0; }
-      });
-
-      // 5. Shift Trail
-      let isDrawing = false;
-      document.addEventListener('keydown', (e) => { if (e.key === 'Shift') isDrawing = true; });
-      document.addEventListener('keyup', (e) => { if (e.key === 'Shift') isDrawing = false; });
-      document.addEventListener('mousemove', (e) => {
-        if (!isDrawing || Math.random() > 0.3) return;
-        const dot = document.createElement('div');
-        dot.style.position = 'fixed';
-        dot.style.left = e.clientX + 'px';
-        dot.style.top = e.clientY + 'px';
-        dot.style.width = '10px'; dot.style.height = '10px';
-        dot.style.backgroundColor = '#ff7b00';
-        dot.style.borderRadius = '50%';
-        dot.style.pointerEvents = 'none';
-        dot.style.zIndex = '9999';
-        dot.style.transition = 'opacity 1s ease';
-        document.body.appendChild(dot);
-        setTimeout(() => { dot.style.opacity = '0'; }, 10);
-        setTimeout(() => { dot.remove(); }, 1000);
-      });
-
-      // 6. Type "matrix"
-      let matrixKeys = "";
-      document.addEventListener('keydown', (e) => {
-        matrixKeys += e.key.toLowerCase();
-        if (matrixKeys.includes("matrix")) {
-          matrixKeys = "";
-          const body = document.body;
-          if (body.style.backgroundColor === 'black') {
-            body.style.backgroundColor = ''; body.style.color = '';
-          } else {
-            body.style.backgroundColor = '#000'; body.style.color = '#0f0';
-            body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
-            setTimeout(() => { body.style.backgroundColor = ''; body.style.color = ''; }, 4000);
-          }
-        }
-        if (matrixKeys.length > 10) matrixKeys = matrixKeys.slice(-6);
-      });
-
-      // 7. Console Message
-      console.log("%c👋 Hey there, curious developer!%c\n\nLooks like you know how to use DevTools. \nIf you're reading this, you're exactly the kind of person I want to work with.\n\nLet's build something great together.\n\n📧 edwinvedon@gmail.com", "font-size: 20px; font-weight: bold; color: #ff7b00;", "font-size: 14px; color: inherit;");
-
-      // 8. Type "party"
-      let partyKeys = "";
-      document.addEventListener('keydown', (e) => {
-        partyKeys += e.key.toLowerCase();
-        if (partyKeys.includes("party")) {
-          partyKeys = "";
-          const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card');
-          cards.forEach(card => { card.style.animation = 'shake 0.5s ease-in-out infinite'; });
-          setTimeout(() => { cards.forEach(c => c.style.animation = ''); }, 3000);
-        }
-        if (partyKeys.length > 8) partyKeys = partyKeys.slice(-5);
-      });
-
-      // 9. Type "zoom"
-      let zoomKeys = "";
-      document.addEventListener('keydown', (e) => {
-        zoomKeys += e.key.toLowerCase();
-        if (zoomKeys.includes("zoom")) {
-          zoomKeys = "";
-          const mainContent = document.querySelector("main");
-          if (mainContent) {
-            mainContent.style.transition = 'transform 0.3s ease';
-            mainContent.style.transformOrigin = 'center top';
-            mainContent.style.transform = 'scale(1.05)';
-            setTimeout(() => { mainContent.style.transform = 'scale(1)'; }, 300);
-            setTimeout(() => { mainContent.style.transform = 'scale(0.95)'; }, 600);
-            setTimeout(() => { mainContent.style.transform = 'scale(1)'; }, 900);
-          }
-        }
-        if (zoomKeys.length > 8) zoomKeys = zoomKeys.slice(-4);
-      });
-
-      // 10. Right-click Logo (Random Color)
-      if (logo) {
-        logo.addEventListener('contextmenu', (e) => {
-          e.preventDefault();
-          const colors = ['#ff7b00', '#2d5a3d', '#1a2332', '#d65a00', '#ff9e40'];
-          document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          setTimeout(() => { document.body.style.backgroundColor = 'var(--surface, #faf9f7)'; }, 2000);
-        });
-      }
-
-      // 11. URL ?admin
-      if (window.location.search.includes("?admin")) {
-        const footer = document.querySelector('.footer-inner p');
-        if (footer) footer.innerHTML += '<br><br><span style="color: #ff7b00; font-weight: bold;">🕵️ Secret Admin Mode Activated. Shh!</span>';
-      }
-
-    });
-  </script>
   
   <style>
     @keyframes shake { 
@@ -463,5 +298,78 @@
       100% { transform: translate(1px, -2px) rotate(-1deg); } 
     }
   </style>
+  <!-- Easter Eggs & Keyboard Secrets -->
+  <script>
+    document.addEventListener("keydown", function(e) {
+      // Ignore key presses if the user is typing in a form input
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+      // Store keys temporarily
+      if (!window._keyBuffer) window._keyBuffer = "";
+      window._keyBuffer += e.key;
+      if (window._keyBuffer.length > 10) {
+        window._keyBuffer = window._keyBuffer.slice(-5);
+      }
+
+      // 1. Secret 404 Page
+      if (window._keyBuffer.includes("404")) {
+        window._keyBuffer = "";
+        const main = document.querySelector("main");
+        if (main) {
+          main.innerHTML = `
+            <div style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: monospace;">
+              <h1 style="font-size: 8rem; color: #ff7b00; margin: 0;">404</h1>
+              <p style="font-size: 1.5rem; color: #333;">You found the secret 404 page.</p>
+              <p style="color: #666; margin-bottom: 2rem;">Nice try, hacker. But you can't escape that easily.</p>
+              <button onclick="window.location.reload()" style="padding: 10px 20px; background: #ff7b00; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Go Back</button>
+            </div>
+          `;
+        }
+      }
+
+      // 2. Secret Job Offer
+      if (window._keyBuffer.includes("job")) {
+        window._keyBuffer = "";
+        console.log("%c💼 You typed 'job'!%c\n\nHere is your official job offer:\nPosition: Full-Stack Developer\nSalary: Negotiable\nBenefits: Unlimited coffee, zero meetings before 10 AM.\n\nPlease email edwinvedon@gmail.com to accept.", "font-size: 18px; color: #fff; background: #ff7b00; padding: 5px; border-radius: 4px;", "font-size: 14px; color: #333;");
+        
+        const toast = document.createElement('div');
+        toast.style.cssText = "position:fixed; bottom:20px; right:20px; background:#1a1a1a; color:#fff; padding:16px 24px; border-radius:8px; z-index:99999; box-shadow:0 4px 12px rgba(0,0,0,0.3); font-family:monospace; border-left:4px solid #ff7b00;";
+        toast.innerHTML = "<strong>💼 Secret Job Offer!</strong><br>Check the Developer Console (F12) to accept.";
+        document.body.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.5s'; }, 3000);
+        setTimeout(() => { toast.remove(); }, 3500);
+      }
+
+      // 3. The "Hire Me" Trick
+      if (window._keyBuffer.includes("hire")) {
+        window._keyBuffer = "";
+        const title = document.querySelector('.hero-text h1');
+        if (title) {
+          const originalText = title.innerText;
+          title.innerText = "Hire Me? Let's Talk!";
+          title.style.color = "#ff7b00";
+          setTimeout(() => { title.innerText = originalText; title.style.color = ""; }, 2500);
+        }
+      }
+    });
+
+    // Logo Spin Easter Egg
+    document.addEventListener("DOMContentLoaded", function() {
+      const logo = document.querySelector('.nav-logo');
+      if (logo) {
+        let logoClicks = 0;
+        logo.addEventListener('click', (e) => {
+          logoClicks++;
+          if (logoClicks === 3) {
+            e.preventDefault();
+            document.body.style.transition = 'transform 1s ease';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
+            logoClicks = 0;
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
