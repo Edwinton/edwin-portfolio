@@ -489,3 +489,16 @@
   opacity: 1 !important;
   visibility: visible !important;
 }
+/* Fix for icons disappearing on hover */
+.contact-card svg, .profile-card-link svg {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  pointer-events: none;
+}
+.contact-card:hover svg, .profile-card-link:hover svg {
+  transform: scale(1.1);
+  opacity: 1 !important;
+}
+.contact-card, .profile-card-link {
+  position: relative;
+  z-index: 10;
+}
