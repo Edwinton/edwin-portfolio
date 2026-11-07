@@ -285,14 +285,19 @@
   <!-- Custom Orange Dot Cursor -->
   <style>
     @media (pointer: fine) {
-      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card, input, textarea {
-        cursor: none !important; /* Hide default cursor */
+      /* Hide default cursor everywhere EXCEPT inputs */
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: none !important;
+      }
+      input, textarea {
+        cursor: text !important; /* Keep default text cursor for typing */
       }
     }
+    
     .orange-dot {
       position: fixed;
       top: 0; left: 0;
-      width: 12px; height: 12px;
+      width: 14px; height: 14px;
       background-color: #ff7b00;
       border-radius: 50%;
       pointer-events: none;
@@ -302,26 +307,30 @@
       box-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
       display: none;
     }
+    
     .orange-dot.hovering {
-      width: 24px; height: 24px;
-      background-color: rgba(255, 123, 0, 0.5);
+      width: 28px; height: 28px;
+      background-color: rgba(255, 123, 0, 0.4);
+      border: 1px solid #ff7b00;
     }
   </style>
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      // Only enable on devices with a mouse
       if (window.matchMedia("(pointer: fine)").matches) {
         const dot = document.createElement("div");
         dot.className = "orange-dot";
         document.body.appendChild(dot);
         dot.style.display = "block";
 
+        // Move the dot with the mouse
         document.addEventListener("mousemove", (e) => {
           dot.style.left = e.clientX + "px";
           dot.style.top = e.clientY + "px";
         });
 
-        // Expand the dot when hovering over clickable elements
+        // Expand the dot on interactive elements
         const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
         hoverables.forEach(el => {
           el.addEventListener("mouseenter", () => dot.classList.add("hovering"));
