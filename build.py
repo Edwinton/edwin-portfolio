@@ -7,6 +7,7 @@ Usage:
     python build.py --clean
 """
 
+import os
 import json
 import re
 import shutil
