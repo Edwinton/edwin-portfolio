@@ -488,7 +488,7 @@
       "external": true
     },
     {
-      "icon": "doc",
+      "icon": "file-text",
       "label": "CV",
       "text": "View or download my CV",
       "href": "cv.html"
