@@ -282,7 +282,7 @@
     });
   </script>
 
-  <!-- Bulletproof Custom Cursor -->
+  <!-- Locked Custom Cursor -->
   <style>
     @media (pointer: fine) {
       body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
@@ -293,76 +293,76 @@
       }
     }
     
-    #cursor-dot {
+    .custom-cursor-layer {
       position: fixed;
       top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 2147483647;
+    }
+    
+    #cursor-dot {
+      position: absolute;
       width: 12px; height: 12px;
       background-color: #ff7b00;
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 2147483647; /* Max z-index */
       transform: translate(-50%, -50%);
       transition: width 0.2s ease, height 0.2s ease;
-      display: none;
     }
     
     #cursor-ring {
-      position: fixed;
-      top: 0; left: 0;
+      position: absolute;
       width: 36px; height: 36px;
       border: 1.5px solid #ff7b00;
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 2147483646;
       transform: translate(-50%, -50%);
-      transition: transform 0.15s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
-      display: none;
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
     }
     
     #cursor-ring.active {
       width: 50px; height: 50px;
-      background-color: rgba(255, 123, 0, 0.1);
+      background-color: rgba(255, 123, 0, 0.15);
     }
   </style>
   
   <script>
-    // Use window.onload to ensure ALL elements are fully loaded before script runs
     window.addEventListener('load', function() {
       if (window.matchMedia("(pointer: fine)").matches) {
+        var layer = document.createElement("div");
+        layer.className = "custom-cursor-layer";
+        
         var dot = document.createElement("div");
         dot.id = "cursor-dot";
-        document.body.appendChild(dot);
-        dot.style.display = "block";
-
+        layer.appendChild(dot);
+        
         var ring = document.createElement("div");
         ring.id = "cursor-ring";
-        document.body.appendChild(ring);
-        ring.style.display = "block";
+        layer.appendChild(ring);
+        
+        document.body.appendChild(layer);
 
-        var mouseX = window.innerWidth / 2;
-        var mouseY = window.innerHeight / 2;
-        var ringX = mouseX;
-        var ringY = mouseY;
-
-        // Track mouse position
-        window.addEventListener('mousemove', function(e) {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-          
-          // Move dot instantly
-          dot.style.left = mouseX + "px";
-          dot.style.top = mouseY + "px";
+        // Track mouse using clientX and clientY
+        document.addEventListener('mousemove', function(e) {
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+          ring.style.left = e.clientX + "px";
+          ring.style.top = e.clientY + "px";
         });
 
-        // Animate ring
-        function animate() {
-          ringX += (mouseX - ringX) * 0.2;
-          ringY += (mouseY - ringY) * 0.2;
-          ring.style.left = ringX + "px";
-          ring.style.top = ringY + "px";
-          requestAnimationFrame(animate);
-        }
-        animate();
+        // Force the cursor to update its position when scrolling
+        document.addEventListener('scroll', function(e) {
+          if (window.lastMouseEvent) {
+            dot.style.left = window.lastMouseEvent.clientX + "px";
+            dot.style.top = window.lastMouseEvent.clientY + "px";
+            ring.style.left = window.lastMouseEvent.clientX + "px";
+            ring.style.top = window.lastMouseEvent.clientY + "px";
+          }
+        }, { passive: true });
+
+        // Save the last mouse position
+        document.addEventListener('mousemove', function(e) {
+          window.lastMouseEvent = e;
+        });
 
         // Expand on hover
         var hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
