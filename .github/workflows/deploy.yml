@@ -32,8 +32,13 @@ jobs:
       - name: Build site
         run: python build.py
 
-      - name: Force copy static folder
-        run: cp -r static public/
+      - name: FORCE COPY STATIC FILES
+        run: |
+          mkdir -p public/static
+          cp -r static/css public/static/css
+          cp -r static/js public/static/js
+          cp -r static/img public/static/img || true
+          cp -r static/pdf public/static/pdf || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
