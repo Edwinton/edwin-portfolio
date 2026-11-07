@@ -293,8 +293,6 @@
       }
     });
   </script>
-  <!-- CursorSwarm Effect (Full CV Reveal) -->
-  <script src="static/js/cursor-swarm.js?v=3"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Only run on the CV page
@@ -313,6 +311,36 @@
               trigger: 0, 
               onDone: function() {
                 // When the ENTIRE CV is built, wait 1.5 seconds then destroy cursors
+                setTimeout(function() {
+                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                    window.cvSwarm.destroy();
+                  }
+                }, 1500);
+              }
+            }).init();
+          }
+        }, 300);
+      }
+    });
+  </script>
+  <!-- CursorSwarm Effect (Full CV Reveal with Table Fix) -->
+  <script src="static/js/cursor-swarm.js?v=4"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.location.pathname.includes("cv.html")) {
+        setTimeout(function() {
+          if (typeof CursorSwarm !== 'undefined') {
+            window.cvSwarm = new CursorSwarm({ 
+              cursors: 4, 
+              palette: 'mono:#2d5a3d',
+              startPosition: 'outside',
+              respectReducedMotion: false,
+              hud: false,
+              deconstruct: false,
+              root: '#cvDoc', 
+              trigger: 0,
+              ignore: 'table', // <--- THIS IS THE FIX: Skip tables so text doesn't vanish
+              onDone: function() {
                 setTimeout(function() {
                   if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
                     window.cvSwarm.destroy();
