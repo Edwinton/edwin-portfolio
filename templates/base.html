@@ -220,8 +220,6 @@
 
     });
   </script>
-  <!-- CursorSwarm Fixed Implementation for CV -->
-  <script src="static/js/cursor-swarm.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       if (!window.location.pathname.includes("cv.html")) return;
@@ -256,6 +254,48 @@
           setTimeout(function() {
             if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
               window.cvSwarm.destroy();
+            }
+          }, 6000);
+        }
+      }, 200);
+    });
+  </script>
+  <!-- CursorSwarm Animation -->
+  <script src="static/js/cursor-swarm.js?v=9"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Universal CursorSwarm setup
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
+          
+          // Skip tables on the CV page to prevent text from disappearing
+          const tables = document.querySelectorAll('.cv-table');
+          tables.forEach(t => t.setAttribute('data-cs', 'none'));
+
+          const isCV = window.location.pathname.includes("cv.html");
+
+          window.mainSwarm = new CursorSwarm({ 
+            cursors: 4, 
+            palette: 'mono:#ff7b00', // The orange cursor color
+            startPosition: 'outside',
+            respectReducedMotion: false, 
+            hud: false,
+            deconstruct: false,
+            root: isCV ? '#cvDoc' : 'body',
+            trigger: 0, 
+            onDone: function() {
+              setTimeout(function() {
+                if (window.mainSwarm && window.mainSwarm.state !== 'destroyed') {
+                  window.mainSwarm.destroy();
+                }
+              }, 1000);
+            }
+          }).init();
+          
+          // Fail-safe: Destroy after 6 seconds
+          setTimeout(function() {
+            if (window.mainSwarm && window.mainSwarm.state !== 'destroyed') {
+              window.mainSwarm.destroy();
             }
           }, 6000);
         }
