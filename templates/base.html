@@ -463,5 +463,86 @@
       100% { transform: translate(1px, -2px) rotate(-1deg); } 
     }
   </style>
+  <!-- Ultimate Dot Cursor -->
+  <style>
+    @media (pointer: fine) {
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: none !important;
+      }
+      input, textarea, select {
+        cursor: text !important;
+      }
+    }
+    
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background-color: #ff7b00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2147483647;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      display: none;
+    }
+    
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(255, 123, 0, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2147483646;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      display: none;
+    }
+    
+    /* The expanding effect on hover */
+    #cursor-ring.active {
+      width: 48px; height: 48px;
+      background-color: rgba(255, 123, 0, 0.15);
+      border-color: #ff7b00;
+    }
+  </style>
+  
+  <script>
+    window.addEventListener('load', function() {
+      if (window.matchMedia("(pointer: fine)").matches) {
+        var dot = document.createElement("div");
+        dot.id = "cursor-dot";
+        document.body.appendChild(dot);
+        dot.style.display = "block";
+
+        var ring = document.createElement("div");
+        ring.id = "cursor-ring";
+        document.body.appendChild(ring);
+        ring.style.display = "block";
+
+        // Move both elements to the mouse position immediately
+        window.addEventListener('mousemove', function(e) {
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+          ring.style.left = e.clientX + "px";
+          ring.style.top = e.clientY + "px";
+        });
+
+        // Add the expanding effect on hover
+        var hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
+        for (var i = 0; i < hoverables.length; i++) {
+          hoverables[i].addEventListener("mouseenter", function() { 
+            ring.classList.add("active"); 
+            dot.style.backgroundColor = "transparent"; // Make the center dot transparent so it looks hollow
+          });
+          hoverables[i].addEventListener("mouseleave", function() { 
+            ring.classList.remove("active"); 
+            dot.style.backgroundColor = "#ff7b00"; // Restore the solid orange dot
+          });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
