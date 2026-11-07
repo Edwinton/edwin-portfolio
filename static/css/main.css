@@ -58,65 +58,7 @@ h3 { font-size: 1.125rem; }
 p  { color: var(--ink-soft); }
 .eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-700); margin-bottom: var(--s-2); }
 
-/* ============================================
-   iOS Liquid Glass Navigation
-   ============================================ */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.65); 
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-  transition: background 0.3s ease, backdrop-filter 0.3s ease;
-}
 
-.nav { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
-.nav-logo { font-family: var(--mono); font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; color: var(--ink); z-index: 101; }
-.nav-logo span { color: var(--green-700); }
-
-.nav-menu { display: flex; align-items: center; gap: 28px; }
-.nav-menu a { font-size: 0.94rem; font-weight: 500; color: var(--ink-soft); transition: color 0.2s ease; position: relative; padding: 4px 0; }
-.nav-menu a:hover, .nav-menu a.active { color: var(--ink); }
-.nav-menu a::after { content: ""; position: absolute; left: 0; bottom: -3px; height: 2px; width: 0; background: var(--green-700); border-radius: 2px; transition: width 0.25s ease; }
-.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
-
-.nav-cta { background: var(--ink); color: var(--white) !important; padding: 7px 16px !important; border-radius: 999px; font-weight: 600; font-size: 0.88rem !important; }
-.nav-cta:hover { background: var(--green-700); }
-.nav-cta::after { display: none; }
-
-.nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; z-index: 101; }
-.nav-toggle span { width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
-.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-toggle.open span:nth-child(2) { opacity: 0; }
-.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* Mobile Menu */
-@media (max-width: 860px) {
-  .nav-toggle { display: flex; }
-  .nav-menu {
-    position: absolute; top: var(--header-h); left: 0; right: 0;
-    flex-direction: column; align-items: center; gap: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 16px 24px 32px;
-    max-height: 0; overflow: hidden; opacity: 0; pointer-events: none;
-    transition: max-height 0.4s ease, opacity 0.3s ease;
-  }
-  .nav-menu.open { max-height: 500px; opacity: 1; pointer-events: auto; }
-  .nav-menu li { width: 100%; text-align: center; }
-  .nav-menu a { display: block; padding: 16px 0; width: 100%; font-size: 1.1rem; border-bottom: 1px solid var(--border); }
-  .nav-menu a::after { display: none; }
-  .nav-cta { margin-top: 16px; display: inline-block; width: auto !important; padding: 12px 32px !important; border-bottom: none !important; }
-  :root { --pad: 20px; }
-}
-
-/* ============================================
-   Footer
    ============================================ */
 .site-footer { background: var(--ink); color: #c8c8c2; padding: var(--s-6) 0; font-size: 0.88rem; margin-top: var(--s-9); }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; }
