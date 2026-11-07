@@ -157,6 +157,25 @@ def prepare(site):
     footer = site.get("footer", {})
     footer["copyright_html"] = footer.get("copyright", "").replace("{year}", str(__import__('datetime').datetime.now().year))
 
+    # Generate Event Cards for Achievements page
+    achv = pages.get("achievements", {})
+    if "events" in achv:
+        cards = []
+        for ev in achv["events"]:
+            cards.append(f"""
+            <article class="project-card">
+              <div class="project-top"><span class="project-badge">{ev.get("badge", "Event")}</span></div>
+              <h3>{ev.get("title", "")}</h3>
+              <p style="font-size: 0.85rem; color: var(--green-700); font-weight: 600; margin-bottom: 4px;">{ev.get("date", "")} · {ev.get("time", "")}</p>
+              <p style="font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 12px;">{ev.get("venue", "")}</p>
+              <p>{ev.get("summary", "")}</p>
+              <div class="project-links" style="margin-top: auto;">
+                <a href="{ev.get("link", "#")}" class="link">Read Case Study →</a>
+              </div>
+            </article>
+            """)
+        achv["events_html"] = "\n".join(cards)
+
     return site
 
 def build_nav(nav, current_file):
