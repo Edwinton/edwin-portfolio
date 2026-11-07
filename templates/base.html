@@ -416,11 +416,15 @@
         zoomKeys += e.key.toLowerCase();
         if (zoomKeys.includes("zoom")) {
           zoomKeys = "";
-          document.body.style.transition = 'transform 0.3s ease';
-          document.body.style.transform = 'scale(1.1)';
-          setTimeout(() => { document.body.style.transform = 'scale(1)'; }, 300);
-          setTimeout(() => { document.body.style.transform = 'scale(0.9)'; }, 600);
-          setTimeout(() => { document.body.style.transform = 'scale(1)'; }, 900);
+          const mainContent = document.querySelector("main");
+          if (mainContent) {
+            mainContent.style.transition = 'transform 0.3s ease';
+            mainContent.style.transformOrigin = 'center top';
+            mainContent.style.transform = 'scale(1.05)';
+            setTimeout(() => { mainContent.style.transform = 'scale(1)'; }, 300);
+            setTimeout(() => { mainContent.style.transform = 'scale(0.95)'; }, 600);
+            setTimeout(() => { mainContent.style.transform = 'scale(1)'; }, 900);
+          }
         }
         if (zoomKeys.length > 8) zoomKeys = zoomKeys.slice(-4);
       });
