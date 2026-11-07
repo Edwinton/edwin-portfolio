@@ -361,73 +361,106 @@
       }, 200);
     });
   </script>
-  <!-- Bulletproof CV Animation -->
+  <script src="static/js/cursor-swarm.js?v=12"></script>
+  <!-- CV Dot Reveal Animation -->
+  <style>
+    .cv-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      background: #ff7b00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      box-shadow: 0 0 8px rgba(255,123,0,0.6);
+      transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+    }
+    
+    /* Hidden state for text to be revealed */
+    .cv-reveal-text {
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    /* Revealed state */
+    .cv-reveal-text.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+  
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const isCV = window.location.pathname.includes("cv.html");
+      if (!window.location.pathname.includes("cv.html")) return;
       
-      if (isCV) {
-        const cvDoc = document.getElementById("cvDoc");
-        if (!cvDoc) return;
+      const cvDoc = document.getElementById("cvDoc");
+      if (!cvDoc) return;
+      
+      // Get all text elements (paragraphs and lists) but NOT tables or headings
+      const textElements = cvDoc.querySelectorAll('.cv-section p, .cv-section > ul');
+      if (textElements.length === 0) return;
 
-        // Add CSS for the smooth fade-in and the scanning cursors
-        const style = document.createElement('style');
-        style.innerHTML = `
-          .cv-section { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
-          .cv-section.loaded { opacity: 1; transform: translateY(0); }
-          .cv-scan-cursor {
-            position: absolute; width: 12px; height: 12px; background: #ff7b00;
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            opacity: 0; transition: top 0.3s ease, left 0.3s ease, opacity 0.2s ease;
-            box-shadow: 0 0 10px rgba(255,123,0,0.5);
-          }
-        `;
-        document.head.appendChild(style);
+      // Add the hidden class to all text elements
+      textElements.forEach(el => el.classList.add('cv-reveal-text'));
 
-        const cursors = [];
-        for (let i = 0; i < 3; i++) {
-          const c = document.createElement("div");
-          c.className = "cv-scan-cursor";
-          cvDoc.appendChild(c);
-          cursors.push(c);
-        }
+      // Create 3 dots
+      const dots = [];
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'cv-dot';
+        cvDoc.appendChild(dot);
+        dots.push(dot);
+      }
 
-        const sections = cvDoc.querySelectorAll(".cv-section");
+      // Animate each text block
+      textElements.forEach((el, index) => {
+        const dot = dots[index % 3];
         
-        // Quickly scan and fade in each section
-        sections.forEach((sec, index) => {
-          setTimeout(() => {
-            const cursor = cursors[index % 3];
-            cursor.style.opacity = "1";
-            cursor.style.top = `${sec.offsetTop + 20}px`;
-            cursor.style.left = `${sec.offsetWidth - 20}px`;
-            
-            // Reveal the section
-            sec.classList.add('loaded');
-            
-            setTimeout(() => { cursor.style.opacity = "0"; }, 200);
-          }, index * 150); // 150ms delay between sections
-        });
-
-        // Remove cursors after they finish
         setTimeout(() => {
-          cursors.forEach(c => c.remove());
-        }, (sections.length * 150) + 500);
-      } else {
-        // Standard CursorSwarm for the homepage
-        if (typeof CursorSwarm !== 'undefined') {
+          const rect = el.getBoundingClientRect();
+          const parentRect = cvDoc.getBoundingClientRect();
+          
+          // Position dot at the left side of the text block
+          const topPos = rect.top - parentRect.top + (rect.height / 2);
+          const leftPos = 10; // Just inside the left edge of the CV
+
+          dot.style.opacity = '1';
+          dot.style.top = `${topPos}px`;
+          dot.style.left = `${leftPos}px`;
+          
+          // Reveal the text slightly after the dot arrives
           setTimeout(() => {
-            window.mainSwarm = new CursorSwarm({ 
-              cursors: 3, palette: 'mono:#ff7b00', startPosition: 'outside',
-              hud: false, deconstruct: false, trigger: 0,
-              onDone: function() { setTimeout(() => window.mainSwarm.destroy(), 500); }
-            }).init();
-            setTimeout(() => { if(window.mainSwarm) window.mainSwarm.destroy(); }, 5000);
-          }, 100);
-        }
+            el.classList.add('revealed');
+            dot.style.opacity = '0';
+          }, 300);
+
+        }, index * 200); // Stagger the text blocks
+      });
+
+      // Clean up dots after everything is revealed
+      setTimeout(() => {
+        dots.forEach(d => d.remove());
+      }, (textElements.length * 200) + 1000);
+    });
+  </script>
+  <!-- Homepage CursorSwarm Animation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.location.pathname.includes("cv.html")) return; // Skip on CV
+      
+      if (typeof CursorSwarm !== 'undefined') {
+        setTimeout(function() {
+          window.mainSwarm = new CursorSwarm({ 
+            cursors: 3, palette: 'mono:#ff7b00', startPosition: 'outside',
+            hud: false, deconstruct: false, trigger: 0,
+            onDone: function() { setTimeout(() => window.mainSwarm.destroy(), 500); }
+          }).init();
+          setTimeout(() => { if(window.mainSwarm) window.mainSwarm.destroy(); }, 5000);
+        }, 100);
       }
     });
   </script>
-  <script src="static/js/cursor-swarm.js?v=12"></script>
+  <script src="static/js/cursor-swarm.js"></script>
 </body>
 </html>
