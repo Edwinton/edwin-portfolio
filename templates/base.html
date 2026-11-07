@@ -282,18 +282,22 @@
     });
   </script>
 
-  <!-- Expandable Orange Dot Cursor -->
+  <!-- Native Custom Orange Cursor -->
   <style>
     @media (pointer: fine) {
+      /* Hide the default cursor globally */
       body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
-        cursor: none !important; /* Hide default cursor */
+        cursor: none !important;
       }
-      input, textarea {
-        cursor: text !important; /* Keep text cursor for typing */
+      
+      /* Keep the text cursor for inputs */
+      input, textarea, select {
+        cursor: text !important;
       }
     }
     
-    .custom-dot {
+    /* The custom orange dot */
+    .native-dot {
       position: fixed;
       top: 0; left: 0;
       width: 12px; height: 12px;
@@ -302,42 +306,70 @@
       pointer-events: none;
       z-index: 99999;
       transform: translate(-50%, -50%);
-      /* Smooth transition for the size change */
-      transition: width 0.25s ease-out, height 0.25s ease-out, background-color 0.25s ease-out, opacity 0.2s ease;
+      transition: transform 0.1s ease-out;
       display: none;
-      box-shadow: 0 0 10px rgba(255, 123, 0, 0.4);
     }
     
-    /* The expanded state when hovering over a link/button */
-    .custom-dot.hovering {
+    /* The expanding ring when hovering links */
+    .native-ring {
+      position: fixed;
+      top: 0; left: 0;
       width: 36px; height: 36px;
-      background-color: rgba(255, 123, 0, 0.15);
       border: 2px solid #ff7b00;
-      box-shadow: 0 0 20px rgba(255, 123, 0, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
+      opacity: 0;
+      display: none;
+    }
+    
+    .native-ring.active {
+      opacity: 1;
     }
   </style>
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Only run on devices with a mouse
       if (window.matchMedia("(pointer: fine)").matches) {
         const dot = document.createElement("div");
-        dot.className = "custom-dot";
+        dot.className = "native-dot";
         document.body.appendChild(dot);
         dot.style.display = "block";
 
-        // Move the dot smoothly with the mouse
+        const ring = document.createElement("div");
+        ring.className = "native-ring";
+        document.body.appendChild(ring);
+        ring.style.display = "block";
+
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
         document.addEventListener("mousemove", (e) => {
-          dot.style.left = e.clientX + "px";
-          dot.style.top = e.clientY + "px";
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          
+          // Move the dot instantly
+          dot.style.left = mouseX + "px";
+          dot.style.top = mouseY + "px";
         });
 
-        // Expand on interactive elements
+        // Animate the ring with a slight lag
+        function animateRing() {
+          ringX += (mouseX - ringX) * 0.2;
+          ringY += (mouseY - ringY) * 0.2;
+          ring.style.left = ringX + "px";
+          ring.style.top = ringY + "px";
+          requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // Expand the ring on links/buttons/cards
         const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
-        
         hoverables.forEach(el => {
-          el.addEventListener("mouseenter", () => dot.classList.add("hovering"));
-          el.addEventListener("mouseleave", () => dot.classList.remove("hovering"));
+          el.addEventListener("mouseenter", () => ring.classList.add("active"));
+          el.addEventListener("mouseleave", () => ring.classList.remove("active"));
         });
       }
     });
