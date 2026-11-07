@@ -297,7 +297,12 @@ def build_page(page_key, page_data, site):
     parts = [render_section(sid, site, page_data) for sid in sections]
     content = "\n".join(parts)
     out_file = page_data.get("file", f"{page_key}.html")
+    # Force the base URL for GitHub Pages if running in CI
+    is_ci = os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true"
+    base_url = "/edwin-portfolio" if is_ci else ""
+
     final = render(base, {
+        "base_url": base_url,
         "site": site,
         "page": page_data,
         "cv": site.get("cv", {}),
