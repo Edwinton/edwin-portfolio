@@ -26,19 +26,6 @@
     @keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
   </style>
-  <!-- Custom Orange Dot Cursor (Pure CSS) -->
-  <style>
-    @media (pointer: fine) {
-      /* The SVG below is a perfectly sized orange circle */
-      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="%23ff7b00" /><circle cx="10" cy="10" r="8" fill="none" stroke="%23ff7b00" stroke-width="1" stroke-opacity="0.5" /></svg>') 10 10, auto !important;
-      }
-      /* Ensure text inputs keep the standard text cursor */
-      input, textarea {
-        cursor: text !important;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -295,5 +282,65 @@
     });
   </script>
 
+  <!-- Expandable Orange Dot Cursor -->
+  <style>
+    @media (pointer: fine) {
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: none !important; /* Hide default cursor */
+      }
+      input, textarea {
+        cursor: text !important; /* Keep text cursor for typing */
+      }
+    }
+    
+    .custom-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 12px; height: 12px;
+      background-color: #ff7b00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      /* Smooth transition for the size change */
+      transition: width 0.25s ease-out, height 0.25s ease-out, background-color 0.25s ease-out, opacity 0.2s ease;
+      display: none;
+      box-shadow: 0 0 10px rgba(255, 123, 0, 0.4);
+    }
+    
+    /* The expanded state when hovering over a link/button */
+    .custom-dot.hovering {
+      width: 36px; height: 36px;
+      background-color: rgba(255, 123, 0, 0.15);
+      border: 2px solid #ff7b00;
+      box-shadow: 0 0 20px rgba(255, 123, 0, 0.3);
+    }
+  </style>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only run on devices with a mouse
+      if (window.matchMedia("(pointer: fine)").matches) {
+        const dot = document.createElement("div");
+        dot.className = "custom-dot";
+        document.body.appendChild(dot);
+        dot.style.display = "block";
+
+        // Move the dot smoothly with the mouse
+        document.addEventListener("mousemove", (e) => {
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+        });
+
+        // Expand on interactive elements
+        const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
+        
+        hoverables.forEach(el => {
+          el.addEventListener("mouseenter", () => dot.classList.add("hovering"));
+          el.addEventListener("mouseleave", () => dot.classList.remove("hovering"));
+        });
+      }
+    });
+  </script>
 </body>
 </html>
