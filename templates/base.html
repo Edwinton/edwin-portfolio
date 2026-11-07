@@ -258,8 +258,6 @@
       }
     });
   </script>
-  <!-- CursorSwarm Effect (Only runs on CV page) -->
-  <script src="static/js/cursor-swarm.js?v=2"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Check if we are on the CV page
@@ -290,6 +288,38 @@
                 window.cvSwarm.destroy();
               }
             }, 4500);
+          }
+        }, 300);
+      }
+    });
+  </script>
+  <!-- CursorSwarm Effect (Full CV Reveal) -->
+  <script src="static/js/cursor-swarm.js?v=3"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only run on the CV page
+      if (window.location.pathname.includes("cv.html")) {
+        setTimeout(function() {
+          if (typeof CursorSwarm !== 'undefined') {
+            window.cvSwarm = new CursorSwarm({ 
+              cursors: 4, 
+              palette: 'mono:#2d5a3d',
+              startPosition: 'outside',
+              respectReducedMotion: false, // Force run
+              hud: false,
+              deconstruct: false,
+              root: '#cvDoc', 
+              // This forces the swarm to treat the whole CV as "visible" at once
+              trigger: 0, 
+              onDone: function() {
+                // When the ENTIRE CV is built, wait 1.5 seconds then destroy cursors
+                setTimeout(function() {
+                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                    window.cvSwarm.destroy();
+                  }
+                }, 1500);
+              }
+            }).init();
           }
         }, 300);
       }
