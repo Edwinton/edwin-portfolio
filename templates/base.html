@@ -126,83 +126,6 @@
       }
     });
   </script>
-  <!-- Custom CV Build Animation -->
-  <style>
-    .cv-mini-cursor {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      background: #2d5a3d;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0;
-      transition: top 0.4s ease, left 0.4s ease, opacity 0.2s ease;
-      box-shadow: 0 0 10px rgba(45,90,61,0.5);
-    }
-    .cv-scan-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(45,90,61,0.05);
-      pointer-events: none;
-      z-index: 9998;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-  </style>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (!window.location.pathname.includes("cv.html")) return;
-      
-      const cvDoc = document.getElementById("cvDoc");
-      if (!cvDoc) return;
-
-      // Make sure the CV is positioned relatively for the cursors
-      cvDoc.style.position = "relative";
-
-      const overlay = document.createElement("div");
-      overlay.className = "cv-scan-overlay";
-      cvDoc.appendChild(overlay);
-
-      const cursors = [];
-      for (let i = 0; i < 3; i++) {
-        const c = document.createElement("div");
-        c.className = "cv-mini-cursor";
-        cvDoc.appendChild(c);
-        cursors.push(c);
-      }
-
-      const sections = cvDoc.querySelectorAll(".cv-section");
-      
-      // Sequence the animation
-      sections.forEach((sec, index) => {
-        setTimeout(() => {
-          const cursor = cursors[index % 3];
-          
-          // Move cursor to the section
-          cursor.style.opacity = "1";
-          cursor.style.top = `${sec.offsetTop + 10}px`;
-          cursor.style.left = `${sec.offsetWidth - 30}px`; // Right side
-
-          // Flash the overlay to simulate building
-          overlay.style.top = `${sec.offsetTop}px`;
-          overlay.style.height = `${sec.offsetHeight}px`;
-          overlay.style.opacity = "1";
-          
-          setTimeout(() => { overlay.style.opacity = "0"; }, 200);
-          setTimeout(() => { cursor.style.opacity = "0"; }, 400);
-          
-        }, index * 250); // Fast sequential scan
-      });
-
-      // Clean up everything after 2 seconds
-      setTimeout(() => {
-        cursors.forEach(c => c.remove());
-        overlay.remove();
-      }, 2500);
-    });
-  </script>
   <!-- Interactive Effects: Tilt, Magnetic, and CV Flow -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -295,6 +218,48 @@
         });
       }
 
+    });
+  </script>
+  <!-- CursorSwarm Fixed Implementation for CV -->
+  <script src="static/js/cursor-swarm.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (!window.location.pathname.includes("cv.html")) return;
+
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
+          
+          // Tell the library to skip complex HTML tables so text doesn't disappear
+          const tables = document.querySelectorAll('.cv-table');
+          tables.forEach(t => t.setAttribute('data-cs', 'none'));
+
+          window.cvSwarm = new CursorSwarm({ 
+            cursors: 3, 
+            palette: 'mono:#2d5a3d',
+            startPosition: 'outside',
+            respectReducedMotion: false, 
+            hud: false,
+            deconstruct: false,
+            root: '#cvDoc', 
+            trigger: 0, // Build everything at once on load
+            onDone: function() {
+              // The moment the last element is built, remove the cursors
+              setTimeout(function() {
+                if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                  window.cvSwarm.destroy();
+                }
+              }, 1000);
+            }
+          }).init();
+          
+          // Fail-safe: Destroy after 6 seconds no matter what to prevent stuck cursors
+          setTimeout(function() {
+            if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+              window.cvSwarm.destroy();
+            }
+          }, 6000);
+        }
+      }, 200);
     });
   </script>
 </body>
