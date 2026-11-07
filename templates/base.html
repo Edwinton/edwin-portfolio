@@ -130,14 +130,45 @@
     });
   </script>
 
-  <!-- Magnetic Pull Effect -->
+  <!-- Interactive Effects: Tilt for Blocks, Magnetic for Elements -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Target all cards and buttons
-      const elements = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card, .btn, .nav-menu a');
       
-      elements.forEach(el => {
-        // Set a smooth transition for when the mouse leaves
+      // ==========================================
+      // 1. 3D TILT EFFECT (For Large Blocks)
+      // ==========================================
+      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
+      
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+        
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6; // 6 degrees max tilt
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease';
+          card.style.boxShadow = '0 15px 35px rgba(0,0,0,0.1)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+          card.style.boxShadow = '';
+        });
+      });
+
+      // ==========================================
+      // 2. MAGNETIC EFFECT (For Small Elements)
+      // ==========================================
+      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
+      
+      magneticElements.forEach(el => {
         el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         
         el.addEventListener('mousemove', (e) => {
@@ -145,16 +176,14 @@
           const x = e.clientX - rect.left - rect.width / 2;
           const y = e.clientY - rect.top - rect.height / 2;
           
-          // strength determines how far it pulls (0.3 is subtle, 0.5 is strong)
-          const strength = 0.2; 
+          // Strength of the magnet (0.3 is noticeable but not crazy)
+          const strength = 0.3; 
           
-          // Remove the transition while moving for instant feedback
           el.style.transition = 'none';
           el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
         });
 
         el.addEventListener('mouseleave', () => {
-          // Snap back to position
           el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           el.style.transform = `translate(0px, 0px)`;
         });
@@ -163,6 +192,7 @@
           el.style.transition = 'none';
         });
       });
+
     });
   </script>
 </body>
