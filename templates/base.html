@@ -221,8 +221,6 @@
       }
     });
   </script>
-  <!-- Magnetic & Tilt Elements -->
-  <script src="https://unpkg.com/@zakkster/lite-ui"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof LiteUI !== 'undefined') {
@@ -243,6 +241,60 @@
           });
         }
       }
+    });
+  </script>
+  <!-- Custom 3D Tilt & Magnetic Buttons -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // 1. Magnetic Buttons
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = `translate(0px, 0px)`;
+          btn.style.transition = 'transform 0.3s ease'; // Smooth return
+        });
+        btn.addEventListener('mouseenter', () => {
+          btn.style.transition = 'none'; // Instant follow
+        });
+      });
+
+      // 2. 3D Tilt Cards
+      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // Calculate rotation based on mouse position (max 10 degrees)
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease'; // Fast response
+          card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+          card.style.boxShadow = '';
+        });
+        
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+        });
+      });
+
     });
   </script>
 </body>
