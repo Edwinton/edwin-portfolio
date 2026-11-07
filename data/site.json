@@ -307,6 +307,17 @@
   },
   "skills": [
     {
+      "title": "Design",
+      "tags": [
+        "Web design",
+        "UI design",
+        "Responsive layout",
+        "Canva",
+        "GIMP",
+        "Inkscape"
+      ]
+    },
+    {
       "title": "Programming",
       "tags": [
         "Python",
