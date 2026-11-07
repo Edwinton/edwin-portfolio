@@ -211,5 +211,17 @@
       });
     });
   </script>
+  <!-- Magnetic Buttons -->
+  <script src="https://unpkg.com/@zakkster/lite-ui"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof LiteUI !== 'undefined' && LiteUI.Magnetic) {
+        new LiteUI.Magnetic('.btn', { 
+          strength: 0.3,  // How strongly the button pulls (0.3 is a good subtle amount)
+          radius: 80      // The distance around the button where the effect triggers
+        });
+      }
+    });
+  </script>
 </body>
 </html>
