@@ -149,18 +149,8 @@ p  { color: var(--ink-soft); }
 }
 .nav-menu a:hover,
 .nav-menu a.active { color: var(--ink); }
-.nav-menu a::after {
-  content: "";
-  position: absolute;
-  left: 0; bottom: -3px;
-  height: 2px;
-  width: 0;
-  background: var(--green-700);
-  border-radius: 2px;
-  transition: width 0.22s ease;
-}
-.nav-menu a:hover::after,
-.nav-menu a.active::after { width: 100%; }
+
+
 
 .nav-cta {
   background: var(--ink);
@@ -252,8 +242,29 @@ p  { color: var(--ink-soft); }
     width: 100%;
     border-bottom: 1px solid var(--border);
   }
-  .nav-menu a::after { display: none; }
+  
   .nav-cta { margin-top: var(--s-3); text-align: center; border-bottom: none !important; }
 
   :root { --pad: 20px; }
+}
+/* Nav Bar Hover Underline Animation */
+.nav-menu a {
+  position: relative;
+}
+
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #ff7b00; /* The exact cursor orange */
+  transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth pop */
+  border-radius: 2px;
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
 }
