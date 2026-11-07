@@ -6,24 +6,22 @@
   <title>{{ page.title }}</title>
   <meta name="description" content="{{ page.description }}" />
   
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-  <!-- Stylesheets -->
   <base href="{{ base_url }}/">
   <link rel="stylesheet" href="static/css/main.css" />
   <link rel="stylesheet" href="static/css/sections.css" />
   <link rel="stylesheet" href="static/css/projects.css" />
   <link rel="stylesheet" href="static/css/cv.css" />
   <link rel="stylesheet" href="static/css/cv-print.css" media="print" />
-  <link rel="stylesheet" href="static/css/motion.css" />
 
   <style>
-    body { animation: page-enter .65s cubic-bezier(.2,.7,.2,1) both; }
-    @keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }
+    /* Smooth page fade-in on load */
+    body { opacity: 0; animation: fadeInPage 0.8s ease-in forwards; }
+    @keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -49,8 +47,11 @@
     </div>
   </footer>
 
-  <!-- Core JavaScript and page motion -->
   <script src="static/js/main.js"></script>
+  <script>
+    if (window.lucide) { lucide.createIcons(); }
+  </script>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
@@ -636,5 +637,6 @@
 
     });
   </script>
+
 </body>
 </html>
