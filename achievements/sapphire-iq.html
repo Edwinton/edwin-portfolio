@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI/UX Design Programme — Edwin Tony</title>
+  <meta name="description" content="Completion of the Sapphire IQ UI/UX Design programme and UX case study." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" crossorigin="anonymous" />
+
+  <!-- Absolute paths via base_url variable -->
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/main.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/sections.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/projects.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/cv.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/cv-print.css" media="print" />
+
+  <style>
+    body { opacity: 0; animation: fadeInPage 0.8s ease-in forwards; }
+    @keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="https://edwinton.github.io/edwin-portfolio/" class="nav-logo">ET<span>.</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/skills.html">Skills</a></li>
+        <li><a href="/projects.html">Projects</a></li>
+        <li><a href="/education.html">Education</a></li>
+        <li><a href="/achievements.html">Achievements</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/cv.html">CV</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+<section class="section page-section">
+  <div class="container" style="max-width: 800px;">
+    <div class="section-head">
+      <p class="eyebrow">Certification & Case Study</p>
+      <h2>UI/UX Design Programme</h2>
+      <p class="section-sub">Completed with Sapphire IQ</p>
+    </div>
+    
+    <div class="about-text" style="font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft);">
+      <p>I recently completed a two-month UI/UX Design programme offered by Sapphire IQ. This certification provided me with a structured introduction to user experience and interface design, complementing my Computer Science studies.</p>
+      
+      <p>Throughout the programme, I explored core design principles, including UX research, usability, navigation, information architecture, and design thinking. Applying these concepts practically, I worked on a comprehensive UX case study for the Gurully Test Preparation App. This involved analysing user needs, structuring the app's flow, and thinking through interface decisions from a user-centric perspective.</p>
+      
+      <p>As a Computer Science student interested in software development, understanding the design pipeline is invaluable. This experience has improved my ability to empathise with end-users and consider usability alongside functionality when building web and software applications.</p>
+    </div>
+
+    <div class="cv-section" style="margin-top: var(--s-7);">
+      <h3 class="cv-section-title">Event Materials</h3>
+      <div style="display: grid; gap: var(--s-5); margin-top: var(--s-4);">
+        
+        <div style="text-align: center; padding: var(--s-6) 0;">
+            <a href="/edwin-portfolio/static/pdf/sapphire-certificate.pdf" target="_blank" class="btn btn-primary" style="display: inline-flex; gap: 8px; align-items: center;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                View Certificate (PDF)
+            </a>
+        </div>
+        
+      </div>
+    </div>
+
+    <div style="margin-top: var(--s-7); padding-top: var(--s-4); border-top: 1px solid var(--border);">
+      <a href="/edwin-portfolio/achievements.html" class="btn btn-outline">← Back to Achievements</a>
+    </div>
+  </div>
+</section>
+</main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><span class="footer-logo">ET<span>.</span></span> &nbsp;·&nbsp; © 2026 Edwin Tony</p>
+      <a href="#" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  <!-- Animations & Interactivity -->
+  <script src="https://edwinton.github.io/edwin-portfolio/static/js/main.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://edwinton.github.io/edwin-portfolio/static/js/cursor-swarm.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Cursor Swarm
+      setTimeout(function() {
+        if (typeof CursorSwarm !== 'undefined') {
+          window.mainSwarm = new CursorSwarm({ 
+            cursors: 4, palette: 'mono:#ff7b00', startPosition: 'outside',
+            hud: false, deconstruct: false, trigger: 0,
+            onDone: function() { setTimeout(() => window.mainSwarm.destroy(), 500); }
+          }).init();
+          setTimeout(() => { if(window.mainSwarm) window.mainSwarm.destroy(); }, 5000);
+        }
+      }, 100);
+
+      // 2. Lucide Icons
+      if (window.lucide) { lucide.createIcons(); }
+
+      // 3. Easter Eggs & Tilt Effects
+      document.addEventListener("keydown", function(e) {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (!window._keyBuffer) window._keyBuffer = "";
+        window._keyBuffer += e.key;
+        if (window._keyBuffer.length > 10) window._keyBuffer = window._keyBuffer.slice(-5);
+        
+        if (window._keyBuffer.includes("404")) {
+          window._keyBuffer = "";
+          const main = document.querySelector("main");
+          if (main) main.innerHTML = `<div style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: monospace;"><h1 style="font-size: 8rem; color: #ff7b00; margin: 0;">404</h1><p style="font-size: 1.5rem; color: #333;">You found the secret 404 page.</p><button onclick="window.location.reload()" style="padding: 10px 20px; background: #ff7b00; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Go Back</button></div>`;
+        }
+        if (window._keyBuffer.includes("job")) {
+          window._keyBuffer = "";
+          console.log("%c💼 You typed 'job'!%c\n\nHere is your official job offer:\nPosition: Full-Stack Developer\nSalary: Negotiable\nBenefits: Unlimited coffee, zero meetings before 10 AM.", "font-size: 18px; color: #fff; background: #ff7b00; padding: 5px; border-radius: 4px;", "font-size: 14px; color: #333;");
+        }
+      });
+
+      // 4. Logo Spin
+      const logo = document.querySelector('.nav-logo');
+      if (logo) {
+        let logoClicks = 0;
+        logo.addEventListener('click', (e) => {
+          logoClicks++;
+          if (logoClicks === 3) {
+            e.preventDefault();
+            document.body.style.transition = 'transform 1s ease';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
+            logoClicks = 0;
+          }
+        });
+      }
+
+      // 5. 3D Tilt & Magnetic Effects
+      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card, .service-card');
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease';
+          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+          card.style.boxShadow = '';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
