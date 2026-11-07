@@ -10,15 +10,15 @@
   --ink-mute:  #6b6b6b;
 
   /* Forest green accents */
-  --green-900: #1f3f2b;
-  --green-700: #2d5a3d;
-  --green-500: #3d7a52;
-  --green-100: #e8f0eb;
-  --green-50:  #f2f7f4;
+  --green-900: #d65a00;
+  --green-700: #ff7b00;
+  --green-500: #ff9e40;
+  --green-100: #fff3e0;
+  --green-50:  #fffaf5;
 
   /* Surfaces */
   --white:     #ffffff;
-  --surface:   #f8f8f6;
+  --surface:   #faf9f7;
   --surface-2: #f2f2ee;
 
   /* Borders */
