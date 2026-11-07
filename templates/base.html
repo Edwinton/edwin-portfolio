@@ -323,8 +323,6 @@
       }
     });
   </script>
-  <!-- CursorSwarm Effect (Full CV Reveal with Table Fix) -->
-  <script src="static/js/cursor-swarm.js?v=4"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       if (window.location.pathname.includes("cv.html")) {
@@ -346,6 +344,38 @@
                     window.cvSwarm.destroy();
                   }
                 }, 1500);
+              }
+            }).init();
+          }
+        }, 300);
+      }
+    });
+  </script>
+  <!-- CursorSwarm Effect (Follows Scroll, skips tables) -->
+  <script src="static/js/cursor-swarm.js?v=5"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only run on the CV page
+      if (window.location.pathname.includes("cv.html")) {
+        setTimeout(function() {
+          if (typeof CursorSwarm !== 'undefined') {
+            window.cvSwarm = new CursorSwarm({ 
+              cursors: 3, 
+              palette: 'mono:#2d5a3d',
+              startPosition: 'outside',
+              respectReducedMotion: false, 
+              hud: false,
+              deconstruct: false,
+              root: '#cvDoc', 
+              // Removed trigger: 0 so it builds as you scroll
+              ignore: 'table', // Skip tables so text doesn't vanish
+              onDone: function() {
+                // When the bottom is reached, wait 1 second and remove cursors
+                setTimeout(function() {
+                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                    window.cvSwarm.destroy();
+                  }
+                }, 1000);
               }
             }).init();
           }
