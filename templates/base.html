@@ -282,7 +282,7 @@
     });
   </script>
 
-  <!-- Smooth Expandable Custom Cursor -->
+  <!-- Bulletproof Custom Cursor -->
   <style>
     @media (pointer: fine) {
       body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
@@ -293,84 +293,83 @@
       }
     }
     
-    .cursor-dot {
+    #cursor-dot {
       position: fixed;
       top: 0; left: 0;
       width: 12px; height: 12px;
       background-color: #ff7b00;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999999;
+      z-index: 2147483647; /* Max z-index */
       transform: translate(-50%, -50%);
-      will-change: left, top;
+      transition: width 0.2s ease, height 0.2s ease;
+      display: none;
     }
     
-    .cursor-ring {
+    #cursor-ring {
       position: fixed;
       top: 0; left: 0;
-      width: 32px; height: 32px;
-      border: 2px solid rgba(255, 123, 0, 0.5);
+      width: 36px; height: 36px;
+      border: 1.5px solid #ff7b00;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999998;
+      z-index: 2147483646;
       transform: translate(-50%, -50%);
-      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
-      will-change: left, top;
+      transition: transform 0.15s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      display: none;
     }
     
-    .cursor-ring.active {
-      width: 56px; height: 56px;
-      border-color: #ff7b00;
+    #cursor-ring.active {
+      width: 50px; height: 50px;
       background-color: rgba(255, 123, 0, 0.1);
     }
   </style>
   
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    // Use window.onload to ensure ALL elements are fully loaded before script runs
+    window.addEventListener('load', function() {
       if (window.matchMedia("(pointer: fine)").matches) {
-        const dot = document.createElement("div");
-        dot.className = "cursor-dot";
+        var dot = document.createElement("div");
+        dot.id = "cursor-dot";
         document.body.appendChild(dot);
+        dot.style.display = "block";
 
-        const ring = document.createElement("div");
-        ring.className = "cursor-ring";
+        var ring = document.createElement("div");
+        ring.id = "cursor-ring";
         document.body.appendChild(ring);
+        ring.style.display = "block";
 
-        // Variables for smooth movement
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let ringX = mouseX;
-        let ringY = mouseY;
+        var mouseX = window.innerWidth / 2;
+        var mouseY = window.innerHeight / 2;
+        var ringX = mouseX;
+        var ringY = mouseY;
 
-        // Update mouse position (clientX/Y tracks the viewport, so it works when scrolling)
-        document.addEventListener("mousemove", (e) => {
+        // Track mouse position
+        window.addEventListener('mousemove', function(e) {
           mouseX = e.clientX;
           mouseY = e.clientY;
           
-          // Instantly move the dot
+          // Move dot instantly
           dot.style.left = mouseX + "px";
           dot.style.top = mouseY + "px";
         });
 
-        // Smoothly animate the ring behind the dot
+        // Animate ring
         function animate() {
-          // This math creates a smooth "lag" effect for the ring
-          ringX += (mouseX - ringX) * 0.15;
-          ringY += (mouseY - ringY) * 0.15;
-          
+          ringX += (mouseX - ringX) * 0.2;
+          ringY += (mouseY - ringY) * 0.2;
           ring.style.left = ringX + "px";
           ring.style.top = ringY + "px";
-          
           requestAnimationFrame(animate);
         }
         animate();
 
-        // Expand the ring when hovering over interactive elements
-        const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
-        hoverables.forEach(el => {
-          el.addEventListener("mouseenter", () => ring.classList.add("active"));
-          el.addEventListener("mouseleave", () => ring.classList.remove("active"));
-        });
+        // Expand on hover
+        var hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
+        for (var i = 0; i < hoverables.length; i++) {
+          hoverables[i].addEventListener("mouseenter", function() { ring.classList.add("active"); });
+          hoverables[i].addEventListener("mouseleave", function() { ring.classList.remove("active"); });
+        }
       }
     });
   </script>

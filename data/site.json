@@ -595,8 +595,8 @@
     ]
   },
   "brand": {
-    "wordmark": "Edwin Tony",
-    "wordmark_accent": ""
+    "wordmark": "ET",
+    "wordmark_accent": "."
   },
   "footer": {
     "copyright": "© {year} Edwin Tony",
