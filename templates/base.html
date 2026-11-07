@@ -648,7 +648,6 @@
 
       // 2. Explorer (Visit all main pages)
       const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-      if (['index.html', 'about.html', 'skills.html', 'projects.html', 'education.html', 'contact.html', 'cv.html'].includes(currentPath)) {
         if (!visitedPages.includes(currentPath)) {
           visitedPages.push(currentPath);
           localStorage.setItem('edwin_visited_pages', JSON.stringify(visitedPages));
