@@ -55,7 +55,19 @@
       "note": "Continuously learning and developing projects — most recently exploring how AI can assist software development.",
       "role": "CS Student & Developer",
       "initials": "ET",
-      "actions": [],
+      "actions": [
+        {
+          "label": "View Projects",
+          "href": "projects.html",
+          "style": "primary"
+        },
+        {
+          "label": "Hire on Fiverr",
+          "href": "https://www.fiverr.com/edwintony141",
+          "style": "primary",
+          "external": true
+        }
+      ],
       "meta": [
         {
           "icon": "map-pin",
