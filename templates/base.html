@@ -211,8 +211,6 @@
       });
     });
   </script>
-  <!-- Magnetic Buttons -->
-  <script src="https://unpkg.com/@zakkster/lite-ui"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       if (typeof LiteUI !== 'undefined' && LiteUI.Magnetic) {
@@ -220,6 +218,30 @@
           strength: 0.3,  // How strongly the button pulls (0.3 is a good subtle amount)
           radius: 80      // The distance around the button where the effect triggers
         });
+      }
+    });
+  </script>
+  <!-- Magnetic & Tilt Elements -->
+  <script src="https://unpkg.com/@zakkster/lite-ui"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof LiteUI !== 'undefined') {
+        // 1. Apply Magnetic effect to buttons (subtle)
+        if (LiteUI.Magnetic) {
+          new LiteUI.Magnetic('.btn', { strength: 0.3, radius: 80 });
+        }
+        
+        // 2. Apply 3D Tilt & Magnetic pull to cards
+        if (LiteUI.Tilt) {
+          new LiteUI.Tilt('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card', {
+            perspective: 1000, // Depth of the 3D effect
+            maxTilt: 8,        // How far the card tilts (8 degrees is a nice subtle amount)
+            scale: 1.02,       // Slight zoom on hover
+            glare: true,       // Adds a subtle light reflection
+            maxGlare: 0.2,     // Opacity of the glare
+            transition: 0.2    // Speed of the snap-back
+          });
+        }
       }
     });
   </script>
