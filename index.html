@@ -180,5 +180,60 @@
       }
     });
   </script>
+  <!-- Skills Page Easter Egg -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only run on the Skills page
+      if (!window.location.pathname.includes("skills.html")) return;
+
+      const skillCards = document.querySelectorAll('.skill-card');
+      
+      skillCards.forEach((card, index) => {
+        card.style.cursor = "pointer"; // Make it look clickable
+        card.style.transition = "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+
+        card.addEventListener('click', function() {
+          // Prevent multiple rapid clicks
+          if (card.dataset.clicked === "true") return;
+          card.dataset.clicked = "true";
+
+          // The secret messages based on the card index
+          const messages = [
+            "🤖 Python is just executable pseudocode!",
+            "🌐 The web is my canvas.",
+            "🛠️ Git commit -m 'I found the easter egg!'",
+            "🧠 Still learning, always growing."
+          ];
+
+          // Save original content
+          const originalContent = card.innerHTML;
+
+          // 1. Shake animation
+          card.style.transform = "scale(0.95) rotate(-2deg)";
+          card.style.borderColor = "#ff7b00";
+          card.style.boxShadow = "0 10px 30px rgba(255, 123, 0, 0.2)";
+
+          // 2. Change text to secret message
+          card.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: #ff7b00;">
+              <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Secret Unlocked!</h3>
+              <p style="font-weight: 600;">${messages[index]}</p>
+            </div>
+          `;
+
+          // 3. Revert back after 3 seconds
+          setTimeout(() => {
+            card.innerHTML = originalContent;
+            card.style.transform = "scale(1) rotate(0deg)";
+            card.style.borderColor = "";
+            card.style.boxShadow = "";
+            
+            // Allow clicking again after it resets
+            setTimeout(() => { card.dataset.clicked = "false"; }, 100);
+          }, 3000);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
