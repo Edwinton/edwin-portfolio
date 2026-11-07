@@ -141,8 +141,6 @@
       }, 3500); // Start scrolling animations only AFTER the swarm has vanished
     });
   </script>
-  <!-- CursorSwarm Animation -->
-  <script src="static/js/cursor-swarm.js"></script>
   <script>
     setTimeout(function() {
       if (typeof CursorSwarm !== 'undefined') {
@@ -179,6 +177,31 @@
     document.addEventListener("DOMContentLoaded", function() {
       // Only apply to elements further down, NOT the hero buttons
       ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card', {
+        delay: 200,
+        distance: '20px',
+        duration: 600,
+        origin: 'bottom',
+        interval: 100,
+        reset: false
+      });
+    });
+  </script>
+  <!-- Clean Load Animations -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Fade in the hero section immediately
+      ScrollReveal().reveal('.hero-text, .hero-card, .section-head', {
+        delay: 100,
+        distance: '30px',
+        duration: 800,
+        origin: 'bottom',
+        interval: 100,
+        reset: false
+      });
+      
+      // Fade in lists and cards on scroll
+      ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card, .profile-card', {
         delay: 200,
         distance: '20px',
         duration: 600,
