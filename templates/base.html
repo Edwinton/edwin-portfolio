@@ -282,43 +282,38 @@
     });
   </script>
 
-  <!-- Native Custom Orange Cursor -->
+  <!-- Fixed Custom Orange Dot Cursor -->
   <style>
     @media (pointer: fine) {
-      /* Hide the default cursor globally */
       body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
         cursor: none !important;
       }
-      
-      /* Keep the text cursor for inputs */
       input, textarea, select {
         cursor: text !important;
       }
     }
     
-    /* The custom orange dot */
     .native-dot {
-      position: fixed;
+      position: fixed !important; /* THIS prevents it from scrolling away */
       top: 0; left: 0;
       width: 12px; height: 12px;
       background-color: #ff7b00;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 99999;
+      z-index: 9999999; /* Highest possible z-index */
       transform: translate(-50%, -50%);
       transition: transform 0.1s ease-out;
       display: none;
     }
     
-    /* The expanding ring when hovering links */
     .native-ring {
-      position: fixed;
+      position: fixed !important;
       top: 0; left: 0;
       width: 36px; height: 36px;
       border: 2px solid #ff7b00;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 99998;
+      z-index: 9999998;
       transform: translate(-50%, -50%);
       transition: transform 0.15s ease-out, width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
       opacity: 0;
@@ -343,29 +338,17 @@
         document.body.appendChild(ring);
         ring.style.display = "block";
 
-        let mouseX = 0, mouseY = 0;
-        let ringX = 0, ringY = 0;
-
+        // Use clientX and clientY so it's based on the viewport, not the document
         document.addEventListener("mousemove", (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
           
-          // Move the dot instantly
-          dot.style.left = mouseX + "px";
-          dot.style.top = mouseY + "px";
+          // Instantly move the ring too to prevent lag when scrolling
+          ring.style.left = e.clientX + "px";
+          ring.style.top = e.clientY + "px";
         });
 
-        // Animate the ring with a slight lag
-        function animateRing() {
-          ringX += (mouseX - ringX) * 0.2;
-          ringY += (mouseY - ringY) * 0.2;
-          ring.style.left = ringX + "px";
-          ring.style.top = ringY + "px";
-          requestAnimationFrame(animateRing);
-        }
-        animateRing();
-
-        // Expand the ring on links/buttons/cards
+        // Expand the ring on links/buttons
         const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
         hoverables.forEach(el => {
           el.addEventListener("mouseenter", () => ring.classList.add("active"));
