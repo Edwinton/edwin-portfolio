@@ -325,36 +325,6 @@
   </script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      if (window.location.pathname.includes("cv.html")) {
-        setTimeout(function() {
-          if (typeof CursorSwarm !== 'undefined') {
-            window.cvSwarm = new CursorSwarm({ 
-              cursors: 4, 
-              palette: 'mono:#2d5a3d',
-              startPosition: 'outside',
-              respectReducedMotion: false,
-              hud: false,
-              deconstruct: false,
-              root: '#cvDoc', 
-              trigger: 0,
-              ignore: 'table', // <--- THIS IS THE FIX: Skip tables so text doesn't vanish
-              onDone: function() {
-                setTimeout(function() {
-                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                    window.cvSwarm.destroy();
-                  }
-                }, 1500);
-              }
-            }).init();
-          }
-        }, 300);
-      }
-    });
-  </script>
-  <!-- CursorSwarm Effect (Follows Scroll, skips tables) -->
-  <script src="static/js/cursor-swarm.js?v=5"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
       // Only run on the CV page
       if (window.location.pathname.includes("cv.html")) {
         setTimeout(function() {
