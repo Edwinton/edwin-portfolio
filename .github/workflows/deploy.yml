@@ -32,8 +32,13 @@ jobs:
       - name: Build site
         run: python build.py
 
+      - name: Force copy static folder
+        run: cp -r static public/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
