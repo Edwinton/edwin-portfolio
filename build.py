@@ -332,9 +332,9 @@ def build_all():
     # Generate CV PDF from site.json
     print("Generating CV PDF...")
     try:
-        # import importlib, build_pdf
+        import importlib, build_pdf
         importlib.reload(build_pdf)
-        # build_pdf.build()  # Disabled in favor of manual PDF
+        build_pdf.build()
     except Exception as e:
         print(f"  WARN: PDF generation failed: {e}")
     print(f"\nDone -> {OUT}")
