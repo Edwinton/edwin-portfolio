@@ -26,3 +26,4 @@ desktop.ini
 .env
 .venv/
 venv/
+public/
