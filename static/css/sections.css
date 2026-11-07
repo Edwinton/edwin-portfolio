@@ -470,3 +470,22 @@
   .about-layout { grid-template-columns: 1fr; }
   .profile-card { position: static; }
 }
+
+/* Fix for icons disappearing on hover in profile card */
+.profile-card-link {
+  position: relative;
+  z-index: 10;
+}
+.profile-card-link svg {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none; /* Prevents the SVG from blocking the hover state */
+}
+.profile-card-link:hover svg {
+  opacity: 1 !important;
+  transform: scale(1.1); /* Slight pop effect on hover */
+}
+/* Ensure the parent card doesn't hide the SVG on hover */
+.profile-card:hover .profile-card-links {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
