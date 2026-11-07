@@ -282,5 +282,82 @@
     });
   </script>
 
+  <!-- Orange Dot Cursor -->
+  <style>
+    @media (pointer: fine) {
+      /* Hide default cursor but keep it for text inputs */
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: none !important;
+      }
+      input, textarea, select {
+        cursor: text !important;
+      }
+    }
+    
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 12px; height: 12px;
+      background-color: #ff7b00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2147483647; /* Max z-index */
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      display: none;
+      will-change: left, top;
+    }
+    
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1.5px solid #ff7b00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2147483646;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      display: none;
+      will-change: left, top;
+    }
+    
+    #cursor-ring.active {
+      width: 50px; height: 50px;
+      background-color: rgba(255, 123, 0, 0.15);
+    }
+  </style>
+  
+  <script>
+    window.addEventListener('load', function() {
+      if (window.matchMedia("(pointer: fine)").matches) {
+        var dot = document.createElement("div");
+        dot.id = "cursor-dot";
+        document.body.appendChild(dot);
+        dot.style.display = "block";
+
+        var ring = document.createElement("div");
+        ring.id = "cursor-ring";
+        document.body.appendChild(ring);
+        ring.style.display = "block";
+
+        // Track mouse movement
+        window.addEventListener('mousemove', function(e) {
+          // Update both the dot and the ring to match the mouse position exactly
+          dot.style.left = e.clientX + "px";
+          dot.style.top = e.clientY + "px";
+          ring.style.left = e.clientX + "px";
+          ring.style.top = e.clientY + "px";
+        });
+
+        // Expand on hover
+        var hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
+        for (var i = 0; i < hoverables.length; i++) {
+          hoverables[i].addEventListener("mouseenter", function() { ring.classList.add("active"); });
+          hoverables[i].addEventListener("mouseleave", function() { ring.classList.remove("active"); });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
