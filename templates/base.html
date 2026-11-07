@@ -282,7 +282,7 @@
     });
   </script>
 
-  <!-- Fixed Custom Orange Dot Cursor -->
+  <!-- Smooth Expandable Custom Cursor -->
   <style>
     @media (pointer: fine) {
       body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
@@ -293,35 +293,35 @@
       }
     }
     
-    .native-dot {
-      position: fixed !important; /* THIS prevents it from scrolling away */
+    .cursor-dot {
+      position: fixed;
       top: 0; left: 0;
       width: 12px; height: 12px;
       background-color: #ff7b00;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999999; /* Highest possible z-index */
+      z-index: 9999999;
       transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out;
-      display: none;
+      will-change: left, top;
     }
     
-    .native-ring {
-      position: fixed !important;
+    .cursor-ring {
+      position: fixed;
       top: 0; left: 0;
-      width: 36px; height: 36px;
-      border: 2px solid #ff7b00;
+      width: 32px; height: 32px;
+      border: 2px solid rgba(255, 123, 0, 0.5);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999998;
       transform: translate(-50%, -50%);
-      transition: transform 0.15s ease-out, width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
-      opacity: 0;
-      display: none;
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+      will-change: left, top;
     }
     
-    .native-ring.active {
-      opacity: 1;
+    .cursor-ring.active {
+      width: 56px; height: 56px;
+      border-color: #ff7b00;
+      background-color: rgba(255, 123, 0, 0.1);
     }
   </style>
   
@@ -329,26 +329,43 @@
     document.addEventListener("DOMContentLoaded", function() {
       if (window.matchMedia("(pointer: fine)").matches) {
         const dot = document.createElement("div");
-        dot.className = "native-dot";
+        dot.className = "cursor-dot";
         document.body.appendChild(dot);
-        dot.style.display = "block";
 
         const ring = document.createElement("div");
-        ring.className = "native-ring";
+        ring.className = "cursor-ring";
         document.body.appendChild(ring);
-        ring.style.display = "block";
 
-        // Use clientX and clientY so it's based on the viewport, not the document
+        // Variables for smooth movement
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+
+        // Update mouse position (clientX/Y tracks the viewport, so it works when scrolling)
         document.addEventListener("mousemove", (e) => {
-          dot.style.left = e.clientX + "px";
-          dot.style.top = e.clientY + "px";
+          mouseX = e.clientX;
+          mouseY = e.clientY;
           
-          // Instantly move the ring too to prevent lag when scrolling
-          ring.style.left = e.clientX + "px";
-          ring.style.top = e.clientY + "px";
+          // Instantly move the dot
+          dot.style.left = mouseX + "px";
+          dot.style.top = mouseY + "px";
         });
 
-        // Expand the ring on links/buttons
+        // Smoothly animate the ring behind the dot
+        function animate() {
+          // This math creates a smooth "lag" effect for the ring
+          ringX += (mouseX - ringX) * 0.15;
+          ringY += (mouseY - ringY) * 0.15;
+          
+          ring.style.left = ringX + "px";
+          ring.style.top = ringY + "px";
+          
+          requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Expand the ring when hovering over interactive elements
         const hoverables = document.querySelectorAll("a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card");
         hoverables.forEach(el => {
           el.addEventListener("mouseenter", () => ring.classList.add("active"));
