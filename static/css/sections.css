@@ -502,3 +502,14 @@
   position: relative;
   z-index: 10;
 }
+/* --- FIX FOR HOVER FLICKERING --- */
+/* By making the SVG ignore the mouse, the parent card handles the hover smoothly */
+.contact-card svg, 
+.profile-card-link svg {
+  pointer-events: none; 
+  transition: transform 0.2s ease;
+}
+.contact-card:hover svg, 
+.profile-card-link:hover svg {
+  transform: scale(1.1);
+}
