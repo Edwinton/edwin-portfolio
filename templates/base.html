@@ -28,6 +28,17 @@
       }
     }
   </style>
+  <style>
+    /* Smooth page fade-in on load */
+    body {
+      opacity: 0;
+      animation: fadeInPage 0.8s ease-in forwards;
+    }
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
@@ -59,8 +70,6 @@
     if (window.lucide) { lucide.createIcons(); }
   </script>
 
-  <!-- CursorSwarm Animation -->
-  <script src="static/js/cursor-swarm.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       setTimeout(function() {
@@ -91,8 +100,6 @@
     });
   </script>
 
-  <!-- ScrollReveal Animations -->
-  <script src="https://unpkg.com/scrollreveal"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card, .profile-card', {
