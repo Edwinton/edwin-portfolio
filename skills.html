@@ -397,5 +397,80 @@
 
     });
   </script>
+  <!-- New Easter Eggs (Konami, Trail, Confetti, Night Mode) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // 1. Konami Code (Arrow Keys)
+      const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konamiCode.length) {
+            document.body.style.transition = 'filter 1s ease';
+            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
+            konamiIndex = 0;
+          }
+        } else {
+          konamiIndex = 0;
+        }
+      });
+
+      // 2. Shift Trail
+      let isDrawing = false;
+      document.addEventListener('keydown', (e) => { if (e.key === 'Shift') isDrawing = true; });
+      document.addEventListener('keyup', (e) => { if (e.key === 'Shift') isDrawing = false; });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDrawing || Math.random() > 0.3) return;
+        const dot = document.createElement('div');
+        dot.style.position = 'fixed';
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        dot.style.width = '8px'; dot.style.height = '8px';
+        dot.style.backgroundColor = '#ff7b00';
+        dot.style.borderRadius = '50%';
+        dot.style.pointerEvents = 'none';
+        dot.style.zIndex = '9999';
+        dot.style.transition = 'opacity 1s ease';
+        document.body.appendChild(dot);
+        setTimeout(() => { dot.style.opacity = '0'; }, 10);
+        setTimeout(() => { dot.remove(); }, 1000);
+      });
+
+      // 3. Footer Confetti (Double Click)
+      const footer = document.querySelector('.site-footer p');
+      if (footer) {
+        footer.addEventListener('dblclick', () => {
+          for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = ['#ff7b00', '#d65a00', '#ff9e40', '#ffffff'][Math.floor(Math.random() * 4)];
+            confetti.style.zIndex = '9999';
+            confetti.style.transition = 'transform 2s linear, opacity 2s linear';
+            document.body.appendChild(confetti);
+            setTimeout(() => { confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`; confetti.style.opacity = '0'; }, 50);
+            setTimeout(() => confetti.remove(), 2000);
+          }
+        });
+      }
+
+      // 4. Night Owl (Dark mode between 12 AM and 4 AM)
+      const hour = new Date().getHours();
+      if (hour >= 0 && hour < 4) {
+        document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+        // Invert images back so they look normal
+        document.querySelectorAll('img').forEach(img => {
+            img.style.filter = 'invert(1) hue-rotate(180deg)';
+        });
+      }
+
+    });
+  </script>
 </body>
 </html>
