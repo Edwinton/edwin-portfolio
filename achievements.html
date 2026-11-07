@@ -63,13 +63,14 @@
   </footer>
 
   <script src="/static/js/main.js"></script>
-  <!-- Animations & Interactivity -->
+  <!-- Core JavaScript -->
   <script src="https://edwinton.github.io/edwin-portfolio/static/js/main.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="https://edwinton.github.io/edwin-portfolio/static/js/cursor-swarm.js"></script>
+  
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // 1. Cursor Swarm
+      // 1. Cursor Swarm Animation
       setTimeout(function() {
         if (typeof CursorSwarm !== 'undefined') {
           window.mainSwarm = new CursorSwarm({ 
@@ -84,7 +85,52 @@
       // 2. Lucide Icons
       if (window.lucide) { lucide.createIcons(); }
 
-      // 3. Easter Eggs & Tilt Effects
+      // 3. 3D Tilt & Magnetic Effects
+      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card, .service-card');
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+        
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // 3D Tilt math (max 6 degrees)
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease';
+          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+          card.style.boxShadow = '';
+        });
+      });
+
+      // Magnetic Buttons
+      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
+      magneticElements.forEach(el => {
+        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          el.style.transition = 'none';
+          el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          el.style.transform = `translate(0px, 0px)`;
+        });
+        el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
+      });
+
+      // 4. Easter Eggs
       document.addEventListener("keydown", function(e) {
         if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
         if (!window._keyBuffer) window._keyBuffer = "";
@@ -102,7 +148,7 @@
         }
       });
 
-      // 4. Logo Spin
+      // Logo Spin
       const logo = document.querySelector('.nav-logo');
       if (logo) {
         let logoClicks = 0;
@@ -117,28 +163,6 @@
           }
         });
       }
-
-      // 5. 3D Tilt & Magnetic Effects
-      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card, .service-card');
-      cards.forEach(card => {
-        card.style.transformStyle = 'preserve-3d';
-        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-          card.style.transition = 'transform 0.1s ease';
-          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)';
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-          card.style.boxShadow = '';
-        });
-      });
     });
   </script>
 </body>
