@@ -49,6 +49,14 @@
       display: none;
     }
   </style>
+  <style>
+    /* Custom Cursor (Desktop only) */
+    @media (pointer: fine) {
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        cursor: url('static/img/cursor.png'), auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -318,40 +326,6 @@
         });
       });
 
-    });
-  </script>
-  <!-- Custom Cursor Elements -->
-  <div class="custom-cursor" id="custom-cursor"></div>
-  
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const cursor = document.getElementById("custom-cursor");
-      
-      
-      // Only enable on devices with a mouse
-      if (window.matchMedia("(pointer: fine)").matches) {
-        cursor.style.display = "block";
-        
-
-        let mouseX = 0, mouseY = 0;
-        let ringX = 0, ringY = 0;
-
-        document.addEventListener("mousemove", (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-          
-          // Main cursor follows instantly
-          cursor.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-        });
-
-        px - 50%), calc(${ringY}px - 50%))`;
-          requestAnimationFrame(animateRing);
-        }
-        animateRing();
-
-        
-      }
     });
   </script>
 </body>
