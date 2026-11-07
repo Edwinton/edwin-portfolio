@@ -107,8 +107,6 @@
       }, 2500); // 2.5 second delay lets the cursors do their thing first
     });
   </script>
-  <!-- CursorSwarm Animation -->
-  <script src="static/js/cursor-swarm.js"></script>
   <script>
     setTimeout(function() {
       if (typeof CursorSwarm !== 'undefined') {
@@ -128,8 +126,6 @@
     }, 100);
   </script>
 
-  <!-- ScrollReveal Animation -->
-  <script src="https://unpkg.com/scrollreveal"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       setTimeout(function() {
@@ -143,6 +139,53 @@
           reset: false
         });
       }, 3500); // Start scrolling animations only AFTER the swarm has vanished
+    });
+  </script>
+  <!-- CursorSwarm Animation -->
+  <script src="static/js/cursor-swarm.js"></script>
+  <script>
+    setTimeout(function() {
+      if (typeof CursorSwarm !== 'undefined') {
+        window.swarm = new CursorSwarm({ 
+          cursors: 4, 
+          palette: 'neon',
+          startPosition: 'outside',
+          respectReducedMotion: false,
+          deconstruct: false,      // Prevents reversing when scrolling up!
+          hud: false,
+          onDone: function() {
+            // The moment the visible page is built, destroy the cursors entirely
+            setTimeout(function() {
+              if (window.swarm) {
+                window.swarm.destroy();
+              }
+            }, 800); 
+          }
+        }).init();
+        
+        // Fail-safe: destroy after 4 seconds no matter what
+        setTimeout(function() {
+          if (window.swarm && window.swarm.state !== 'destroyed') {
+            window.swarm.destroy();
+          }
+        }, 4000);
+      }
+    }, 100);
+  </script>
+
+  <!-- ScrollReveal Animation (for cards and content) -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only apply to elements further down, NOT the hero buttons
+      ScrollReveal().reveal('.project-card, .skill-card, .timeline-item, .contact-card', {
+        delay: 200,
+        distance: '20px',
+        duration: 600,
+        origin: 'bottom',
+        interval: 100,
+        reset: false
+      });
     });
   </script>
 </body>
