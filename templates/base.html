@@ -19,25 +19,11 @@
   <link rel="stylesheet" href="static/css/projects.css" />
   <link rel="stylesheet" href="static/css/cv.css" />
   <link rel="stylesheet" href="static/css/cv-print.css" media="print" />
+  <link rel="stylesheet" href="static/css/motion.css" />
 
-  <!-- Custom Cursor CSS -->
   <style>
-    @media (pointer: fine) {
-      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
-        cursor: url('static/img/cursor.png'), auto !important;
-      }
-    }
-  </style>
-  <style>
-    /* Smooth page fade-in on load */
-    body {
-      opacity: 0;
-      animation: fadeInPage 0.8s ease-in forwards;
-    }
-    @keyframes fadeInPage {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    body { animation: page-enter .65s cubic-bezier(.2,.7,.2,1) both; }
+    @keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
@@ -63,330 +49,74 @@
     </div>
   </footer>
 
-  <!-- Core JavaScript -->
+  <!-- Core JavaScript and page motion -->
   <script src="static/js/main.js"></script>
-  <script>
-    // Initialize Lucide Icons
-    if (window.lucide) { lucide.createIcons(); }
-  </script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      setTimeout(function() {
-        if (typeof CursorSwarm !== 'undefined') {
-          window.swarm = new CursorSwarm({ 
-            cursors: 3, 
-            palette: 'forest',
-            startPosition: 'outside',
-            respectReducedMotion: true,
-            hud: false,
-            deconstruct: false,
-            onDone: function() {
-              setTimeout(function() {
-                if (window.swarm && window.swarm.state !== 'destroyed') {
-                  window.swarm.destroy();
-                }
-              }, 500);
-            }
-          }).init();
-          
-          setTimeout(function() {
-            if (window.swarm && window.swarm.state !== 'destroyed') {
-              window.swarm.destroy();
-            }
-          }, 4000);
-        }
-      }, 100);
-    });
-  </script>
-
-
-  <!-- Magnetic Buttons -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const buttons = document.querySelectorAll('.btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-          btn.style.transform = `translate(0px, 0px)`;
-          btn.style.transition = 'transform 0.3s ease';
-        });
-        btn.addEventListener('mouseenter', () => {
-          btn.style.transition = 'none';
-        });
-      });
-    });
-  </script>
-
-  <!-- Interactive Effects: Tilt for Blocks, Magnetic for Elements -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      
-      // ==========================================
-      // 1. 3D TILT EFFECT (For Large Blocks)
-      // ==========================================
-      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
-      
-      cards.forEach(card => {
-        card.style.transformStyle = 'preserve-3d';
-        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-        
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          
-          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6; // 6 degrees max tilt
-          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-          
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-          card.style.transition = 'transform 0.1s ease';
-          card.style.boxShadow = '0 15px 35px rgba(0,0,0,0.1)';
-        });
-
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-          card.style.boxShadow = '';
-        });
-      });
-
-      // ==========================================
-      // 2. MAGNETIC EFFECT (For Small Elements)
-      // ==========================================
-      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
-      
-      magneticElements.forEach(el => {
-        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        
-        el.addEventListener('mousemove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          
-          // Strength of the magnet (0.3 is noticeable but not crazy)
-          const strength = 0.3; 
-          
-          el.style.transition = 'none';
-          el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-        });
-
-        el.addEventListener('mouseleave', () => {
-          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-          el.style.transform = `translate(0px, 0px)`;
-        });
-        
-        el.addEventListener('mouseenter', () => {
-          el.style.transition = 'none';
-        });
-      });
-
-    });
-  </script>
-  <!-- CV Cursor Flow Effect -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const cvDoc = document.getElementById("cvDoc");
-      
-      if (cvDoc) {
-        // Ensure smooth transition for the return to center
-        cvDoc.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        
-        cvDoc.addEventListener('mousemove', (e) => {
-          const rect = cvDoc.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          
-          // Subtle flow effect (moves max 10px in any direction)
-          const strength = 0.03; 
-          
-          cvDoc.style.transition = 'transform 0.1s ease-out';
-          cvDoc.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-          cvDoc.style.boxShadow = '0 20px 40px rgba(0,0,0,0.08)';
-        });
-
-        cvDoc.addEventListener('mouseleave', () => {
-          // Snap back to center smoothly
-          cvDoc.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s ease';
-          cvDoc.style.transform = `translate(0px, 0px)`;
-          cvDoc.style.boxShadow = '';
-        });
-        
-        cvDoc.addEventListener('mouseenter', () => {
-          cvDoc.style.transition = 'transform 0.1s ease-out';
-        });
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Only run if we are on the CV page and the CV document exists
-      if (window.location.pathname.includes("cv.html") && document.getElementById("cvDoc")) {
-        setTimeout(function() {
-          if (typeof CursorSwarm !== 'undefined') {
-            window.cvSwarm = new CursorSwarm({ 
-              cursors: 3, 
-              palette: 'mono:#2d5a3d',
-              startPosition: 'center',
-              respectReducedMotion: true,
-              hud: false,
-              deconstruct: false,
-              root: '#cvDoc', // Only build the CV document, not the nav bar!
-              onDone: function() {
-                // Destroy the cursors after the CV is built
-                setTimeout(function() {
-                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                    window.cvSwarm.destroy();
-                  }
-                }, 500);
-              }
-            }).init();
-            
-            // Fail-safe timeout
-            setTimeout(function() {
-              if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                window.cvSwarm.destroy();
-              }
-            }, 4000);
-          }
-        }, 100);
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Check if we are on the CV page
-      if (window.location.pathname.includes("cv.html")) {
-        // Wait 300ms to ensure the DOM is fully painted before hiding it
-        setTimeout(function() {
-          if (typeof CursorSwarm !== 'undefined') {
-            window.cvSwarm = new CursorSwarm({ 
-              cursors: 3, 
-              palette: 'mono:#2d5a3d',
-              startPosition: 'center',
-              respectReducedMotion: false, // Force it to run
-              hud: false,
-              deconstruct: false,
-              root: '#cvDoc', 
-              onDone: function() {
-                setTimeout(function() {
-                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                    window.cvSwarm.destroy();
-                  }
-                }, 800);
-              }
-            }).init();
-            
-            // Fail-safe timeout
-            setTimeout(function() {
-              if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                window.cvSwarm.destroy();
-              }
-            }, 4500);
-          }
-        }, 300);
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Only run on the CV page
-      if (window.location.pathname.includes("cv.html")) {
-        setTimeout(function() {
-          if (typeof CursorSwarm !== 'undefined') {
-            window.cvSwarm = new CursorSwarm({ 
-              cursors: 4, 
-              palette: 'mono:#2d5a3d',
-              startPosition: 'outside',
-              respectReducedMotion: false, // Force run
-              hud: false,
-              deconstruct: false,
-              root: '#cvDoc', 
-              // This forces the swarm to treat the whole CV as "visible" at once
-              trigger: 0, 
-              onDone: function() {
-                // When the ENTIRE CV is built, wait 1.5 seconds then destroy cursors
-                setTimeout(function() {
-                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                    window.cvSwarm.destroy();
-                  }
-                }, 1500);
-              }
-            }).init();
-          }
-        }, 300);
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Only run on the CV page
-      if (window.location.pathname.includes("cv.html")) {
-        setTimeout(function() {
-          if (typeof CursorSwarm !== 'undefined') {
-            window.cvSwarm = new CursorSwarm({ 
-              cursors: 3, 
-              palette: 'mono:#2d5a3d',
-              startPosition: 'outside',
-              respectReducedMotion: false, 
-              hud: false,
-              deconstruct: false,
-              root: '#cvDoc', 
-              // Removed trigger: 0 so it builds as you scroll
-              ignore: 'table', // Skip tables so text doesn't vanish
-              onDone: function() {
-                // When the bottom is reached, wait 1 second and remove cursors
-                setTimeout(function() {
-                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                    window.cvSwarm.destroy();
-                  }
-                }, 1000);
-              }
-            }).init();
-          }
-        }, 300);
-      }
-    });
-  </script>
-  <!-- CursorSwarm (The correct way) -->
   <script src="static/js/cursor-swarm.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Only run on the CV page
-      if (!window.location.pathname.includes("cv.html")) return;
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
 
-      setTimeout(function() {
-        if (typeof CursorSwarm !== 'undefined') {
-          
-          // Prevent the library from breaking tables by telling it to treat them as unbreakable blocks
-          const tables = document.querySelectorAll('.cv-table');
-          tables.forEach(t => t.setAttribute('data-cs', 'none'));
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const revealItems = document.querySelectorAll('.hero-text > *, .hero-card, .section-head, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
+      if (!reduceMotion && 'IntersectionObserver' in window) {
+        revealItems.forEach((item, index) => {
+          item.classList.add('motion-reveal');
+          item.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
+        });
+        const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        }), { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+        revealItems.forEach(item => observer.observe(item));
+      }
 
-          window.cvSwarm = new CursorSwarm({ 
-            cursors: 3, 
-            palette: 'mono:#2d5a3d',
-            startPosition: 'outside',
-            respectReducedMotion: false, 
-            hud: false,
-            deconstruct: false,
-            root: '#cvDoc', 
-            trigger: 0,
-            onDone: function() {
-              // Instantly remove cursors when the whole page is finished
-              setTimeout(function() {
-                if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
-                  window.cvSwarm.destroy();
-                }
-              }, 1000);
-            }
-          }).init();
-        }
-      }, 300);
+      if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
+        document.querySelectorAll('.project-card, .skill-card, .profile-card, .contact-card').forEach(card => {
+          card.addEventListener('pointermove', event => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--pointer-x', `${event.clientX - rect.left}px`);
+            card.style.setProperty('--pointer-y', `${event.clientY - rect.top}px`);
+          });
+        });
+      }
+
+      const cvDoc = document.getElementById('cvDoc');
+      if (cvDoc && !reduceMotion && matchMedia('(pointer: fine)').matches) {
+        cvDoc.addEventListener('pointermove', event => {
+          const rect = cvDoc.getBoundingClientRect();
+          cvDoc.style.setProperty('--tilt-x', `${((event.clientY - rect.top) / rect.height - .5) * -1.4}deg`);
+          cvDoc.style.setProperty('--tilt-y', `${((event.clientX - rect.left) / rect.width - .5) * 1.4}deg`);
+        });
+        cvDoc.addEventListener('pointerleave', () => {
+          cvDoc.style.setProperty('--tilt-x', '0deg');
+          cvDoc.style.setProperty('--tilt-y', '0deg');
+        });
+      }
+
+      const isCv = /(?:^|\/)cv\.html$/.test(location.pathname);
+      const swarmRoot = isCv ? document.querySelector('#cvDoc') : document.querySelector('main');
+      if (swarmRoot && typeof CursorSwarm !== 'undefined' && !reduceMotion) {
+        if (isCv) document.querySelectorAll('.cv-table').forEach(table => table.setAttribute('data-cs', 'skip'));
+        const swarm = new CursorSwarm({
+          cursors: 3,
+          palette: isCv ? 'mono:#2d5a3d' : 'forest',
+          startPosition: 'outside',
+          respectReducedMotion: true,
+          hud: false,
+          deconstruct: false,
+          trigger: isCv ? 0.72 : 0.88,
+          speed: isCv ? 2 : 1,
+          typeDuration: isCv ? 0.65 : 1.6,
+          root: swarmRoot,
+          ignore: isCv ? 'table' : 'nav, footer',
+          onDone: () => setTimeout(() => swarm.destroy(), 900)
+        }).init();
+        if (isCv && swarm.state === 'running') swarm.buildAll({ animate: true });
+        if (!isCv && swarm.state === 'running') setTimeout(() => swarm.destroy(), 6500);
+        if (isCv && swarm.state === 'running') setTimeout(() => swarm.destroy(), 12000);
+      }
     });
   </script>
 </body>

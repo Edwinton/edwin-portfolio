@@ -1,0 +1,81 @@
+/* Refined motion and pointer feedback, kept lightweight and accessible. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 22rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+  opacity: .48;
+  background: radial-gradient(circle, rgba(61,122,82,.12), rgba(61,122,82,0) 68%);
+  animation: ambient-drift 15s ease-in-out infinite alternate;
+}
+.hero::before { right: -7rem; top: -11rem; }
+.hero::after { left: 30%; bottom: -17rem; width: 28rem; animation-delay: -7s; }
+
+.motion-reveal {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.motion-reveal.is-visible { opacity: 1; transform: translate3d(0, 0, 0); }
+
+.hero-card, .project-card, .skill-card, .profile-card, .contact-card {
+  position: relative;
+  overflow: hidden;
+}
+.project-card::before, .skill-card::before, .profile-card::before, .contact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px circle at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(61,122,82,.10), transparent 72%);
+  transition: opacity .25s ease;
+}
+.project-card:hover::before, .skill-card:hover::before, .profile-card:hover::before, .contact-card:hover::before { opacity: 1; }
+.project-card, .skill-card, .profile-card, .contact-card {
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), border-color .25s ease, box-shadow .3s ease;
+}
+.project-card:hover, .skill-card:hover, .profile-card:hover, .contact-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(45,90,61,.32);
+  box-shadow: 0 16px 38px rgba(20,30,25,.09);
+}
+.profile-circle { animation: avatar-float 5s ease-in-out infinite; }
+.btn { position: relative; overflow: hidden; }
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  background: linear-gradient(100deg, transparent 25%, rgba(255,255,255,.2) 50%, transparent 75%);
+  transition: transform .65s ease;
+  pointer-events: none;
+}
+.btn:hover::after { transform: translateX(120%) skewX(-18deg); }
+.nav-logo span { display: inline-block; transition: transform .25s ease; }
+.nav-logo:hover span { transform: translateY(-2px) rotate(-5deg); }
+#cvDoc { transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform .35s ease, box-shadow .35s ease; }
+
+@keyframes ambient-drift { from { transform: translate3d(-12px, 0, 0) scale(.94); } to { transform: translate3d(14px, 18px, 0) scale(1.06); } }
+@keyframes avatar-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+@media (max-width: 760px) {
+  .motion-reveal { transform: translate3d(0, 14px, 0); }
+  .project-card:hover, .skill-card:hover, .profile-card:hover, .contact-card:hover { transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .motion-reveal { opacity: 1; transform: none; }
+}

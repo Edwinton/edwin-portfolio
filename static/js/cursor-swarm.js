@@ -382,8 +382,12 @@ html.cs-cloak body{visibility:hidden}
             return this;
         }
 
-        /** Instantly build everything (the swarm keeps running for later jobs when needed). */
-        buildAll() {
+        /** Build everything immediately, or queue a one-time animated pass with { animate: true }. */
+        buildAll({ animate = false } = {}) {
+            if (animate && this.state === 'running') {
+                this.records.forEach(r => this._dispatch(r, true));
+                return this;
+            }
             this.records.forEach(r => { r.want = 'built'; if (!r.active) this._finish(r); });
             this._updateHud();
             return this;
