@@ -223,8 +223,6 @@
       }
     });
   </script>
-  <!-- CursorSwarm Effect (Only runs on CV page) -->
-  <script src="static/js/cursor-swarm.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Only run if we are on the CV page and the CV document exists
@@ -257,6 +255,43 @@
             }, 4000);
           }
         }, 100);
+      }
+    });
+  </script>
+  <!-- CursorSwarm Effect (Only runs on CV page) -->
+  <script src="static/js/cursor-swarm.js?v=2"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Check if we are on the CV page
+      if (window.location.pathname.includes("cv.html")) {
+        // Wait 300ms to ensure the DOM is fully painted before hiding it
+        setTimeout(function() {
+          if (typeof CursorSwarm !== 'undefined') {
+            window.cvSwarm = new CursorSwarm({ 
+              cursors: 3, 
+              palette: 'mono:#2d5a3d',
+              startPosition: 'center',
+              respectReducedMotion: false, // Force it to run
+              hud: false,
+              deconstruct: false,
+              root: '#cvDoc', 
+              onDone: function() {
+                setTimeout(function() {
+                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                    window.cvSwarm.destroy();
+                  }
+                }, 800);
+              }
+            }).init();
+            
+            // Fail-safe timeout
+            setTimeout(function() {
+              if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                window.cvSwarm.destroy();
+              }
+            }, 4500);
+          }
+        }, 300);
       }
     });
   </script>
