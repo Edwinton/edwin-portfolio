@@ -126,64 +126,6 @@
       }
     });
   </script>
-  <!-- Custom Interactive Effects -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      
-      // 1. 3D TILT EFFECT (For Large Blocks)
-      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
-      cards.forEach(card => {
-        card.style.transformStyle = 'preserve-3d';
-        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-          card.style.transition = 'transform 0.1s ease';
-          card.style.boxShadow = '0 15px 35px rgba(0,0,0,0.1)';
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-          card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
-          card.style.boxShadow = '';
-        });
-      });
-
-        el.addEventListener('mouseleave', () => {
-          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-          el.style.transform = `translate(0px, 0px)`;
-        });
-        el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
-      });
-
-      // 3. CV CURSOR FLOW EFFECT
-      const cvDoc = document.getElementById("cvDoc");
-      if (cvDoc) {
-        cvDoc.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        cvDoc.addEventListener('mousemove', (e) => {
-          const rect = cvDoc.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          cvDoc.style.transition = 'transform 0.1s ease-out';
-          cvDoc.style.transform = `translate(${x * 0.03}px, ${y * 0.03}px)`;
-          cvDoc.style.boxShadow = '0 20px 40px rgba(0,0,0,0.08)';
-        });
-        cvDoc.addEventListener('mouseleave', () => {
-          cvDoc.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s ease';
-          cvDoc.style.transform = `translate(0px, 0px)`;
-          cvDoc.style.boxShadow = '';
-        });
-        cvDoc.addEventListener('mouseenter', () => { cvDoc.style.transition = 'transform 0.1s ease-out'; });
-      }
-
-      // 4. LUCIDE ICONS
-      if (window.lucide) { lucide.createIcons(); }
-
-    });
-  </script>
   <!-- Lumo.js: Cursor, Magnetic, and Text Reveal -->
   <script src="https://cdn.jsdelivr.net/npm/lumojs/dist/lumo.min.js"></script>
   <script>
@@ -225,6 +167,153 @@
           });
         }
       }
+    });
+  </script>
+  <!-- Ultimate Interactive Effects & Easter Eggs -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // ==========================================
+      // 1. 3D TILT EFFECT (For Cards)
+      // ==========================================
+      const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card');
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+        
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // Tilt up to 8 degrees
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+          card.style.transition = 'transform 0.1s ease';
+          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)'; // Orange shadow
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+          card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
+          card.style.boxShadow = '';
+        });
+      });
+
+      // ==========================================
+      // 2. MAGNETIC BUTTONS & NAV LINKS
+      // ==========================================
+      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
+      magneticElements.forEach(el => {
+        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          el.style.transition = 'none';
+          el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        el.addEventListener('mouseleave', () => {
+          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          el.style.transform = `translate(0px, 0px)`;
+        });
+        
+        el.addEventListener('mouseenter', () => { el.style.transition = 'none'; });
+      });
+
+      // ==========================================
+      // 3. CV CURSOR FLOW EFFECT
+      // ==========================================
+      const cvDoc = document.getElementById("cvDoc");
+      if (cvDoc) {
+        cvDoc.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        cvDoc.addEventListener('mousemove', (e) => {
+          const rect = cvDoc.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          cvDoc.style.transition = 'transform 0.1s ease-out';
+          cvDoc.style.transform = `translate(${x * 0.03}px, ${y * 0.03}px)`;
+          cvDoc.style.boxShadow = '0 20px 40px rgba(0,0,0,0.08)';
+        });
+        cvDoc.addEventListener('mouseleave', () => {
+          cvDoc.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s ease';
+          cvDoc.style.transform = `translate(0px, 0px)`;
+          cvDoc.style.boxShadow = '';
+        });
+      }
+
+      // ==========================================
+      // 4. EASTER EGGS
+      // ==========================================
+      
+      // Easter Egg 1: The Logo Click (The Konami Code Lite)
+      let logoClicks = 0;
+      const logo = document.querySelector('.nav-logo');
+      if (logo) {
+        logo.addEventListener('click', (e) => {
+          logoClicks++;
+          if (logoClicks === 3) {
+            e.preventDefault();
+            document.body.style.transition = 'transform 1s ease';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
+            logoClicks = 0;
+            console.log("🚀 You found the spin easter egg!");
+          }
+        });
+      }
+
+      // Easter Egg 2: The Title Typing (Press 'h' for Hello)
+      let keysPressed = "";
+      document.addEventListener('keydown', (e) => {
+        keysPressed += e.key.toLowerCase();
+        if (keysPressed.includes("hire")) {
+          keysPressed = "";
+          const title = document.querySelector('.hero-text h1');
+          if (title) {
+            const originalText = title.innerText;
+            title.innerText = "Hire Me? Let's Talk!";
+            title.style.color = "#ff7b00";
+            setTimeout(() => {
+              title.innerText = originalText;
+              title.style.color = "";
+            }, 2500);
+          }
+        }
+        if (keysPressed.length > 10) keysPressed = keysPressed.slice(-5);
+      });
+
+      // Easter Egg 3: The Confetti Click (Only on the Footer Copyright)
+      const footer = document.querySelector('.site-footer p');
+      if (footer) {
+        footer.addEventListener('dblclick', () => {
+          for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = ['#ff7b00', '#d65a00', '#ff9e40', '#ffffff'][Math.floor(Math.random() * 4)];
+            confetti.style.zIndex = '9999';
+            confetti.style.transition = 'transform 2s linear, opacity 2s linear';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+              confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`;
+              confetti.style.opacity = '0';
+            }, 50);
+            
+            setTimeout(() => confetti.remove(), 2000);
+          }
+        });
+      }
+
     });
   </script>
 </body>
