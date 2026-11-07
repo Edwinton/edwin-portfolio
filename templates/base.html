@@ -466,6 +466,91 @@
           }
         });
       }
+      // ==========================================
+      // 5. EASTER EGG: The Konami Code (Arrow Keys)
+      // ==========================================
+      let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konamiCode.length) {
+            // Trigger the egg!
+            document.body.style.transition = 'filter 1s ease';
+            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
+            konamiIndex = 0;
+            console.log("👾 Konami Code Activated!");
+          }
+        } else {
+          konamiIndex = 0;
+        }
+      });
+
+      // ==========================================
+      // 6. EASTER EGG: The Trail (Hold 'Shift' and move mouse)
+      // ==========================================
+      let isDrawing = false;
+      document.addEventListener('keydown', (e) => { if (e.key === 'Shift') isDrawing = true; });
+      document.addEventListener('keyup', (e) => { if (e.key === 'Shift') isDrawing = false; });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        if (Math.random() > 0.3) return; // only draw sometimes
+        
+        const dot = document.createElement('div');
+        dot.style.position = 'fixed';
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        dot.style.width = '10px';
+        dot.style.height = '10px';
+        dot.style.backgroundColor = '#ff7b00';
+        dot.style.borderRadius = '50%';
+        dot.style.pointerEvents = 'none';
+        dot.style.zIndex = '9999';
+        dot.style.transition = 'opacity 1s ease';
+        
+        document.body.appendChild(dot);
+        
+        setTimeout(() => { dot.style.opacity = '0'; }, 10);
+        setTimeout(() => { dot.remove(); }, 1000);
+      });
+
+      // ==========================================
+      // 7. EASTER EGG: Type "matrix" to turn the background black
+      // ==========================================
+      let matrixKeys = "";
+      document.addEventListener('keydown', (e) => {
+        matrixKeys += e.key.toLowerCase();
+        if (matrixKeys.includes("matrix")) {
+          matrixKeys = "";
+          const body = document.body;
+          if (body.style.backgroundColor === 'black') {
+            body.style.backgroundColor = '';
+            body.style.color = '';
+          } else {
+            body.style.backgroundColor = '#000';
+            body.style.color = '#0f0';
+            body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+            setTimeout(() => {
+              body.style.backgroundColor = '';
+              body.style.color = '';
+            }, 4000); // Reverts after 4 seconds
+          }
+        }
+        if (matrixKeys.length > 10) matrixKeys = matrixKeys.slice(-6);
+      });
+
+      // ==========================================
+      // 8. EASTER EGG: Secret Console Message
+      // ==========================================
+      console.log(
+        "%c👋 Hey there, curious developer!%c\n\nLooks like you know how to use DevTools. \nIf you're reading this, you're exactly the kind of person I want to work with.\n\nLet's build something great together.\n\n📧 edwinvedon@gmail.com", 
+        "font-size: 20px; font-weight: bold; color: #ff7b00;", 
+        "font-size: 14px; color: inherit;"
+      );
+
 
     });
   </script>
