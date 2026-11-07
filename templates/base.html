@@ -230,5 +230,42 @@
       }
     });
   </script>
+  <!-- CursorSwarm Effect (Only runs on CV page) -->
+  <script src="static/js/cursor-swarm.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Only run if we are on the CV page and the CV document exists
+      if (window.location.pathname.includes("cv.html") && document.getElementById("cvDoc")) {
+        setTimeout(function() {
+          if (typeof CursorSwarm !== 'undefined') {
+            window.cvSwarm = new CursorSwarm({ 
+              cursors: 3, 
+              palette: 'mono:#2d5a3d',
+              startPosition: 'center',
+              respectReducedMotion: true,
+              hud: false,
+              deconstruct: false,
+              root: '#cvDoc', // Only build the CV document, not the nav bar!
+              onDone: function() {
+                // Destroy the cursors after the CV is built
+                setTimeout(function() {
+                  if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                    window.cvSwarm.destroy();
+                  }
+                }, 500);
+              }
+            }).init();
+            
+            // Fail-safe timeout
+            setTimeout(function() {
+              if (window.cvSwarm && window.cvSwarm.state !== 'destroyed') {
+                window.cvSwarm.destroy();
+              }
+            }, 4000);
+          }
+        }, 100);
+      }
+    });
+  </script>
 </body>
 </html>
