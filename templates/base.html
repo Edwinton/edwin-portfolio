@@ -371,5 +371,169 @@
       }
     });
   </script>
+  <!-- Developer Terminal Easter Egg -->
+  <style>
+    #dev-terminal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%; max-width: 600px;
+      height: 400px;
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #333;
+      border-radius: 10px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      z-index: 999999;
+      display: none;
+      flex-direction: column;
+      font-family: "JetBrains Mono", monospace;
+      color: #00ff00;
+      overflow: hidden;
+    }
+    
+    #dev-terminal.active { display: flex; }
+    
+    .term-header {
+      background: #222;
+      padding: 10px 15px;
+      font-size: 12px;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+    }
+    
+    .term-close { cursor: pointer; color: #ff5f56; font-weight: bold; }
+    
+    .term-body {
+      padding: 15px;
+      flex-grow: 1;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .term-input-line { display: flex; gap: 8px; margin-top: 5px; }
+    .term-prompt { color: #ff7b00; }
+    
+    #term-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #00ff00;
+      font-family: inherit;
+      font-size: inherit;
+      flex-grow: 1;
+    }
+  </style>
+
+  <div id="dev-terminal">
+    <div class="term-header">
+      <span>edwin@portfolio:~</span>
+      <span class="term-close" onclick="document.getElementById('dev-terminal').classList.remove('active')">✕</span>
+    </div>
+    <div class="term-body" id="term-output">
+      <p>Welcome to Edwin's Portfolio Terminal.</p>
+      <p>Type <strong>help</strong> to see available commands.</p>
+      <div class="term-input-line">
+        <span class="term-prompt">edwin@portfolio:~$</span>
+        <input type="text" id="term-input" autocomplete="off" autofocus>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const terminal = document.getElementById('dev-terminal');
+      const input = document.getElementById('term-input');
+      const output = document.getElementById('term-output');
+      
+      let typedKeys = "";
+      
+      // Open terminal with Ctrl+K or typing "terminal"
+      document.addEventListener('keydown', function(e) {
+        // Ignore if typing in a form
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        
+        // Ctrl+K shortcut
+        if (e.ctrlKey && e.key === 'k') {
+          e.preventDefault();
+          terminal.classList.add('active');
+          input.focus();
+          return;
+        }
+        
+        // Type "terminal"
+        typedKeys += e.key.toLowerCase();
+        if (typedKeys.includes("terminal")) {
+          typedKeys = "";
+          terminal.classList.add('active');
+          input.focus();
+        }
+        if (typedKeys.length > 10) typedKeys = typedKeys.slice(-8);
+      });
+
+      // Handle commands
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          const cmd = input.value.trim().toLowerCase();
+          input.value = '';
+          
+          if (!cmd) return;
+          
+          // Echo the command
+          const echo = document.createElement('div');
+          echo.innerHTML = `<span style="color:#ff7b00">edwin@portfolio:~$</span> ${cmd}`;
+          output.insertBefore(echo, output.lastElementChild);
+          
+          // Process command
+          const res = document.createElement('div');
+          res.style.marginBottom = "10px";
+          
+          switch(cmd) {
+            case 'help':
+              res.innerHTML = `Available commands:<br>
+                - <strong>about</strong>: Who is Edwin?<br>
+                - <strong>skills</strong>: Tech stack<br>
+                - <strong>projects</strong>: What has he built?<br>
+                - <strong>coffee</strong>: Essential dev fuel<br>
+                - <strong>sudo hire edwin</strong>: You know what to do.<br>
+                - <strong>clear</strong>: Clear terminal`;
+              break;
+            case 'about':
+              res.innerHTML = "I am a Full-Stack Web Developer and CS student (AI & ML) specializing in building accessible, high-utility products.";
+              break;
+            case 'skills':
+              res.innerHTML = "Languages: Python, Java, C, JavaScript<br>Frameworks: Flask, Node.js, Tailwind, React<br>Tools: Git, Supabase, Render";
+              break;
+            case 'projects':
+              res.innerHTML = "1. OmniShare (Flask)<br>2. LeaveMail (Flask)<br>3. Portfolio (Python)<br>4. The Exemption (JS)";
+              break;
+            case 'coffee':
+              res.innerHTML = "☕ Error 418: I'm a teapot. But coffee is accepted.";
+              break;
+            case 'sudo hire edwin':
+              res.innerHTML = "<span style='color:#00ff00'>Access Granted.</span><br>Initiating hiring sequence...<br>Please email <strong>edwinvedon@gmail.com</strong> to proceed.";
+              break;
+            case 'clear':
+              output.innerHTML = `
+                <div class="term-input-line">
+                  <span class="term-prompt">edwin@portfolio:~$</span>
+                  <input type="text" id="term-input" autocomplete="off" autofocus>
+                </div>`;
+              // Re-attach event listener since we replaced the innerHTML
+              document.getElementById('term-input').addEventListener('keydown', arguments.callee);
+              return;
+            default:
+              res.innerHTML = `Command not found: ${cmd}. Type <strong>help</strong> for a list of commands.`;
+          }
+          
+          output.insertBefore(res, output.lastElementChild);
+          output.scrollTop = output.scrollHeight;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
