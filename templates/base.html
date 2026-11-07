@@ -152,17 +152,6 @@
         });
       });
 
-      // 2. MAGNETIC EFFECT (For Small Elements)
-      const magneticElements = document.querySelectorAll('.btn, .nav-menu a, .back-top');
-      magneticElements.forEach(el => {
-        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        el.addEventListener('mousemove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          el.style.transition = 'none';
-          el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
         el.addEventListener('mouseleave', () => {
           el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           el.style.transform = `translate(0px, 0px)`;
@@ -193,6 +182,49 @@
       // 4. LUCIDE ICONS
       if (window.lucide) { lucide.createIcons(); }
 
+    });
+  </script>
+  <!-- Lumo.js: Cursor, Magnetic, and Text Reveal -->
+  <script src="https://cdn.jsdelivr.net/npm/lumojs/dist/lumo.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof lumo !== 'undefined') {
+        
+        // 1. Custom Cursor with Magnetic Hover (Orange Theme)
+        lumo.snake({
+          cursorType: "dot",
+          color: "#ff7b00",             // Orange cursor
+          trailColor: "rgba(255,123,0,0.4)",
+          size: 10,
+          trailSize: 6,
+          trailCount: 8,
+          hideDefaultCursor: true,
+          clickEffect: true,
+          hoverGrow: true,
+          magnetic: true,               // Magnetic pull on buttons/links
+          hoverSelector: ".btn, .nav-menu a, .back-top"
+        });
+
+        // 2. Text Reveal on CV Page (Safe for Tables)
+        if (window.location.pathname.includes("cv.html")) {
+          lumo.textReveal(".cv-section p, .cv-section > ul", {
+            preset: "fade",             // Simple fade-in, no layout breaking
+            direction: "up",
+            speed: 600,
+            stagger: 100                // Delays between each paragraph
+          });
+        }
+
+        // 3. Text Reveal on Homepage Hero
+        if (!window.location.pathname.includes("cv.html")) {
+          lumo.textReveal(".hero-text h1, .hero-text h2, .hero-title", {
+            preset: "slide",
+            direction: "up",
+            speed: 800,
+            stagger: 150
+          });
+        }
+      }
     });
   </script>
 </body>
