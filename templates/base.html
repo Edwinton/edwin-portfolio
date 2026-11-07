@@ -282,5 +282,182 @@
     });
   </script>
 
+  <!-- Easter Eggs -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // 1. The Logo Spin (3 Clicks)
+      let logoClicks = 0;
+      const logo = document.querySelector('.nav-logo');
+      if (logo) {
+        logo.addEventListener('click', (e) => {
+          logoClicks++;
+          if (logoClicks === 3) {
+            e.preventDefault();
+            document.body.style.transition = 'transform 1s ease';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
+            logoClicks = 0;
+          }
+        });
+      }
+
+      // 2. Type "hire"
+      let keysPressed = "";
+      document.addEventListener('keydown', (e) => {
+        keysPressed += e.key.toLowerCase();
+        if (keysPressed.includes("hire")) {
+          keysPressed = "";
+          const title = document.querySelector('.hero-text h1');
+          if (title) {
+            const originalText = title.innerText;
+            title.innerText = "Hire Me? Let's Talk!";
+            title.style.color = "#ff7b00";
+            setTimeout(() => { title.innerText = originalText; title.style.color = ""; }, 2500);
+          }
+        }
+        if (keysPressed.length > 10) keysPressed = keysPressed.slice(-5);
+      });
+
+      // 3. Double Click Confetti
+      const footer = document.querySelector('.site-footer p');
+      if (footer) {
+        footer.addEventListener('dblclick', () => {
+          for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = ['#ff7b00', '#d65a00', '#ff9e40', '#ffffff'][Math.floor(Math.random() * 4)];
+            confetti.style.zIndex = '9999';
+            confetti.style.transition = 'transform 2s linear, opacity 2s linear';
+            document.body.appendChild(confetti);
+            setTimeout(() => { confetti.style.transform = `translateY(100vh) rotate(${Math.random() * 360}deg)`; confetti.style.opacity = '0'; }, 50);
+            setTimeout(() => confetti.remove(), 2000);
+          }
+        });
+      }
+
+      // 4. Konami Code
+      let konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konamiCode.length) {
+            document.body.style.transition = 'filter 1s ease';
+            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+            setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
+            konamiIndex = 0;
+          }
+        } else { konamiIndex = 0; }
+      });
+
+      // 5. Shift Trail
+      let isDrawing = false;
+      document.addEventListener('keydown', (e) => { if (e.key === 'Shift') isDrawing = true; });
+      document.addEventListener('keyup', (e) => { if (e.key === 'Shift') isDrawing = false; });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDrawing || Math.random() > 0.3) return;
+        const dot = document.createElement('div');
+        dot.style.position = 'fixed';
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        dot.style.width = '10px'; dot.style.height = '10px';
+        dot.style.backgroundColor = '#ff7b00';
+        dot.style.borderRadius = '50%';
+        dot.style.pointerEvents = 'none';
+        dot.style.zIndex = '9999';
+        dot.style.transition = 'opacity 1s ease';
+        document.body.appendChild(dot);
+        setTimeout(() => { dot.style.opacity = '0'; }, 10);
+        setTimeout(() => { dot.remove(); }, 1000);
+      });
+
+      // 6. Type "matrix"
+      let matrixKeys = "";
+      document.addEventListener('keydown', (e) => {
+        matrixKeys += e.key.toLowerCase();
+        if (matrixKeys.includes("matrix")) {
+          matrixKeys = "";
+          const body = document.body;
+          if (body.style.backgroundColor === 'black') {
+            body.style.backgroundColor = ''; body.style.color = '';
+          } else {
+            body.style.backgroundColor = '#000'; body.style.color = '#0f0';
+            body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+            setTimeout(() => { body.style.backgroundColor = ''; body.style.color = ''; }, 4000);
+          }
+        }
+        if (matrixKeys.length > 10) matrixKeys = matrixKeys.slice(-6);
+      });
+
+      // 7. Console Message
+      console.log("%c👋 Hey there, curious developer!%c\n\nLooks like you know how to use DevTools. \nIf you're reading this, you're exactly the kind of person I want to work with.\n\nLet's build something great together.\n\n📧 edwinvedon@gmail.com", "font-size: 20px; font-weight: bold; color: #ff7b00;", "font-size: 14px; color: inherit;");
+
+      // 8. Type "party"
+      let partyKeys = "";
+      document.addEventListener('keydown', (e) => {
+        partyKeys += e.key.toLowerCase();
+        if (partyKeys.includes("party")) {
+          partyKeys = "";
+          const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card');
+          cards.forEach(card => { card.style.animation = 'shake 0.5s ease-in-out infinite'; });
+          setTimeout(() => { cards.forEach(c => c.style.animation = ''); }, 3000);
+        }
+        if (partyKeys.length > 8) partyKeys = partyKeys.slice(-5);
+      });
+
+      // 9. Type "zoom"
+      let zoomKeys = "";
+      document.addEventListener('keydown', (e) => {
+        zoomKeys += e.key.toLowerCase();
+        if (zoomKeys.includes("zoom")) {
+          zoomKeys = "";
+          document.body.style.transition = 'transform 0.3s ease';
+          document.body.style.transform = 'scale(1.1)';
+          setTimeout(() => { document.body.style.transform = 'scale(1)'; }, 300);
+          setTimeout(() => { document.body.style.transform = 'scale(0.9)'; }, 600);
+          setTimeout(() => { document.body.style.transform = 'scale(1)'; }, 900);
+        }
+        if (zoomKeys.length > 8) zoomKeys = zoomKeys.slice(-4);
+      });
+
+      // 10. Right-click Logo (Random Color)
+      if (logo) {
+        logo.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          const colors = ['#ff7b00', '#2d5a3d', '#1a2332', '#d65a00', '#ff9e40'];
+          document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          setTimeout(() => { document.body.style.backgroundColor = 'var(--surface, #faf9f7)'; }, 2000);
+        });
+      }
+
+      // 11. URL ?admin
+      if (window.location.search.includes("?admin")) {
+        const footer = document.querySelector('.footer-inner p');
+        if (footer) footer.innerHTML += '<br><br><span style="color: #ff7b00; font-weight: bold;">🕵️ Secret Admin Mode Activated. Shh!</span>';
+      }
+
+    });
+  </script>
+  
+  <style>
+    @keyframes shake { 
+      0% { transform: translate(1px, 1px) rotate(0deg); } 
+      10% { transform: translate(-1px, -2px) rotate(-1deg); } 
+      20% { transform: translate(-3px, 0px) rotate(1deg); } 
+      30% { transform: translate(3px, 2px) rotate(0deg); } 
+      40% { transform: translate(1px, -1px) rotate(1deg); } 
+      50% { transform: translate(-1px, 2px) rotate(-1deg); } 
+      60% { transform: translate(-3px, 1px) rotate(0deg); } 
+      70% { transform: translate(3px, 1px) rotate(-1deg); } 
+      80% { transform: translate(-1px, -1px) rotate(1deg); } 
+      90% { transform: translate(1px, 2px) rotate(0deg); } 
+      100% { transform: translate(1px, -2px) rotate(-1deg); } 
+    }
+  </style>
 </body>
 </html>
