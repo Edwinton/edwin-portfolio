@@ -422,5 +422,87 @@
 
     });
   </script>
+  <!-- Easter Eggs (Injected Directly) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      
+      // 1. Right-click Email
+      document.body.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('a[href^="mailto:"]')) {
+          e.preventDefault();
+          alert("Wait! Don't copy my email. Just click it to open your mail app!");
+        }
+      });
+
+      // 2. Typing Easter Eggs (hire, matrix, job, 404)
+      let keyBuffer = "";
+      document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        
+        keyBuffer += e.key.toLowerCase();
+        if (keyBuffer.length > 10) keyBuffer = keyBuffer.slice(-6);
+
+        if (keyBuffer.includes("hire")) {
+          keyBuffer = "";
+          const mainTitle = document.querySelector('h1');
+          if (mainTitle) {
+            const originalText = mainTitle.innerText;
+            mainTitle.innerText = "Hire Me? Let's Talk!";
+            mainTitle.style.color = "#ff7b00";
+            setTimeout(() => { mainTitle.innerText = originalText; mainTitle.style.color = ""; }, 2500);
+          }
+        }
+
+        if (keyBuffer.includes("matrix")) {
+          keyBuffer = "";
+          document.body.style.transition = 'filter 1s ease';
+          document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+          setTimeout(() => { document.body.style.filter = 'none'; }, 3000);
+        }
+
+        if (keyBuffer.includes("job")) {
+          keyBuffer = "";
+          console.log("%cYou typed 'job'!%c\n\nHere is your official job offer:\nPosition: Full-Stack Developer\nSalary: Negotiable\nBenefits: Unlimited coffee, zero meetings before 10 AM.", "font-size: 18px; color: #fff; background: #ff7b00; padding: 5px; border-radius: 4px;", "font-size: 14px; color: #333;");
+        }
+
+        if (keyBuffer.includes("404")) {
+          keyBuffer = "";
+          const main = document.querySelector("main");
+          if (main) main.innerHTML = `<div style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: monospace;"><h1 style="font-size: 8rem; color: #ff7b00; margin: 0;">404</h1><p style="font-size: 1.5rem; color: #333;">You found the secret 404 page.</p><button onclick="window.location.reload()" style="padding: 10px 20px; background: #ff7b00; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Go Back</button></div>`;
+        }
+      });
+
+      // 3. The Shake (Type "party")
+      let partyBuffer = "";
+      document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        partyBuffer += e.key.toLowerCase();
+        if (partyBuffer.includes("party")) {
+          partyBuffer = "";
+          const cards = document.querySelectorAll('.project-card, .skill-card, .profile-card');
+          cards.forEach(card => { card.style.animation = 'shake 0.5s ease-in-out infinite'; });
+          setTimeout(() => { cards.forEach(c => c.style.animation = ''); }, 3000);
+        }
+        if (partyBuffer.length > 8) partyBuffer = partyBuffer.slice(-5);
+      });
+
+      // 4. Logo Spin
+      const logo = document.querySelector('.nav-logo');
+      if (logo) {
+        let logoClicks = 0;
+        logo.addEventListener('click', (e) => {
+          logoClicks++;
+          if (logoClicks === 3) {
+            e.preventDefault();
+            document.body.style.transition = 'transform 1s ease';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => { document.body.style.transform = 'none'; }, 1000);
+            logoClicks = 0;
+          }
+        });
+      }
+
+    });
+  </script>
 </body>
 </html>
