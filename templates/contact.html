@@ -15,7 +15,7 @@
     <div style="background: var(--surface, #faf9f7); border: 1px solid var(--border, #e5e5e0); border-radius: 12px; padding: 3rem; margin-bottom: 3rem; text-align: center;">
       <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--ink, #1a1a1a);">Need a Website for Your Business?</h2>
       <p style="font-size: 1.1rem; color: var(--ink-soft, #4a4a4a); max-width: 700px; margin: 0 auto 1.5rem; line-height: 1.6;">
-        I build fast, responsive, and high-converting websites for businesses. As a Full-Stack Developer and UI/UX Designer, I don't just write code—I design digital experiences that help you stand out and grow.
+        I build fast, responsive, and high-converting websites. As a Full-Stack Developer and UI/UX Designer, I don't just write code—I design digital experiences that help you stand out and grow.
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; color: var(--green-700, #2d5a3d); font-weight: 600;">
         <span>✓ Custom Design</span>
@@ -26,22 +26,36 @@
     </div>
 
     <!-- Detailed Hiring Form -->
-    <div style="max-width: 700px; margin: 0 auto;">
+    <div style="max-width: 800px; margin: 0 auto; background: white; padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border, #e5e5e0);">
       <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--ink, #1a1a1a);">Start Your Project</h2>
       
       <form id="hireForm" style="display: grid; gap: 1.5rem;">
         
+        <!-- Row 1: Name & Email -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Your Name *</label>
             <input type="text" id="hireName" placeholder="John Doe" required style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit;">
           </div>
           <div>
-            <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Your Email *</label>
+            <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Email Address *</label>
             <input type="email" id="hireEmail" placeholder="john@example.com" required style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit;">
           </div>
         </div>
 
+        <!-- Row 2: Company & Current Website -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Company / Business Name</label>
+            <input type="text" id="hireCompany" placeholder="Your Business Ltd." style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Current Website (if any)</label>
+            <input type="url" id="hireWebsite" placeholder="https://yourwebsite.com" style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit;">
+          </div>
+        </div>
+
+        <!-- Row 3: Project Type & Budget -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Project Type</label>
@@ -50,6 +64,7 @@
               <option value="Portfolio">Portfolio</option>
               <option value="E-Commerce Store">E-Commerce Store</option>
               <option value="Web App">Web App</option>
+              <option value="Landing Page">Landing Page</option>
               <option value="Other">Other</option>
             </select>
           </div>
@@ -64,9 +79,21 @@
           </div>
         </div>
 
+        <!-- Row 4: Timeline -->
         <div>
-          <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Tell me about your project *</label>
-          <textarea id="hireMessage" placeholder="What are you looking to build? Do you have a deadline?" rows="5" required style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
+          <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">When do you need this completed?</label>
+          <select id="hireTimeline" style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit; background: white;">
+            <option value="ASAP (Rush)">ASAP (Rush)</option>
+            <option value="Within 2 Weeks">Within 2 Weeks</option>
+            <option value="Within 1 Month">Within 1 Month</option>
+            <option value="Flexible / No Rush">Flexible / No Rush</option>
+          </select>
+        </div>
+
+        <!-- Row 5: Detailed Message -->
+        <div>
+          <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink, #1a1a1a);">Tell me about your goals *</label>
+          <textarea id="hireMessage" placeholder="What pages do you need? Do you have a logo and text ready? What are your main goals for this website?" rows="6" required style="width: 100%; padding: 12px; border: 1px solid var(--border, #e5e5e0); border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary" style="padding: 14px 24px; background: var(--green-700, #2d5a3d); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;">Send Project Request</button>
@@ -84,10 +111,25 @@
     status.style.display = 'block';
     status.style.color = 'var(--ink-mute, #6b6b6b)';
 
-    // Get the selected project type and budget
+    const company = document.getElementById('hireCompany').value || 'N/A';
+    const website = document.getElementById('hireWebsite').value || 'N/A';
     const projectType = document.getElementById('hireType').value;
     const budget = document.getElementById('hireBudget').value;
-    const messageBody = `[Project: ${projectType} | Budget: ${budget}]\n\n` + document.getElementById('hireMessage').value;
+    const timeline = document.getElementById('hireTimeline').value;
+    const goals = document.getElementById('hireMessage').value;
+
+    // Format all the data neatly for the admin panel
+    const formattedMessage = `
+[--- PROJECT DETAILS ---]
+Company: ${company}
+Current Website: ${website}
+Project Type: ${projectType}
+Budget: ${budget}
+Timeline: ${timeline}
+
+[--- PROJECT GOALS ---]
+${goals}
+    `.trim();
 
     fetch('/api/hire', {
       method: 'POST',
@@ -95,7 +137,7 @@
       body: JSON.stringify({
         name: document.getElementById('hireName').value,
         email: document.getElementById('hireEmail').value,
-        message: messageBody
+        message: formattedMessage
       })
     }).then(res => res.json()).then(data => {
       if (data.ok) {
