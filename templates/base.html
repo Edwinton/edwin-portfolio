@@ -229,16 +229,17 @@
       }
     });
 
-    // 8. Maintenance Auto-Redirect
-    if (!window.location.pathname.includes('maintenance.html')) {
+    // 8. Maintenance Auto-Redirect (LOCALHOST ONLY)
+    // GitHub Pages has no backend, so we skip the API fetch there
+    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocal && !window.location.pathname.includes('maintenance.html')) {
       setInterval(function() {
         fetch('/api/site', { cache: 'no-store' })
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
             if (isMaint) {
-              var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-              window.location.href = isLocal ? '/maintenance.html' : '/edwin-portfolio/maintenance.html';
+              window.location.href = '/maintenance.html';
             }
           }).catch(function() {});
       }, 3000);
