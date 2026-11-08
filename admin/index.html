@@ -3,23 +3,28 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin Inbox · Edwin Tony</title>
+<title>Admin Dashboard · Edwin Tony</title>
 <style>
-  :root{--ink:#1a1a1a;--ink-soft:#4a4a4a;--ink-mute:#6b6b6b;--green:#2d5a3d;--green-100:#e8f0eb;--surface:#f8f8f6;--border:#e5e5e0;--white:#fff;--mono:"JetBrains Mono",Consolas,monospace;--sans:"Inter",system-ui,sans-serif}
+  :root{--ink:#1a1a1a;--ink-soft:#4a4a4a;--ink-mute:#6b6b6b;--green:#2d5a3d;--green-100:#e8f0eb;--surface:#f8f8f6;--border:#e5e5e0;--border-2:#d6d6d0;--white:#fff;--mono:"JetBrains Mono",Consolas,monospace;--sans:"Inter",system-ui,sans-serif}
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:var(--sans);color:var(--ink);background:var(--surface);font-size:14px;line-height:1.5}
   .topbar{position:sticky;top:0;z-index:10;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:12px 20px}
   .logo{font-family:var(--mono);font-weight:700;font-size:15px}
   .logo span{color:var(--green)}
   .topbar-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--white);color:var(--ink);font-weight:600;font-size:13px;text-decoration:none;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border-2);background:var(--white);color:var(--ink);font-weight:600;font-size:13px;text-decoration:none;cursor:pointer;}
   .btn:hover{background:var(--surface)}
-  .layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 57px)}
+  .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 57px)}
   .sidebar{background:var(--white);border-right:1px solid var(--border);padding:16px 12px;position:sticky;top:57px;height:calc(100vh - 57px);}
   .sidebar h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-mute);margin:16px 0 8px;padding:0 8px}
   .sidebar ul{list-style:none}
-  .sidebar li{padding:10px;border-radius:6px;font-size:14px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;background:var(--green-100);color:var(--green);font-weight:600;}
-  .editor{padding:32px;max-width:900px}
+  .sidebar li{padding:10px;border-radius:6px;font-size:14px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;cursor:pointer;transition:background 0.15s;}
+  .sidebar li:hover{background:var(--surface)}
+  .sidebar li.active{background:var(--green-100);color:var(--green);font-weight:600;}
+  .editor{padding:32px;width: 100%; max-width: 1200px;}
+  .editor h2{font-size: 22px; margin-bottom: 24px; color: var(--ink);}
+  
+  /* Message Cards */
   .message-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
   .message-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;}
   .message-name{font-weight:700;font-size:16px;color:var(--ink);}
@@ -27,6 +32,9 @@
   .message-date{color:var(--ink-mute);font-size:12px;}
   .message-body{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.6;}
   .empty{text-align:center;padding:40px;color:var(--ink-mute);}
+  
+  /* Analytics Iframe */
+  iframe{border:none; width:100%; height: 80vh; border-radius: 12px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.05);}
 </style>
 </head>
 <body>
@@ -34,7 +42,7 @@
 <div class="topbar">
   <div class="logo">ET<span>.</span> admin</div>
   <div class="topbar-actions">
-    <a href="/" target="_blank" class="btn">View Public Site ↗</a>
+    <a href="https://edwinton.github.io/edwin-portfolio/" target="_blank" class="btn">View Public Site ↗</a>
   </div>
 </div>
 
@@ -42,61 +50,90 @@
   <aside class="sidebar">
     <h3>Dashboard</h3>
     <ul>
-      <li>📥 Inbox</li>
-      <li onclick="selectPath(['analytics'])">📊 Analytics</li>
-      <li onclick="selectPath(['analytics'])">📊 Analytics</li>
-      <li onclick="selectPath(['analytics'])">📊 Analytics</li>
+      <li id="tab-inbox" class="active" onclick="switchTab('inbox')">📥 Inbox</li>
+      <li id="tab-analytics" onclick="switchTab('analytics')">📊 Analytics</li>
     </ul>
   </aside>
+  
   <main class="editor">
-    <h2 style="margin-bottom: 24px;">Hiring Inbox</h2>
-    <div id="messages-list"><p class="empty">Loading messages...</p></div>
+    <!-- Inbox View -->
+    <div id="view-inbox">
+      <h2>Hiring Inbox</h2>
+      <div id="messages-list"><p class="empty">Loading messages...</p></div>
+    </div>
+
+    <!-- Analytics View -->
+    <div id="view-analytics" style="display: none;">
+      <h2>Website Analytics</h2>
+      <iframe src="https://edwinton.goatcounter.com" allowtransparency="true"></iframe>
+    </div>
   </main>
 </div>
 
 <script>
-const $ = (s) => document.querySelector(s);
-
-async function loadMessages() {
-  try {
-    const res = await fetch('/api/messages');
-    if (!res.ok) throw new Error("Server error");
+  // Tab Switching Logic
+  function switchTab(tab) {
+    // Hide all views
+    document.getElementById('view-inbox').style.display = 'none';
+    document.getElementById('view-analytics').style.display = 'none';
     
-    const msgs = await res.json();
-    const container = $('#messages-list');
-    container.innerHTML = '';
-
-    if (msgs.length === 0) {
-      container.innerHTML = '<div class="empty"><h3>No messages yet</h3><p>When someone fills out the form, it will appear here.</p></div>';
-      return;
+    // Remove active class from all tabs
+    document.getElementById('tab-inbox').classList.remove('active');
+    document.getElementById('tab-analytics').classList.remove('active');
+    
+    // Show selected view and highlight tab
+    if (tab === 'inbox') {
+      document.getElementById('view-inbox').style.display = 'block';
+      document.getElementById('tab-inbox').classList.add('active');
+      loadMessages();
+    } else if (tab === 'analytics') {
+      document.getElementById('view-analytics').style.display = 'block';
+      document.getElementById('tab-analytics').classList.add('active');
     }
-
-    msgs.forEach(m => {
-      const card = document.createElement('div');
-      card.className = 'message-card';
-      
-      // Protect against HTML injection in messages
-      const safeMsg = m.message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      
-      card.innerHTML = `
-        <div class="message-header">
-          <div>
-            <div class="message-name">${m.name}</div>
-            <a href="mailto:${m.email}" class="message-email">${m.email}</a>
-          </div>
-          <div class="message-date">${m.date}</div>
-        </div>
-        <div class="message-body">${safeMsg}</div>
-      `;
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error(err);
-    $('#messages-list').innerHTML = '<div class="empty">Error loading messages.</div>';
   }
-}
 
-loadMessages();
+  // Fetch Messages from Server
+  async function loadMessages() {
+    try {
+      const res = await fetch('/api/messages');
+      if (!res.ok) throw new Error("Server error");
+      
+      const msgs = await res.json();
+      const container = document.getElementById('messages-list');
+      container.innerHTML = '';
+
+      if (msgs.length === 0) {
+        container.innerHTML = '<div class="empty"><h3>No messages yet</h3><p>When someone fills out the form, it will appear here.</p></div>';
+        return;
+      }
+
+      msgs.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'message-card';
+        
+        // Protect against HTML injection
+        const safeMsg = m.message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        
+        card.innerHTML = `
+          <div class="message-header">
+            <div>
+              <div class="message-name">${m.name}</div>
+              <a href="mailto:${m.email}" class="message-email">${m.email}</a>
+            </div>
+            <div class="message-date">${m.date}</div>
+          </div>
+          <div class="message-body">${safeMsg}</div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      document.getElementById('messages-list').innerHTML = '<div class="empty">Error loading messages. Make sure python admin.py is running.</div>';
+    }
+  }
+
+  // Load messages on startup
+  loadMessages();
 </script>
 </body>
 </html>
