@@ -35,6 +35,21 @@
       box-shadow: 0 10px 25px rgba(29, 191, 115, 0.2) !important;
     }
   </style>
+  <!-- Custom SVG Cursor -->
+  <style>
+    /* Desktop only */
+    @media (pointer: fine) {
+      body, a, button, .btn, .project-card, .skill-card, .profile-card, .timeline-content, .contact-card {
+        /* A clean orange arrow with a black outline (Base64 encoded SVG) */
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z" fill="%23ff7b00" stroke="%23111" stroke-width="1.5"/></svg>') 4 4, auto !important;
+      }
+      
+      /* Keep the text cursor for typing */
+      input, textarea, select {
+        cursor: text !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
