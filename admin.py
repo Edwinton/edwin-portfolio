@@ -5,6 +5,7 @@ import base64
 import hashlib
 import hmac
 import json
+import os
 import secrets
 import subprocess
 import sys
@@ -12,6 +13,18 @@ import urllib.request
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
+
+from pathlib import Path
+from datetime import datetime
+import os
+
+# Load .env file if it exists
+env_file = Path(__file__).parent / ".env"
+if env_file.exists():
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        if "=" in line and not line.startswith("#"):
+            key, value = line.split("=", 1)
+            os.environ[key.strip()] = value.strip()
 
 ROOT = Path(__file__).parent
 PUBLIC = ROOT / "public"
@@ -49,18 +62,18 @@ class Handler(SimpleHTTPRequestHandler):
         # 2. API: Analytics (GoatCounter)
         if self.path == "/api/analytics":
             try:
-                token = "1hinkxh1horej1mb273ezdddhjta4w6acvo0gybswlk4il1lf1"
+                token = os.environ.get("GOATCOUNTER_API_TOKEN")
+                if not token:
+                    raise RuntimeError("GOATCOUNTER_API_TOKEN is not set")
                 base_url = "https://edwinton.goatcounter.com/api/v0/stats"
                 
                 def fetch(endpoint):
-                    req = urllib.request.Request(f"{base_url}/{endpoint}?limit=5")
+                    url = f"{base_url}/{endpoint}?limit=10"
+                    req = urllib.request.Request(url)
                     req.add_header("Authorization", f"Bearer {token}")
                     req.add_header("Content-Type", "application/json")
-                    try:
-                        with urllib.request.urlopen(req) as response:
-                            return json.loads(response.read().decode())
-                    except Exception:
-                        return {"hits": []}
+                    with urllib.request.urlopen(req, timeout=15) as response:
+                        return json.loads(response.read().decode("utf-8"))
 
                 hits = fetch("hits")
                 locations = fetch("locations")
@@ -69,12 +82,12 @@ class Handler(SimpleHTTPRequestHandler):
 
                 self._json(200, {
                     "hits": hits.get("hits", []),
-                    "locations": locations.get("hits", []),
-                    "browsers": browsers.get("hits", []),
-                    "systems": systems.get("hits", [])
+                    "locations": locations.get("stats", []),
+                    "browsers": browsers.get("stats", []),
+                    "systems": systems.get("stats", [])
                 })
             except Exception as e:
-                self._json(500, {"error": str(e)})
+                self._json(502, {"error": f"GoatCounter analytics request failed: {e}"})
             return
 
         # 3. API: Get site data
