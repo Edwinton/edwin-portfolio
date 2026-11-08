@@ -107,7 +107,7 @@
     <button class="btn btn-primary" id="start-btn" onclick="startGame()">Start Game</button>
 
     <div class="game-container" id="game-container">
-      <p style="font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 12px;">Find all 6 matching pairs.</p>
+      <p style="font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 12px;">Find all 8 matching pairs.</p>
       
       <div class="grid" id="grid"></div>
 
@@ -118,7 +118,8 @@
   </main>
 
   <script>
-    const ICONS = ["🚀", "💻", "⚙️", "🎨", "🧠", "🔒"];
+    // Upgraded to 8 symbols (16 cards total)
+    const ICONS = ["🚀", "💻", "⚙️", "🎨", "🧠", "🔒", "☕", "🐛"];
     let cards = [];
     let flipped = [];
     let matched = 0;
