@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/main.css" />
   
   <style>
-    /* Force the portfolio background and center the content */
     body { 
       background-color: var(--surface, #faf9f7) !important; 
       min-height: 100vh;
@@ -25,7 +24,6 @@
       font-family: var(--font, 'Inter', sans-serif);
     }
 
-    /* The main card */
     .maintenance-card {
       background: var(--white, #ffffff);
       border: 1px solid var(--border, #e5e5e0);
@@ -49,145 +47,241 @@
     .maintenance-card p {
       font-size: 1.1rem;
       color: var(--ink-soft, #4a4a4a);
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       line-height: 1.6;
     }
 
-    /* Game UI elements */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      font-family: var(--mono, monospace);
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 32px;
-      padding: 16px;
-      background: var(--surface, #faf9f7);
-      border-radius: var(--r, 10px);
-      border: 1px solid var(--border, #e5e5e0);
-    }
+    /* Game UI */
+    .game-container { display: none; margin-top: 24px; }
+    .game-container.active { display: block; }
+    
+    .instructions { font-size: 0.9rem; color: var(--ink-mute); margin-bottom: 16px; }
 
-    .score-val, .time-val {
-      color: var(--green-700, #ff7b00);
-      font-size: 1.5rem;
+    .board { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .row { display: flex; justify-content: center; gap: 12px; align-items: center; }
+    
+    /* The peg slots */
+    .slot {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--border);
+      cursor: pointer; transition: all 0.2s;
     }
+    .slot:hover { border-color: var(--green-500); }
+    
+    /* Colors */
+    .slot.c1 { background: #ff7b00; border-color: #ff7b00; } /* Orange */
+    .slot.c2 { background: #1a1a1a; border-color: #1a1a1a; } /* Black */
+    .slot.c3 { background: #e5e5e0; border-color: #d6d6d0; } /* Grey */
+    .slot.c4 { background: #ffffff; border-color: #cccccc; } /* White */
+    
+    /* Feedback pegs */
+    .feedback { display: flex; gap: 4px; width: 40px; flex-wrap: wrap; justify-content: center; }
+    .fb-peg { width: 10px; height: 10px; border-radius: 50%; background: transparent; border: 1px solid var(--border); }
+    .fb-peg.correct { background: #1a1a1a; border-color: #1a1a1a; }
+    .fb-peg.partial { background: #e5e5e0; border-color: #d6d6d0; }
 
-    .terminal-text {
-      font-family: var(--mono, monospace);
-      font-size: 0.9rem;
-      color: var(--ink-mute, #6b6b6b);
-      margin-top: 24px;
-      height: 20px;
-    }
+    /* Controls */
+    .controls { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+    .color-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+    .color-picker .slot { width: 32px; height: 32px; cursor: pointer; }
+    .color-picker .slot.selected { transform: scale(1.2); box-shadow: 0 0 0 3px var(--green-100); }
 
-    /* Clickable data packets */
-    .data-packet {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--green-700, #ff7b00);
-      cursor: crosshair;
-      z-index: 20;
-      box-shadow: 0 0 15px rgba(255, 123, 0, 0.6);
-      transition: transform 0.1s;
-    }
-    .data-packet:active { transform: scale(0.8); }
+    .msg { font-size: 1.1rem; font-weight: bold; height: 24px; margin-top: 16px; }
+    .win { color: var(--green-700); }
+    .lose { color: #d65a00; }
 
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- Hardcoded Logo (No longer using {{ }} variables) -->
   <a href="https://edwinton.github.io/edwin-portfolio/index.html" class="nav-logo" style="position: absolute; top: 24px; left: 24px; text-decoration: none; font-size: 1.2rem;">
     ET<span>.</span>
   </a>
 
   <main class="maintenance-card">
-    <div class="hidden" id="game-ui">
-      <div class="stats">
-        <div>SCORE: <span class="score-val" id="score">0</span></div>
-        <div>TIME: <span class="time-val" id="timer">15</span>s</div>
-      </div>
-    </div>
+    <div class="eyebrow" style="text-align: center;">SYSTEM UPGRADE</div>
+    <h1>Under Maintenance</h1>
+    <p>I'm currently updating the portfolio to make it even better.<br>While you wait, play a quick game of Code Breaker!</p>
+    
+    <button class="btn btn-primary" id="start-btn" onclick="startGame()">Start Game</button>
 
-    <div id="start-screen">
-      <div class="eyebrow" style="text-align: center;">SYSTEM UPGRADE</div>
-      <h1>Under Maintenance</h1>
-      <p>I'm currently updating the portfolio to make it even better.<br>While you wait, try to catch the floating data packets!</p>
-      <button class="btn btn-primary" onclick="startGame()">Initialize Game</button>
-      <div class="terminal-text" id="terminal"></div>
+    <div class="game-container" id="game-container">
+      <p class="instructions">Guess the 4-color code. <br> <span style="color:#1a1a1a">■</span> = Right color, right spot. <span style="color:#d6d6d0">■</span> = Right color, wrong spot.</p>
+      
+      <div class="board" id="board"></div>
+      
+      <div class="color-picker">
+        <div class="slot c1 selected" onclick="selectColor(1, this)"></div>
+        <div class="slot c2" onclick="selectColor(2, this)"></div>
+        <div class="slot c3" onclick="selectColor(3, this)"></div>
+        <div class="slot c4" onclick="selectColor(4, this)"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-outline" onclick="checkGuess()">Submit Guess</button>
+      </div>
+
+      <div class="msg" id="message"></div>
     </div>
   </main>
 
   <script>
-    let score = 0, timeLeft = 15, gameInterval, timerInterval, isPlaying = false;
-    const startScreen = document.getElementById("start-screen");
-    const gameUi = document.getElementById("game-ui");
-    const scoreEl = document.getElementById("score");
-    const timerEl = document.getElementById("timer");
-    const terminal = document.getElementById("terminal");
+    const MAX_TRIES = 10;
+    const COLORS = 4;
+    let secretCode = [];
+    let currentGuess = [];
+    let currentRow = 0;
+    let currentColor = 1;
+    let gameActive = false;
+
+    function initGame() {
+      // Generate secret code
+      secretCode = Array.from({length: COLORS}, () => Math.floor(Math.random() * 4) + 1);
+      currentGuess = Array(COLORS).fill(0);
+      currentRow = 0;
+      currentColor = 1;
+      gameActive = true;
+
+      // Reset UI
+      document.getElementById('message').innerText = "";
+      document.getElementById('message').className = "msg";
+      document.getElementById('start-btn').classList.add('hidden');
+      document.getElementById('game-container').classList.add('active');
+      
+      // Update color picker
+      document.querySelectorAll('.color-picker .slot').forEach((s, i) => {
+        s.className = `slot c${i+1}` + (i === 0 ? ' selected' : '');
+      });
+
+      buildBoard();
+    }
 
     function startGame() {
-      if (isPlaying) return;
-      isPlaying = true; score = 0; timeLeft = 15;
-      scoreEl.innerText = score; timerEl.innerText = timeLeft;
-      startScreen.classList.add("hidden"); gameUi.classList.remove("hidden");
-      
-      gameInterval = setInterval(spawnDot, 700);
-      timerInterval = setInterval(() => {
-        timeLeft--; timerEl.innerText = timeLeft;
-        if (timeLeft <= 0) endGame();
-      }, 1000);
+      initGame();
     }
 
-    function spawnDot() {
-      if (!isPlaying) return;
-      const dot = document.createElement("div");
-      dot.className = "data-packet";
-      const size = Math.random() * 24 + 16;
-      dot.style.width = size + "px"; dot.style.height = size + "px";
-      dot.style.left = (Math.random() * (window.innerWidth - size)) + "px";
-      dot.style.top  = (Math.random() * (window.innerHeight - size)) + "px";
+    function buildBoard() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
       
-      dot.addEventListener("mousedown", () => {
-        if (!isPlaying) return;
-        score++; scoreEl.innerText = score; dot.remove();
-      });
-      
-      setTimeout(() => { if (dot.parentNode) dot.remove(); }, 1800);
-      document.body.appendChild(dot);
-    }
+      for (let i = 0; i < MAX_TRIES; i++) {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.id = `row-${i}`;
 
-    function endGame() {
-      isPlaying = false;
-      clearInterval(gameInterval); clearInterval(timerInterval);
-      document.querySelectorAll(".data-packet").forEach(d => d.remove());
-      
-      startScreen.classList.remove("hidden"); gameUi.classList.add("hidden");
-      startScreen.innerHTML = `
-        <div class="eyebrow" style="text-align: center;">COMPLETE</div>
-        <h1>Game Over</h1>
-        <p>You caught <strong style="color: var(--green-700); font-size: 1.5rem;">${score}</strong> data packets.</p>
-        <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
-        <p style="margin-top: 24px; font-size: 0.9rem; color: var(--ink-mute);">The site will be back online shortly. Thanks for waiting!</p>
-      `;
-    }
+        // Create 4 slots
+        for (let j = 0; j < COLORS; j++) {
+          const slot = document.createElement('div');
+          slot.className = 'slot';
+          slot.id = `slot-${i}-${j}`;
+          if (i === 0) {
+            slot.style.cursor = 'pointer';
+            slot.onclick = () => fillSlot(j);
+          } else {
+            slot.style.cursor = 'default';
+          }
+          row.appendChild(slot);
+        }
 
-    const messages = ["Connecting to server...", "Compiling updates...", "Running tests...", "Almost there..."];
-    let msgIdx = 0, charIdx = 0;
-    
-    function typeWriter() {
-      if (msgIdx >= messages.length) msgIdx = 0;
-      const currentMsg = messages[msgIdx];
-      if (charIdx < currentMsg.length) {
-        terminal.innerHTML += currentMsg.charAt(charIdx);
-        charIdx++; setTimeout(typeWriter, 50);
-      } else {
-        setTimeout(() => { terminal.innerHTML = ""; charIdx = 0; msgIdx++; typeWriter(); }, 2000);
+        // Feedback area
+        const feedback = document.createElement('div');
+        feedback.className = 'feedback';
+        feedback.id = `feedback-${i}`;
+        row.appendChild(feedback);
+
+        board.appendChild(row);
       }
     }
-    setTimeout(typeWriter, 1000);
+
+    function selectColor(c, el) {
+      if (!gameActive) return;
+      currentColor = c;
+      document.querySelectorAll('.color-picker .slot').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function fillSlot(index) {
+      if (!gameActive || currentRow !== 0) return;
+      currentGuess[index] = currentColor;
+      const slot = document.getElementById(`slot-${currentRow}-${index}`);
+      slot.className = `slot c${currentColor}`;
+    }
+
+    function checkGuess() {
+      if (!gameActive) return;
+      
+      if (currentGuess.includes(0)) {
+        showMessage("Please fill all 4 slots.", "lose");
+        return;
+      }
+
+      // Calculate feedback
+      let exact = 0, partial = 0;
+      let tempSecret = [...secretCode];
+      let tempGuess = [...currentGuess];
+
+      // First pass: exact matches
+      for (let i = 0; i < COLORS; i++) {
+        if (tempGuess[i] === tempSecret[i]) {
+          exact++;
+          tempSecret[i] = null;
+          tempGuess[i] = null;
+        }
+      }
+      // Second pass: partial matches
+      for (let i = 0; i < COLORS; i++) {
+        if (tempGuess[i] !== null && tempSecret.includes(tempGuess[i])) {
+          partial++;
+          tempSecret[tempSecret.indexOf(tempGuess[i])] = null;
+        }
+      }
+
+      // Render feedback pegs
+      const feedback = document.getElementById(`feedback-${currentRow}`);
+      for (let i = 0; i < exact; i++) {
+        const peg = document.createElement('div'); peg.className = 'fb-peg correct'; feedback.appendChild(peg);
+      }
+      for (let i = 0; i < partial; i++) {
+        const peg = document.createElement('div'); peg.className = 'fb-peg partial'; feedback.appendChild(peg);
+      }
+      // Fill empty
+      for (let i = exact + partial; i < COLORS; i++) {
+        const peg = document.createElement('div'); peg.className = 'fb-peg'; feedback.appendChild(peg);
+      }
+
+      // Check win/loss
+      if (exact === COLORS) {
+        gameActive = false;
+        showMessage("You cracked the code! 🎉", "win");
+        document.getElementById('start-btn').innerText = "Play Again";
+        document.getElementById('start-btn').classList.remove('hidden');
+        return;
+      }
+
+      currentRow++;
+      currentGuess = Array(COLORS).fill(0);
+
+      if (currentRow >= MAX_TRIES) {
+        gameActive = false;
+        showMessage(`Game Over. The code was: ${secretCode.join(" - ")}`, "lose");
+        document.getElementById('start-btn').innerText = "Try Again";
+        document.getElementById('start-btn').classList.remove('hidden');
+        return;
+      }
+
+      // Make next row active
+      for (let j = 0; j < COLORS; j++) {
+        document.getElementById(`slot-${currentRow}-${j}`).style.cursor = 'pointer';
+        document.getElementById(`slot-${currentRow}-${j}`).onclick = () => fillSlot(j);
+      }
+    }
+
+    function showMessage(text, type) {
+      const msg = document.getElementById('message');
+      msg.innerText = text;
+      msg.className = `msg ${type}`;
+    }
   </script>
 </body>
 </html>
