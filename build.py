@@ -248,6 +248,33 @@ def prepare(site):
           @media (max-width: 768px) { .cv-doc { padding: 32px 24px !important; } .cv-toolbar { flex-direction: column; gap: 10px; } }
         </style>
         """
+
+    # CV Page specific CSS (fixes the bug where it was applied to the wrong page)
+    if "cv" in pages:
+        pages["cv"]["inline_css"] = """
+        <style>
+          body { background-color: #f0f2f5 !important; }
+          .cv-doc { background: #fff !important; border: 1px solid #e5e5e0 !important; border-radius: 8px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important; padding: 64px 72px !important; max-width: 850px !important; width: 100%; font-family: 'Arial', sans-serif !important; color: #000 !important; margin: 0 auto; }
+          .cv-toolbar { display: flex; justify-content: space-between; max-width: 850px; width: 100%; margin: 40px auto 20px auto; }
+          .btn-mono { background: #fff !important; color: #1a1a1a !important; border: 1.5px solid #d1d1d1 !important; padding: 10px 20px !important; border-radius: 6px !important; font-weight: 600 !important; text-decoration: none !important; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease !important; }
+          .btn-mono:hover { background: #1a1a1a !important; color: #fff !important; border-color: #1a1a1a !important; }
+          .cv-header h1 { font-size: 2.2rem !important; margin-bottom: 4px !important; }
+          .cv-subtitle { font-size: 1rem !important; font-weight: 600 !important; color: #ff7b00 !important; margin-bottom: 8px !important; }
+          .cv-contact { font-size: 0.85rem !important; color: #333 !important; line-height: 1.5 !important; }
+          .cv-contact a { color: #1a1a1a !important; text-decoration: underline !important; }
+          .cv-section { margin-top: 28px !important; }
+          .cv-section h2 { font-size: 1rem !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; border-bottom: 1.5px solid #000 !important; padding-bottom: 4px !important; margin-bottom: 12px !important; }
+          .cv-section p, .cv-section li { font-size: 0.95rem !important; color: #333 !important; line-height: 1.5 !important; }
+          .cv-section ul { padding-left: 20px !important; margin: 0 !important; }
+          .cv-table { width: 100% !important; border-collapse: collapse !important; font-size: 0.95rem !important; }
+          .cv-table th, .cv-table td { text-align: left !important; vertical-align: top !important; padding: 8px 0 !important; border-bottom: 1px solid #eee !important; }
+          .cv-table thead th { border-bottom: 1.5px solid #000 !important; padding-bottom: 4px !important; font-size: 0.85rem !important; text-transform: uppercase !important; }
+          .cv-td-period { font-weight: 700 !important; width: 25% !important; }
+          .cv-td-main strong { display: block !important; font-weight: 700 !important; margin-bottom: 2px !important; }
+          .cv-td-main span { color: #555 !important; font-size: 0.9rem !important; }
+          @media (max-width: 768px) { .cv-doc { padding: 32px 24px !important; } .cv-toolbar { flex-direction: column; gap: 10px; } }
+        </style>
+        """
     return site
 
 def build_nav(nav, current_file):
