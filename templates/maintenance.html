@@ -110,7 +110,11 @@
     <h1>Under Maintenance</h1>
     <p>Play a quick game while I update the site!</p>
 
-    <div class="game-container active" id="game-container">
+    <!-- 1. Start Button (Middle) -->
+    <button class="btn btn-primary" id="start-btn" onclick="startGame()">Start Game</button>
+
+    <!-- 2. Game Board (Hidden initially) -->
+    <div class="game-container" id="game-container">
       <p class="instructions">
         Guess the 4-color code in 6 tries.<br>
         <span style="color:#1a1a1a">■</span> Right color, right spot. 
@@ -132,16 +136,12 @@
 
       <div class="msg" id="message"></div>
       
-      <!-- The Play Again button is now placed at the very bottom -->
+      <!-- 3. Play Again Button (Bottom) -->
       <button class="btn btn-primary btn-small" id="reset-btn" onclick="startGame()" style="display: none; margin-top: 16px;">Play Again</button>
     </div>
   </main>
 
   <script>
-    window.onload = function() {
-      startGame();
-    };
-
     const MAX_TRIES = 6;
     const COLORS = 4;
     let secretCode = [];
@@ -159,6 +159,10 @@
 
       document.getElementById('message').innerText = "";
       document.getElementById('message').className = "msg";
+      
+      // Hide Start Button, Show Game
+      document.getElementById('start-btn').classList.add('hidden');
+      document.getElementById('game-container').classList.add('active');
       document.getElementById('main-controls').style.display = 'flex';
       document.getElementById('reset-btn').style.display = 'none'; 
       
