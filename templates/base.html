@@ -50,6 +50,39 @@
   {{ page.inline_css }}
 </head>
 <body>
+  <!-- CV PAGE CSS -->
+  <style>
+  body.is-cv { background-color: #f0f2f5 !important; }
+  body.is-cv .site-header, body.is-cv .site-footer { display: none !important; }
+  body.is-cv .cv-page { padding: 60px 24px !important; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  body.is-cv .cv-doc {
+    background: #ffffff !important; border: 1px solid #e5e5e0 !important;
+    border-radius: 8px !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    padding: 64px 72px !important; max-width: 850px !important; width: 100%;
+    font-family: 'Arial', 'Helvetica', sans-serif !important; color: #000000 !important; line-height: 1.5 !important;
+  }
+  body.is-cv .cv-toolbar { display: flex; justify-content: flex-end; max-width: 850px; width: 100%; margin-bottom: 20px; }
+  body.is-cv .btn-mono {
+    background: #ffffff !important; color: #1a1a1a !important;
+    border: 1.5px solid #d1d1d1 !important; padding: 10px 20px !important;
+    border-radius: 6px !important; font-weight: 600 !important;
+    font-size: 14px !important; cursor: pointer !important;
+    transition: all 0.2s ease !important; text-decoration: none !important;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  body.is-cv .btn-mono:hover { background: #1a1a1a !important; color: #ffffff !important; border-color: #1a1a1a !important; }
+  body.is-cv .cv-doc h1 { font-size: 2.2rem !important; font-weight: bold !important; letter-spacing: -0.02em !important; margin-bottom: 8px !important; }
+  body.is-cv .cv-doc h2 { font-size: 1.1rem !important; font-weight: bold !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; border-bottom: 1.5px solid #000000 !important; padding-bottom: 4px !important; margin-top: 32px !important; margin-bottom: 16px !important; }
+  body.is-cv .cv-doc h3 { font-size: 1.1rem !important; font-weight: bold !important; margin-bottom: 4px !important; }
+  body.is-cv .cv-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  body.is-cv .cv-table th, body.is-cv .cv-table td { text-align: left; vertical-align: top; padding: 8px 0; border-bottom: 1px solid #eeeeee; }
+  body.is-cv .cv-table thead th { border-bottom: 1.5px solid #000000; padding-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  @media (max-width: 768px) {
+    body.is-cv .cv-page { padding: 24px 12px !important; }
+    body.is-cv .cv-doc { padding: 32px 24px !important; }
+    body.is-cv .cv-toolbar { justify-content: center; }
+  }
+</style>
 
   <header class="site-header">
     <nav class="nav container">
