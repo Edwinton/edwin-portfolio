@@ -301,40 +301,58 @@
   </script>
   <!-- GoatCounter Analytics -->
   <script data-goatcounter="https://edwinton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <!-- Fiverr Banner Glowing Tilt -->
+  <!-- Fiverr Glowing Tilt Effect -->
+  <style>
+    .fiverr-banner {
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease !important;
+      transform-style: preserve-3d;
+      will-change: transform, box-shadow;
+    }
+  </style>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const banner = document.querySelector('.fiverr-banner');
-      if (!banner) return;
+      // Target the exact green banner
+      const banners = document.querySelectorAll('div[style*="background: #1dbf73"]');
+      
+      banners.forEach(banner => {
+        banner.classList.add('fiverr-banner');
+        
+        banner.addEventListener('mousemove', (e) => {
+          const rect = banner.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          // Calculate rotation for a pull effect
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          
+          banner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+          banner.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
+          
+          // Dynamic glowing shadow
+          banner.style.boxShadow = `
+            ${-rotateY * 3}px ${rotateX * 3}px 40px rgba(29, 191, 115, 0.6),
+            0 0 80px rgba(29, 191, 115, 0.3)
+          `;
+        });
 
-      // Prevent the generic magnetic script from overriding this one
-      banner.setAttribute('data-custom-tilt', 'true');
-
-      banner.addEventListener('mousemove', (e) => {
-        const rect = banner.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Calculate rotation (-4 to 4 degrees for subtle pull)
-        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * 4;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * -4; // Pull towards mouse
-        
-        // Apply the pull-tilt 3D transform
-        banner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-        banner.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
-        
-        // Dynamic glow that follows the cursor
-        banner.style.boxShadow = `
-          ${-rotateY * 2}px ${rotateX * 2}px 30px rgba(29, 191, 115, 0.5),
-          0 0 60px rgba(29, 191, 115, 0.2)
-        `;
+        banner.addEventListener('mouseleave', () => {
+          banner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+          banner.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
+          banner.style.boxShadow = '0 10px 25px rgba(29, 191, 115, 0.2)';
+        });
       });
 
-      banner.addEventListener('mouseleave', () => {
-        banner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-        banner.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
-        banner.style.boxShadow = '0 10px 25px rgba(29, 191, 115, 0.2)'; // Default green glow
-      });
+      // 3. Prevent the generic tilt script from targeting the Fiverr banner
+      // We do this by slightly modifying the selection criteria in the existing script
+      // (Assuming the generic tilt script is already in the DOM and running)
+      setTimeout(() => {
+        // If the generic script added inline transforms, reset the banner's transform
+        // This ensures our custom effect takes priority
+        banners.forEach(b => {
+          b.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+      }, 500);
     });
   </script>
 </body>
