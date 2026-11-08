@@ -236,5 +236,19 @@
       }
     });
   </script>
+  <script>
+    // Check every 3 seconds if maintenance mode is turned off
+    setInterval(function() {
+      fetch('/api/site', { cache: 'no-store' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
+          // If maintenance is off, send them back to the homepage
+          if (!isMaint) {
+            window.location.href = '/index.html';
+          }
+        }).catch(function() {});
+    }, 3000);
+  </script>
 </body>
 </html>
