@@ -68,7 +68,7 @@
     </div>
   </footer>
 
-  <script src="https://edwinton.github.io/edwin-portfolio/static/js/main.js"></script>
+    <script src="https://edwinton.github.io/edwin-portfolio/static/js/main.js"></script>
   <script src="https://edwinton.github.io/edwin-portfolio/static/js/lucide.min.js"></script>
 
   <script>
@@ -84,13 +84,12 @@
         // 1. Magnetic Buttons
         var magneticElements = document.querySelectorAll("button, .btn, .back-top, .nav-menu a");
         magneticElements.forEach(function(element) {
+          element.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           element.addEventListener("mousemove", function(event) {
             var rect = element.getBoundingClientRect();
             var centerX = rect.left + rect.width / 2;
             var centerY = rect.top + rect.height / 2;
-            var distanceX = event.clientX - centerX;
-            var distanceY = event.clientY - centerY;
-            element.style.transform = "translate3d(" + (distanceX * 0.3) + "px, " + (distanceY * 0.3) + "px, 0)";
+            element.style.transform = "translate3d(" + ((event.clientX - centerX) * 0.3) + "px, " + ((event.clientY - centerY) * 0.3) + "px, 0)";
           });
           element.addEventListener("mouseleave", function() {
             element.style.transform = "";
@@ -141,10 +140,8 @@
             var rect = banner.getBoundingClientRect();
             var x = event.clientX - rect.left;
             var y = event.clientY - rect.top;
-            
             glow.style.background = "radial-gradient(circle 150px at " + x + "px " + y + "px, rgba(255, 255, 255, 0.4), transparent 70%)";
             glow.style.opacity = "1";
-            
             var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
             var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
             banner.style.transform = "perspective(1000px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg) scale(1.03)";
@@ -160,7 +157,7 @@
       });
     })();
 
-    // EASTER EGGS (Type 404, job, hire, matrix)
+    // 4. Keyboard Easter Eggs
     document.addEventListener("keydown", function(e) {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (!window._keyBuffer) window._keyBuffer = "";
@@ -199,20 +196,7 @@
       }
     });
 
-
-    }
-  </script>
-  <script>
-    if (window.location.pathname.includes('cv.html')) {
-      document.addEventListener("DOMContentLoaded", function() {
-        document.body.classList.add("is-cv");
-      });
-    }
-  </script>
-     // Check every 3 seconds
-    }
-  <script>
-    // MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
+    // 5. MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
     var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
     if (isLocal) {
       setInterval(function() {
@@ -220,13 +204,9 @@
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
-            
-            // If maintenance is ON and we are on the main site, redirect to the game
             if (isMaint && !window.location.pathname.includes("maintenance.html")) {
               window.location.href = "/maintenance.html";
             }
-            
-            // If maintenance is OFF and we are on the game page, redirect to the homepage
             if (!isMaint && window.location.pathname.includes("maintenance.html")) {
               window.location.href = "/index.html";
             }
