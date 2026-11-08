@@ -12,31 +12,35 @@
   <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/main.css" />
   
   <style>
+    /* Page background: Allow scrolling if the card is tall */
     body { 
       background-color: var(--surface, #faf9f7) !important; 
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 40px 24px; /* Top and bottom padding for breathing room */
       margin: 0;
-      padding: 24px;
       font-family: var(--font, 'Inter', sans-serif);
     }
 
+    /* The Card */
     .maintenance-card {
       background: var(--white, #ffffff) !important;
       border: 1px solid var(--border, #e5e5e0);
       border-radius: var(--r-lg, 14px);
-      padding: 40px;
-      max-width: 500px;
+      padding: 32px;
+      max-width: 480px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
       text-align: center;
       position: relative;
       z-index: 10;
       color: var(--ink, #1a1a1a);
+      margin-top: 40px; /* Push down from top */
+      margin-bottom: 40px;
       
+      /* Spotlight setup */
       overflow: hidden;
       transform-style: preserve-3d;
       transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
@@ -46,7 +50,7 @@
       content: "";
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle 200px at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(255, 123, 0, 0.1), transparent 60%);
+      background: radial-gradient(circle 150px at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(255, 123, 0, 0.1), transparent 60%);
       pointer-events: none;
       z-index: 1;
       opacity: 0;
@@ -56,41 +60,45 @@
 
     .maintenance-card > * { position: relative; z-index: 2; }
 
-    .maintenance-card .eyebrow { color: var(--green-700) !important; }
-    .maintenance-card h1 { color: var(--ink) !important; font-size: 2rem; margin-bottom: 12px; letter-spacing: -0.02em; }
-    .maintenance-card p { color: var(--ink-soft) !important; font-size: 1rem; margin-bottom: 24px; line-height: 1.5; }
+    .maintenance-card .eyebrow { color: var(--green-700) !important; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .maintenance-card h1 { color: var(--ink) !important; font-size: 1.8rem; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .maintenance-card p { color: var(--ink-soft) !important; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
 
     .game-container { display: none; margin-top: 16px; }
     .game-container.active { display: block; }
     
-    .instructions { font-size: 0.85rem; color: var(--ink-mute) !important; margin-bottom: 16px; line-height: 1.6; }
+    .instructions { font-size: 0.8rem; color: var(--ink-mute) !important; margin-bottom: 12px; line-height: 1.5; }
 
-    .board { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-    .row { display: flex; justify-content: center; gap: 8px; align-items: center; }
+    /* Compact Game Board */
+    .board { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .row { display: flex; justify-content: center; gap: 6px; align-items: center; }
     
     .slot {
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 28px; height: 28px; border-radius: 50%;
       background: var(--surface); border: 2px solid var(--border);
       cursor: pointer; transition: all 0.2s;
     }
     .slot:hover { border-color: var(--green-500); }
     
-    .slot.c1 { background: #ff7b00; border-color: #ff7b00; }
-    .slot.c2 { background: #1a1a1a; border-color: #1a1a1a; }
-    .slot.c3 { background: #e5e5e0; border-color: #d6d6d0; }
-    .slot.c4 { background: #ffffff; border-color: #cccccc; }
+    /* Colors */
+    .slot.c1 { background: #ff7b00; border-color: #ff7b00; } 
+    .slot.c2 { background: #1a1a1a; border-color: #1a1a1a; } 
+    .slot.c3 { background: #e5e5e0; border-color: #d6d6d0; } 
+    .slot.c4 { background: #ffffff; border-color: #cccccc; } 
     
-    .feedback { display: flex; gap: 3px; width: 32px; flex-wrap: wrap; justify-content: center; }
-    .fb-peg { width: 8px; height: 8px; border-radius: 50%; background: transparent; border: 1px solid var(--border); }
+    /* Feedback */
+    .feedback { display: flex; gap: 2px; width: 28px; flex-wrap: wrap; justify-content: center; }
+    .fb-peg { width: 6px; height: 6px; border-radius: 50%; background: transparent; border: 1px solid var(--border); }
     .fb-peg.correct { background: #1a1a1a; border-color: #1a1a1a; }
     .fb-peg.partial { background: #e5e5e0; border-color: #d6d6d0; }
 
-    .controls { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
-    .color-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
-    .color-picker .slot { width: 32px; height: 32px; cursor: pointer; }
-    .color-picker .slot.selected { transform: scale(1.2); box-shadow: 0 0 0 3px var(--green-100); }
+    /* Controls */
+    .controls { display: flex; justify-content: center; gap: 12px; margin-top: 12px; }
+    .color-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
+    .color-picker .slot { width: 28px; height: 28px; cursor: pointer; }
+    .color-picker .slot.selected { transform: scale(1.15); box-shadow: 0 0 0 3px var(--green-100); }
 
-    .msg { font-size: 1rem; font-weight: bold; height: 24px; margin-top: 12px; }
+    .msg { font-size: 0.95rem; font-weight: bold; height: 20px; margin-top: 8px; }
     .win { color: var(--green-700); }
     .lose { color: #d65a00; }
 
@@ -109,7 +117,6 @@
     <h1>Under Maintenance</h1>
     <p>Play a quick game while I update the site!</p>
     
-    <!-- Reset button visible at all times -->
     <button class="btn btn-primary btn-small" id="reset-btn" onclick="startGame()" style="display: none; margin-bottom: 16px;">Play Again</button>
 
     <div class="game-container" id="game-container">
@@ -137,7 +144,12 @@
   </main>
 
   <script>
-    const MAX_TRIES = 6; // Reduced to 6 so it fits on screen
+    // Start game immediately so it's not blank
+    window.onload = function() {
+      startGame();
+    };
+
+    const MAX_TRIES = 6;
     const COLORS = 4;
     let secretCode = [];
     let currentGuess = [];
@@ -155,7 +167,7 @@
       document.getElementById('message').innerText = "";
       document.getElementById('message').className = "msg";
       document.getElementById('game-container').classList.add('active');
-      document.getElementById('reset-btn').style.display = 'none'; // Hide reset when playing
+      document.getElementById('reset-btn').style.display = 'none';
       
       document.querySelectorAll('.color-picker .slot').forEach((s, i) => {
         s.className = `slot c${i+1}` + (i === 0 ? ' selected' : '');
@@ -253,7 +265,7 @@
       if (exact === COLORS) {
         gameActive = false;
         showMessage("You cracked the code! 🎉", "win");
-        document.getElementById('reset-btn').style.display = 'inline-block'; // Show reset button
+        document.getElementById('reset-btn').style.display = 'inline-block';
         return;
       }
 
