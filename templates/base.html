@@ -58,10 +58,11 @@
     (() => {
       "use strict";
 
-      if (window.lucide) { lucide.createIcons(); }
+      // Wait for the DOM to be fully ready
+      document.addEventListener("DOMContentLoaded", function() {
+        if (window.lucide) { lucide.createIcons(); }
 
-            // 1. Mobile Nav Toggle
-      setTimeout(function() {
+        // 1. Mobile Nav Toggle (Absolute Guarantee)
         var navToggle = document.getElementById("navToggle");
         var navMenu = document.getElementById("navMenu");
         if (navToggle && navMenu) {
@@ -69,96 +70,88 @@
             e.preventDefault();
             var isOpen = navMenu.classList.toggle("open");
             navToggle.classList.toggle("open", isOpen);
-            // Force inline styles to guarantee it shows/hides regardless of CSS cache
-            if (isOpen) {
-              navMenu.style.display = "flex";
-              navMenu.style.opacity = "1";
-              navMenu.style.visibility = "visible";
-            } else {
-              navMenu.style.display = "none";
-            }
+            navToggle.setAttribute("aria-expanded", isOpen);
           });
         }
-      }, 100);      }
 
-      // SKIP ANIMATIONS ON CV PAGE
-      if (window.location.pathname.includes('cv.html')) return;
+        // SKIP ALL ANIMATIONS ON CV PAGE
+        if (window.location.pathname.includes('cv.html')) return;
 
-      // 2. Magnetic Buttons
-      const magneticElements = document.querySelectorAll("button, .btn, .back-top, .nav-menu a");
-      magneticElements.forEach(element => {
-        element.addEventListener("mousemove", event => {
-          const rect = element.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const distanceX = event.clientX - centerX;
-          const distanceY = event.clientY - centerY;
-          element.style.transform = `translate3d(${distanceX * 0.3}px, ${distanceY * 0.3}px, 0)`;
-        });
-        element.addEventListener("mouseleave", () => {
-          element.style.transform = "";
-        });
-      });
-
-      // 3. 3D Tilt Cards
-      const tiltElements = document.querySelectorAll(
-        ".project-card, .skill-card, .profile-card, .contact-card, .timeline-content, .hero-card"
-      );
-
-      tiltElements.forEach(card => {
-        card.style.transformStyle = "preserve-3d";
-        card.addEventListener("mousemove", event => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateY = ((x - centerX) / centerX) * 6;
-          const rotateX = ((centerY - y) / centerY) * 6;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        });
-        card.addEventListener("mouseleave", () => {
-          card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-        });
-      });
-
-      // 4. Fiverr Banner Spotlight & Green Glow
-      const banners = document.querySelectorAll("div[style*='#1dbf73']");
-      banners.forEach(banner => {
-        banner.style.position = "relative";
-        banner.style.overflow = "hidden";
-        banner.style.transformStyle = "preserve-3d";
-        
-        const glow = document.createElement("div");
-        glow.style.cssText = "position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity 0.3s ease; z-index:1;";
-        glow.style.background = "radial-gradient(circle 150px at 50% 50%, rgba(255, 255, 255, 0.4), transparent 70%)";
-        banner.appendChild(glow);
-
-        Array.from(banner.children).forEach(child => {
-          if (child !== glow) {
-            child.style.position = "relative";
-            child.style.zIndex = "2";
-          }
+        // 2. Magnetic Buttons
+        var magneticElements = document.querySelectorAll("button, .btn, .back-top, .nav-menu a");
+        magneticElements.forEach(function(element) {
+          element.addEventListener("mousemove", function(event) {
+            var rect = element.getBoundingClientRect();
+            var centerX = rect.left + rect.width / 2;
+            var centerY = rect.top + rect.height / 2;
+            var distanceX = event.clientX - centerX;
+            var distanceY = event.clientY - centerY;
+            element.style.transform = "translate3d(" + (distanceX * 0.3) + "px, " + (distanceY * 0.3) + "px, 0)";
+          });
+          element.addEventListener("mouseleave", function() {
+            element.style.transform = "";
+          });
         });
 
-        banner.addEventListener("mousemove", event => {
-          const rect = banner.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
+        // 3. 3D Tilt Cards
+        var tiltElements = document.querySelectorAll(
+          ".project-card, .skill-card, .profile-card, .contact-card, .timeline-content, .hero-card"
+        );
+        tiltElements.forEach(function(card) {
+          card.style.transformStyle = "preserve-3d";
+          card.addEventListener("mousemove", function(event) {
+            var rect = card.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 6;
+            var rotateX = ((centerY - y) / centerY) * 6;
+            card.style.transform = "perspective(1000px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg) scale(1.02)";
+          });
+          card.addEventListener("mouseleave", function() {
+            card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+          });
+        });
+
+        // 4. Fiverr Banner Spotlight & Green Glow (Loop fixed)
+        var banners = document.querySelectorAll("div[style*='#1dbf73']");
+        banners.forEach(function(banner) {
+          banner.style.position = "relative";
+          banner.style.overflow = "hidden";
+          banner.style.transformStyle = "preserve-3d";
           
-          glow.style.background = `radial-gradient(circle 150px at ${x}px ${y}px, rgba(255, 255, 255, 0.4), transparent 70%)`;
-          glow.style.opacity = "1";
+          var glow = document.createElement("div");
+          glow.style.cssText = "position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity 0.3s ease; z-index:1;";
+          glow.style.background = "radial-gradient(circle 150px at 50% 50%, rgba(255, 255, 255, 0.4), transparent 70%)";
+          banner.appendChild(glow);
+
+          Array.from(banner.children).forEach(function(child) {
+            if (child !== glow) {
+              child.style.position = "relative";
+              child.style.zIndex = "2";
+            }
+          });
+
+          banner.addEventListener("mousemove", function(event) {
+            var rect = banner.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            
+            glow.style.background = "radial-gradient(circle 150px at " + x + "px " + y + "px, rgba(255, 255, 255, 0.4), transparent 70%)";
+            glow.style.opacity = "1";
+            
+            var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
+            var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+            banner.style.transform = "perspective(1000px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg) scale(1.03)";
+            banner.style.boxShadow = "0 25px 50px rgba(29, 191, 115, 0.4), 0 0 20px rgba(29, 191, 115, 0.2)";
+          });
           
-          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
-          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-          banner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-          banner.style.boxShadow = "0 25px 50px rgba(29, 191, 115, 0.4), 0 0 20px rgba(29, 191, 115, 0.2)";
-        });
-        
-        banner.addEventListener("mouseleave", () => {
-          glow.style.opacity = "0";
-          banner.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-          banner.style.boxShadow = "0 4px 12px rgba(29, 191, 115, 0.2)";
+          banner.addEventListener("mouseleave", function() {
+            glow.style.opacity = "0";
+            banner.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+            banner.style.boxShadow = "0 4px 12px rgba(29, 191, 115, 0.2)";
+          });
         });
       });
     })();
