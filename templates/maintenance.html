@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Construction · Edwin Tony</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/main.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/sections.css" />
+  <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/projects.css" />
+  <style>
+    body, html { opacity: 1 !important; }
+    .maintenance-wrapper {
+      min-height: calc(100vh - 200px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 60px 24px; text-align: center;
+    }
+    .data-packet {
+      position: absolute; border-radius: 50%;
+      background: var(--green-700); cursor: crosshair; z-index: 1;
+      box-shadow: 0 0 15px rgba(255, 123, 0, 0.6);
+      transition: transform 0.1s;
+    }
+    .data-packet:active { transform: scale(0.8); }
+    .maintenance-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 48px;
+      box-shadow: var(--shadow-lg); max-width: 600px;
+      width: 100%; position: relative; z-index: 10;
+    }
+    .maintenance-card h1 { font-size: 2.5rem; margin-bottom: 16px; color: var(--ink); letter-spacing: -0.02em; }
+    .maintenance-card p { font-size: 1.1rem; color: var(--ink-soft); margin-bottom: 32px; }
+    .stats {
+      display: flex; justify-content: center; gap: 40px;
+      font-family: var(--mono); font-size: 1.2rem; font-weight: 700;
+      margin-bottom: 32px; padding: 16px;
+      background: var(--surface); border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+    .score-val, .time-val { color: var(--green-700); font-size: 1.5rem; }
+    .terminal-text { font-family: var(--mono); font-size: 0.9rem; color: var(--ink-mute); margin-top: 24px; height: 20px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="/" class="nav-logo">Edwin<span>Tony</span></a>
+    </nav>
+  </header>
+
+  <main class="maintenance-wrapper">
+    <div class="maintenance-card">
+      <div class="hidden" id="game-ui">
+        <div class="stats">
+          <div>SCORE: <span class="score-val" id="score">0</span></div>
+          <div>TIME: <span class="time-val" id="timer">15</span>s</div>
+        </div>
+      </div>
+      <div id="start-screen">
+        <div class="eyebrow" style="text-align: center;">SYSTEM UPGRADE</div>
+        <h1>Under Maintenance</h1>
+        <p>I'm currently updating the portfolio to make it even better.<br>While you wait, try to catch the floating data packets!</p>
+        <button class="btn btn-primary" onclick="startGame()">Initialize Game</button>
+        <div class="terminal-text" id="terminal"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><span class="footer-logo">Edwin<span>Tony</span></span> &nbsp;·&nbsp; © <span id="yr"></span> Edwin Tony</p>
+      <a href="#" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    let score = 0, timeLeft = 15, gameInterval, timerInterval, isPlaying = false;
+    const startScreen = document.getElementById("start-screen");
+    const gameUi = document.getElementById("game-ui");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
+    const terminal = document.getElementById("terminal");
+
+    function startGame() {
+      if (isPlaying) return;
+      isPlaying = true; score = 0; timeLeft = 15;
+      scoreEl.innerText = score; timerEl.innerText = timeLeft;
+      startScreen.classList.add("hidden"); gameUi.classList.remove("hidden");
+      gameInterval = setInterval(spawnDot, 700);
+      timerInterval = setInterval(() => {
+        timeLeft--; timerEl.innerText = timeLeft;
+        if (timeLeft <= 0) endGame();
+      }, 1000);
+    }
+    function spawnDot() {
+      if (!isPlaying) return;
+      const dot = document.createElement("div");
+      dot.className = "data-packet";
+      const size = Math.random() * 24 + 16;
+      dot.style.width = size + "px"; dot.style.height = size + "px";
+      dot.style.left = (Math.random() * (window.innerWidth - size)) + "px";
+      dot.style.top  = (Math.random() * (window.innerHeight - size)) + "px";
+      dot.addEventListener("mousedown", () => {
+        if (!isPlaying) return;
+        score++; scoreEl.innerText = score; dot.remove();
+      });
+      setTimeout(() => { if (dot.parentNode) dot.remove(); }, 1800);
+      document.body.appendChild(dot);
+    }
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval); clearInterval(timerInterval);
+      document.querySelectorAll(".data-packet").forEach(d => d.remove());
+      startScreen.classList.remove("hidden"); gameUi.classList.add("hidden");
+      startScreen.innerHTML = `
+        <div class="eyebrow" style="text-align: center;">COMPLETE</div>
+        <h1>Game Over</h1>
+        <p>You caught <strong style="color: var(--green-700); font-size: 1.5rem;">${score}</strong> data packets.</p>
+        <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
+        <p style="margin-top: 24px; font-size: 0.9rem; color: var(--ink-mute);">The site will be back online shortly. Thanks for waiting!</p>
+      `;
+    }
+    const messages = ["Connecting to server...", "Compiling updates...", "Running tests...", "Almost there..."];
+    let msgIdx = 0, charIdx = 0;
+    function typeWriter() {
+      if (msgIdx >= messages.length) msgIdx = 0;
+      const currentMsg = messages[msgIdx];
+      if (charIdx < currentMsg.length) {
+        terminal.innerHTML += currentMsg.charAt(charIdx);
+        charIdx++; setTimeout(typeWriter, 50);
+      } else {
+        setTimeout(() => { terminal.innerHTML = ""; charIdx = 0; msgIdx++; typeWriter(); }, 2000);
+      }
+    }
+    setTimeout(typeWriter, 1000);
+
+    // Auto-redirect back to home when maintenance ends
+    setInterval(() => {
+      fetch('/api/site', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+          const isMaint = data.site_config?.maintenance_mode || data.maintenance_mode;
+          if (!isMaint) {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            window.location.href = isLocal ? '/' : '/edwin-portfolio/';
+          }
+        }).catch(() => {});
+    }, 3000);
+  </script>
+</body>
+</html>

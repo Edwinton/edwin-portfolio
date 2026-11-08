@@ -10,13 +10,10 @@ import secrets
 import subprocess
 import sys
 import urllib.request
+import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
-
-from pathlib import Path
-from datetime import datetime
-import os
 
 # Load .env file if it exists
 env_file = Path(__file__).parent / ".env"
@@ -47,8 +44,30 @@ class Handler(SimpleHTTPRequestHandler):
             return str(ADMIN / clean[len("/admin/"):])
         return super().translate_path(clean)
 
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        super().end_headers()
+
     def do_GET(self):
+        # SERVER-MAINTENANCE: Serve maintenance page directly without 302 redirect
+        _p = self.path.split("?", 1)[0].split("#", 1)[0]
+        if _p.startswith("/edwin-portfolio/"):
+            _p = _p.replace("/edwin-portfolio/", "/", 1)
+        
+        if _p not in ("/maintenance.html", "/admin", "/admin/", "/api/site", "/api/messages",
+                      "/api/analytics", "/api/uptime", "/api/server-status") and not _p.startswith("/static/"):
+            try:
+                _cfg = json.loads(DATA_FILE.read_text(encoding="utf-8-sig"))
+                if _cfg.get("site_config", {}).get("maintenance_mode") or _cfg.get("maintenance_mode"):
+                    self.path = "/maintenance.html"
+                    super().do_GET()
+                    return
+            except Exception:
+                pass
+
         # 1. API: Messages
+
+
         if self.path == "/api/messages":
             try:
                 if not MESSAGES_FILE.exists():
@@ -64,33 +83,128 @@ class Handler(SimpleHTTPRequestHandler):
             try:
                 token = os.environ.get("GOATCOUNTER_API_TOKEN")
                 if not token:
-                    raise RuntimeError("GOATCOUNTER_API_TOKEN is not set")
+                    self._json(500, {"error": "GOATCOUNTER_API_TOKEN is not set. Check your .env file."})
+                    return
+
                 base_url = "https://edwinton.goatcounter.com/api/v0/stats"
                 
-                def fetch(endpoint):
+                def fetch(endpoint, key):
                     url = f"{base_url}/{endpoint}?limit=10"
                     req = urllib.request.Request(url)
                     req.add_header("Authorization", f"Bearer {token}")
                     req.add_header("Content-Type", "application/json")
-                    with urllib.request.urlopen(req, timeout=15) as response:
-                        return json.loads(response.read().decode("utf-8"))
+                    try:
+                        with urllib.request.urlopen(req) as response:
+                            data = json.loads(response.read().decode())
+                            return data.get(key, [])
+                    except Exception as e:
+                        print(f"API Error for {endpoint}: {e}")
+                        return []
 
-                hits = fetch("hits")
-                locations = fetch("locations")
-                browsers = fetch("browsers")
-                systems = fetch("systems")
+                hits = fetch("hits", "hits")
+                locations = fetch("locations", "stats")
+                browsers = fetch("browsers", "stats")
+                systems = fetch("systems", "stats")
+                referrers = fetch("refs", "stats")
+                sizes = fetch("sizes", "stats")
+                languages = fetch("languages", "stats")
+                
+                # Fetch daily hits for the chart
+                daily_req = urllib.request.Request(f"{base_url}/hits?daily=true&limit=7")
+                daily_req.add_header("Authorization", f"Bearer {token}")
+                daily_req.add_header("Content-Type", "application/json")
+                try:
+                    with urllib.request.urlopen(daily_req) as response:
+                        daily_data = json.loads(response.read().decode()).get("hits", [])
+                except:
+                    daily_data = []
+
+                # Merge Screen Sizes
+                size_map = {0: "Desktop", 1: "Mobile", 2: "Tablet", 3: "Desktop (Large)", 4: "Mobile (Small)", 5: "Tablet (Large)", 6: "Unknown", "0": "Desktop", "1": "Mobile", "2": "Tablet"}
+                merged_sizes = {}
+                for s in sizes:
+                    raw_id = s.get("path", s.get("name", 0))
+                    label = size_map.get(raw_id, "Desktop")
+                    count = s.get("count", 0)
+                    merged_sizes[label] = merged_sizes.get(label, 0) + count
+                sizes = [{"name": k, "count": v} for k, v in merged_sizes.items()]
+                sizes.sort(key=lambda x: x["count"], reverse=True)
+
+                # Map languages
+                for l in languages:
+                    lang = l.get("name", "")
+                    if not lang or lang == "(unknown)" or lang == "Unknown":
+                        l["name"] = "English / Unknown"
+                    else:
+                        l["name"] = lang.split("-")[0].upper()
 
                 self._json(200, {
-                    "hits": hits.get("hits", []),
-                    "locations": locations.get("stats", []),
-                    "browsers": browsers.get("stats", []),
-                    "systems": systems.get("stats", [])
+                    "hits": hits,
+                    "locations": locations,
+                    "browsers": browsers,
+                    "systems": systems,
+                    "referrers": referrers,
+                    "sizes": sizes,
+                    "languages": languages,
+                    "daily": daily_data
                 })
             except Exception as e:
-                self._json(502, {"error": f"GoatCounter analytics request failed: {e}"})
+                self._json(500, {"error": str(e)})
             return
 
-        # 3. API: Get site data
+        # 3. API: Uptime (UptimeRobot)
+        if self.path == "/api/uptime":
+            try:
+                api_key = os.environ.get("UPTIMEROBOT_API_KEY", "YOUR_UPTIMEROBOT_API_KEY")
+                if api_key == "YOUR_UPTIMEROBOT_API_KEY":
+                    self._json(200, {"status": "unconfigured", "uptime_ratio": "N/A", "avg_response": "N/A"})
+                    return
+
+                url = "https://api.uptimerobot.com/v2/getMonitors"
+                data = urllib.parse.urlencode({"api_key": api_key, "format": "json"}).encode()
+                req = urllib.request.Request(url, data=data, method="POST")
+                
+                with urllib.request.urlopen(req) as response:
+                    result = json.loads(response.read().decode())
+                    if result.get("stat") == "ok" and result.get("monitors"):
+                        monitor = result["monitors"][0]
+                        self._json(200, {
+                            "status": "up" if monitor.get("status") == 2 else "down",
+                            "uptime_ratio": monitor.get("custom_uptime_ratio", "100%"),
+                            "avg_response": monitor.get("average_response_time", "0")
+                        })
+                    else:
+                        self._json(500, {"error": "UptimeRobot API error"})
+            except Exception as e:
+                self._json(500, {"error": str(e)})
+            return
+
+        # 4. API: Server Status (GitHub Actions)
+        if self.path == "/api/server-status":
+            try:
+                gh_token = "YOUR_GITHUB_TOKEN"
+                req = urllib.request.Request("https://api.github.com/repos/Edwinton/edwin-portfolio/actions/runs?per_page=3")
+                req.add_header("User-Agent", "Python-Admin-Dashboard")
+                if gh_token and gh_token != "YOUR_GITHUB_TOKEN":
+                    req.add_header("Authorization", f"Bearer {gh_token}")
+
+                with urllib.request.urlopen(req) as response:
+                    data = json.loads(response.read().decode())
+                    runs = data.get("workflow_runs", [])
+                    status_list = []
+                    for run in runs:
+                        status_list.append({
+                            "name": run.get("name", "Deploy"),
+                            "status": "Success" if run.get("conclusion") == "success" else "Failed",
+                            "date": run.get("created_at", "")[:10],
+                            "url": run.get("html_url", "")
+                        })
+                    self._json(200, {"runs": status_list})
+            except Exception as e:
+                self._json(500, {"error": str(e)})
+            return
+
+        # 5. API: Get site data
         if self.path == "/api/site":
             try:
                 self._json(200, json.loads(DATA_FILE.read_text(encoding="utf-8-sig")))
@@ -104,7 +218,6 @@ class Handler(SimpleHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(length)
 
-        # API: Receive new hiring form message
         if self.path == "/api/hire":
             try:
                 data = json.loads(body.decode("utf-8"))
@@ -125,7 +238,6 @@ class Handler(SimpleHTTPRequestHandler):
                 self._json(400, {"error": str(e)})
             return
 
-        # API: Save site data (if you ever use the full admin panel again)
         if self.path == "/api/site":
             try:
                 data = json.loads(body.decode("utf-8"))
@@ -135,7 +247,6 @@ class Handler(SimpleHTTPRequestHandler):
                 self._json(400, {"error": str(e)})
             return
 
-        # API: Trigger build
         if self.path == "/api/build":
             try:
                 result = subprocess.run([sys.executable, "build.py"], cwd=ROOT, capture_output=True, text=True, timeout=60)

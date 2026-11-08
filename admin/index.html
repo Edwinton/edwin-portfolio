@@ -48,6 +48,8 @@
     <ul>
       <li id="tab-inbox" class="active" onclick="switchTab('inbox')">📥 Inbox</li>
       <li id="tab-analytics" onclick="switchTab('analytics')">📊 Analytics</li>
+      <li id="tab-uptime" onclick="switchTab('uptime')">⚡ Uptime & Status</li>
+      <li id="tab-settings" onclick="switchTab('settings')">⚙️ Settings</li>
     </ul>
   </aside>
   
@@ -65,16 +67,42 @@
         <p style="color: #666;">Loading analytics data...</p>
       </div>
     </div>
+
+    <!-- Uptime & Status View -->
+    <div id="view-uptime" style="display: none;">
+      <h2>Server Status & Uptime</h2>
+      <div id="uptime-data" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <p style="color: #666;">Loading status data...</p>
+      </div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="view-settings" style="display: none;">
+      <h2>Site Settings</h2>
+      <div style="background: white; padding: 32px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); max-width: 600px;">
+        <h3 style="font-size: 18px; margin-bottom: 8px;">Maintenance Mode</h3>
+        <p style="font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;">When enabled, all visitors will see a "Under Construction" page instead of the main site.</p>
+        
+        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600;">
+          <input type="checkbox" id="maintenanceToggle" style="width: 20px; height: 20px; accent-color: #ff7b00; cursor: pointer;">
+          <span>Enable Maintenance Mode</span>
+        </label>
+        
+        <p id="saveStatus" style="font-size: 13px; color: var(--green); margin-top: 16px; display: none;">✓ Settings saved successfully.</p>
+      </div>
+    </div>
   </main>
 </div>
 
 <script>
   function switchTab(tab) {
-    document.getElementById('view-inbox').style.display = 'none';
-    document.getElementById('view-analytics').style.display = 'none';
-    document.getElementById('tab-inbox').classList.remove('active');
-    document.getElementById('tab-analytics').classList.remove('active');
+    // Hide all views
+    document.querySelectorAll('.editor > div').forEach(el => el.style.display = 'none');
     
+    // Remove active class from all tabs
+    document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
+    
+    // Show selected view and highlight tab
     if (tab === 'inbox') {
       document.getElementById('view-inbox').style.display = 'block';
       document.getElementById('tab-inbox').classList.add('active');
@@ -83,9 +111,20 @@
       document.getElementById('view-analytics').style.display = 'block';
       document.getElementById('tab-analytics').classList.add('active');
       loadAnalytics();
+    } else if (tab === 'uptime') {
+      document.getElementById('view-uptime').style.display = 'block';
+      document.getElementById('tab-uptime').classList.add('active');
+      loadUptime();
+    } else if (tab === 'settings') {
+      document.getElementById('view-settings').style.display = 'block';
+      document.getElementById('tab-settings').classList.add('active');
+      loadSettings();
     }
   }
 
+  // ==========================================
+  // 1. INBOX
+  // ==========================================
   async function loadMessages() {
     try {
       const res = await fetch('/api/messages');
@@ -115,77 +154,68 @@
         container.appendChild(card);
       });
     } catch (err) {
-      document.getElementById('messages-list').innerHTML = '<div class="empty">Error loading messages. Is python admin.py running?</div>';
+      document.getElementById('messages-list').innerHTML = '<div class="empty">Error loading messages.</div>';
     }
   }
 
+  // ==========================================
+  // 2. ANALYTICS (GoatCounter)
+  // ==========================================
   async function loadAnalytics() {
     const container = document.getElementById('analytics-data');
-    container.innerHTML = '<p style="color: var(--ink-mute);">Loading detailed analytics...</p>';
+    container.innerHTML = '<p style="color: var(--ink-mute);">Loading...</p>';
     
     try {
       const res = await fetch('/api/analytics');
       const data = await res.json();
-      
       if (data.error) throw new Error(data.error);
       
       const hits = data.hits || [];
-      const totalViews = hits.reduce((sum, item) => sum + item.count, 0);
+      const totalViews = hits.reduce((sum, item) => sum + (item.count || 0), 0);
       
-      // Helper to generate HTML list with CSS bars
       function generateList(items, labelKey) {
         if (!items || items.length === 0) return '<li style="color: #888;">No data yet.</li>';
         const maxCount = Math.max(...items.map(i => i.count || 0));
-        
         return items.map(item => {
           const count = item.count || 0;
           const percent = maxCount > 0 ? (count / maxCount) * 100 : 0;
-          const label = item[labelKey] || "Unknown";
-          
+          let label = item[labelKey] || "Unknown";
+          if (label === '') label = "Direct / Unknown";
           return `
             <div style="margin-bottom: 12px;">
               <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
-                <span style="font-weight: 600; color: var(--ink);">${label}</span>
+                <span style="font-weight: 600;">${label}</span>
                 <span style="color: var(--ink-mute);">${count}</span>
               </div>
               <div style="width: 100%; background: #f0f0f0; height: 6px; border-radius: 3px; overflow: hidden;">
-                <div style="width: ${percent}%; background: #ff7b00; height: 100%; border-radius: 3px;"></div>
+                <div style="width: ${percent}%; background: #ff7b00; height: 100%;"></div>
               </div>
-            </div>
-          `;
+            </div>`;
         }).join('');
       }
 
       container.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; grid-column: span 2; margin-bottom: 24px;">
-          <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+        <div style="grid-column: span 2; display: flex; gap: 20px;">
+          <div style="flex: 1; background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
             <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase;">Total Views</h3>
             <p style="font-size: 40px; font-weight: 800; color: #ff7b00; margin-top: 8px;">${totalViews}</p>
           </div>
-          <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+          <div style="flex: 1; background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
             <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase;">Tracked Pages</h3>
             <p style="font-size: 40px; font-weight: 800; color: var(--ink); margin-top: 8px;">${hits.length}</p>
           </div>
         </div>
-
         <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
           <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 16px;">Top Pages</h3>
           ${generateList(hits, 'path')}
         </div>
-        
         <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
           <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 16px;">Top Countries</h3>
           ${generateList(data.locations, 'name')}
         </div>
-
         <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
           <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 16px;">Browsers</h3>
           ${generateList(data.browsers, 'name')}
-        </div>
-
-        <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
-          <h3 style="font-size: 12px; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 16px;">Operating Systems</h3>
-          ${generateList(data.systems, 'name')}
         </div>
       `;
     } catch (e) {
@@ -193,6 +223,99 @@
     }
   }
 
+  // ==========================================
+  // 3. UPTIME & STATUS
+  // ==========================================
+  async function loadUptime() {
+    const container = document.getElementById('uptime-data');
+    container.innerHTML = '<p style="color: #666;">Loading...</p>';
+    
+    try {
+      const [uptimeRes, ghRes] = await Promise.all([
+        fetch('/api/uptime'),
+        fetch('/api/server-status')
+      ]);
+      const uptime = await uptimeRes.json();
+      const gh = await ghRes.json();
+      
+      let uptimeHtml = '';
+      if (uptime.status === 'unconfigured') {
+        uptimeHtml = '<p style="color: #b33;">UptimeRobot API key not configured.</p>';
+      } else {
+        const isUp = uptime.status === 'up';
+        uptimeHtml = `
+          <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e5e5e0;">
+            <h3 style="font-size: 12px; color: #666; text-transform: uppercase;">Status</h3>
+            <p style="font-size: 32px; font-weight: 800; color: ${isUp ? '#2d5a3d' : '#b33'};">${isUp ? 'ONLINE' : 'DOWN'}</p>
+          </div>
+          <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e5e5e0;">
+            <h3 style="font-size: 12px; color: #666; text-transform: uppercase;">Uptime</h3>
+            <p style="font-size: 32px; font-weight: 800; color: #ff7b00;">${uptime.uptime_ratio}</p>
+          </div>
+        `;
+      }
+
+      let ghHtml = gh.runs ? gh.runs.map(run => `
+        <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #e5e5e0; margin-bottom: 12px; display: flex; justify-content: space-between;">
+          <div><strong>${run.name}</strong><br><small>${run.date}</small></div>
+          <div style="font-weight: bold; color: ${run.status === 'Success' ? '#2d5a3d' : '#b33'};">${run.status}</div>
+        </div>
+      `).join('') : '';
+
+      container.innerHTML = `
+        <div style="grid-column: span 3; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">${uptimeHtml}</div>
+        <div style="grid-column: span 3; margin-top: 24px;">
+          <h3 style="font-size: 14px; margin-bottom: 16px;">Recent Deployments</h3>
+          ${ghHtml}
+        </div>
+      `;
+    } catch (e) {
+      container.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
+    }
+  }
+
+  // ==========================================
+  // 4. SETTINGS
+  // ==========================================
+  async function loadSettings() {
+    const toggle = document.getElementById('maintenanceToggle');
+    const status = document.getElementById('saveStatus');
+    status.style.display = 'none';
+    
+    try {
+      const res = await fetch('/api/site');
+      const data = await res.json();
+      toggle.checked = data.site_config?.maintenance_mode || false;
+      
+      toggle.onchange = async () => {
+        const isEnabled = toggle.checked;
+        status.style.display = 'inline';
+        status.innerText = 'Saving...';
+        status.style.color = '#666';
+        
+        if (!data.site_config) data.site_config = {};
+        data.site_config.maintenance_mode = isEnabled;
+        
+        try {
+          await fetch('/api/site', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          await fetch('/api/build', { method: 'POST' });
+          status.innerText = '✓ Saved & Site Updated.';
+          status.style.color = '#2d5a3d';
+        } catch (e) {
+          status.innerText = 'Error saving.';
+          status.style.color = '#b33';
+        }
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // Load inbox on startup
   loadMessages();
 </script>
 </body>

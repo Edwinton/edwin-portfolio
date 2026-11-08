@@ -50,6 +50,16 @@
       }
     }
   </style>
+  <!-- Maintenance Redirect -->
+  <script>
+    if (window.location.pathname !== '/maintenance.html' && window.location.pathname !== '/edwin-portfolio/maintenance.html') {
+      fetch('/api/site').then(r => r.json()).then(data => {
+        if (data.site_config && data.site_config.maintenance_mode) {
+          window.location.href = '/edwin-portfolio/maintenance.html';
+        }
+      }).catch(() => {});
+    }
+  </script>
 </head>
 <body>
 

@@ -27,6 +27,7 @@ PAGES = {
     "cv.html": "cv.html",
     "achievements.html": "achievements.html",
     "contact.html": "contact.html",
+    "maintenance.html": "maintenance.html",
 }
 
 TOKEN = re.compile(r"\{\{\s*([\w.]+)\s*\}\}")
@@ -234,6 +235,12 @@ def build_all():
     for page_key, page_data in site["pages"].items():
         outputs.add(build_page(page_key, page_data, site))
 
+    # STANDALONE-MAINTENANCE: emit maintenance.html without base.html wrapper
+    _maint = TEMPLATES / "maintenance.html"
+    if _maint.exists():
+        (OUT / "maintenance.html").write_text(_maint.read_text(encoding="utf-8"), encoding="utf-8")
+        outputs.add("maintenance.html")
+        print("  ok maintenance.html (standalone)")
     for existing in OUT.glob("*.html"):
         if existing.name not in outputs:
             try: existing.unlink()
