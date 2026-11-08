@@ -55,142 +55,95 @@
   <script src="https://edwinton.github.io/edwin-portfolio/static/js/lucide.min.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    // Main animations (ChatGPT clean version)
+    (() => {
+      "use strict";
+
+      // CV PAGE EXCEPTION
+      const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+      if (currentPage === "cv.html") {
+        if (window.lucide) { lucide.createIcons(); }
+        return;
+      }
+
       if (window.lucide) { lucide.createIcons(); }
 
-      // 1. Mobile Nav Toggle
-      var navToggle = document.getElementById("navToggle");
-      var navMenu = document.getElementById("navMenu");
+      // MOBILE NAVIGATION
+      const navToggle = document.getElementById("navToggle");
+      const navMenu = document.getElementById("navMenu");
+
       if (navToggle && navMenu) {
-        navToggle.addEventListener("click", function(e) {
-          e.preventDefault();
-          navMenu.classList.toggle("open");
-          navToggle.classList.toggle("open");
-        });
-      }
-
-      // SKIP ANIMATIONS ON CV PAGE
-      if (window.location.pathname.includes('cv.html')) return;
-
-      // 2. Navbar Magnetic Hover
-      var navLinks = document.querySelectorAll('.nav-menu a');
-      navLinks.forEach(function(el) {
-        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        el.addEventListener('mousemove', function(e) {
-          var rect = el.getBoundingClientRect();
-          var x = e.clientX - rect.left - rect.width / 2;
-          var y = e.clientY - rect.top - rect.height / 2;
-          el.style.transition = 'none';
-          el.style.transform = 'translate(' + (x * 0.3) + 'px, ' + (y * 0.3) + 'px)';
-        });
-        el.addEventListener('mouseleave', function() {
-          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-          el.style.transform = 'translate(0px, 0px)';
-        });
-        el.addEventListener('mouseenter', function() { el.style.transition = 'none'; });
-      });
-
-      // 3. Magnetic Buttons
-      var magneticElements = document.querySelectorAll('button, .btn, .btn-primary, .btn-outline, .back-top, input[type="submit"], a[style*="background"]');
-      magneticElements.forEach(function(el) {
-        el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        el.addEventListener('mousemove', function(e) {
-          var rect = el.getBoundingClientRect();
-          var x = e.clientX - rect.left - rect.width / 2;
-          var y = e.clientY - rect.top - rect.height / 2;
-          el.style.transition = 'none';
-          el.style.transform = 'translate(' + (x * 0.3) + 'px, ' + (y * 0.3) + 'px)';
-        });
-        el.addEventListener('mouseleave', function() {
-          el.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-          el.style.transform = 'translate(0px, 0px)';
-        });
-        el.addEventListener('mouseenter', function() { el.style.transition = 'none'; });
-      });
-
-      // 4. 3D Tilt for Cards
-      var cards = document.querySelectorAll('.project-card, .skill-card, .profile-card, .timeline-content, .contact-card, .hero-card, .service-card');
-      cards.forEach(function(card) {
-        card.style.transformStyle = 'preserve-3d';
-        card.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease';
-        card.addEventListener('mousemove', function(e) {
-          var rect = card.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-          var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-          card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.02)';
-          card.style.transition = 'transform 0.1s ease-out';
-          card.style.boxShadow = '0 15px 35px rgba(255, 123, 0, 0.15)';
-        });
-        card.addEventListener('mouseleave', function() {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-          card.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease';
-          card.style.boxShadow = '';
-        });
-      });
-
-      // 5. Fiverr Banner: Spotlight Glow & 3D Tilt
-      var banners = document.querySelectorAll('div[style*="background: #1dbf73"]');
-      banners.forEach(function(banner) {
-        banner.style.position = 'relative';
-        banner.style.overflow = 'hidden';
-        banner.style.transformStyle = 'preserve-3d';
-        banner.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease';
-        
-        var glow = document.createElement('div');
-        glow.style.cssText = "position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity 0.3s ease; z-index:1;";
-        glow.style.background = "radial-gradient(circle 150px at 50% 50%, rgba(255, 255, 255, 0.4), transparent 70%)";
-        banner.appendChild(glow);
-
-        Array.from(banner.children).forEach(function(child) {
-          if (child !== glow) {
-            child.style.position = 'relative';
-            child.style.zIndex = '2';
-          }
+        navToggle.addEventListener("click", () => {
+          const isOpen = navMenu.classList.toggle("open");
+          navToggle.classList.toggle("open", isOpen);
+          navToggle.setAttribute("aria-expanded", isOpen);
         });
 
-        banner.addEventListener('mousemove', function(e) {
-          var rect = banner.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          
-          glow.style.background = 'radial-gradient(circle 150px at ' + x + 'px ' + y + 'px, rgba(255, 255, 255, 0.4), transparent 70%)';
-          glow.style.opacity = '1';
-          
-          var rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
-          var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-          banner.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.03)';
-          banner.style.transition = 'transform 0.1s ease-out';
-          banner.style.boxShadow = '0 25px 50px rgba(29, 191, 115, 0.4), 0 0 20px rgba(29, 191, 115, 0.2)';
+        navMenu.querySelectorAll("a").forEach(link => {
+          link.addEventListener("click", () => {
+            navMenu.classList.remove("open");
+            navToggle.classList.remove("open");
+            navToggle.setAttribute("aria-expanded", "false");
+          });
         });
-        
-        banner.addEventListener('mouseleave', function() {
-          glow.style.opacity = '0';
-          banner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-          banner.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease';
-          banner.style.boxShadow = '0 4px 12px rgba(29, 191, 115, 0.2)';
-        });
-      });
 
-      // 6. Logo Spin Easter Egg
-      var logo = document.querySelector('.nav-logo');
-      if (logo) {
-        var logoClicks = 0;
-        logo.addEventListener('click', function(e) {
-          logoClicks++;
-          if (logoClicks === 3) {
-            e.preventDefault();
-            document.body.style.transition = 'transform 1s ease';
-            document.body.style.transform = 'rotate(360deg)';
-            setTimeout(function() { document.body.style.transform = 'none'; }, 1000);
-            logoClicks = 0;
+        window.addEventListener("resize", () => {
+          if (window.innerWidth > 768) {
+            navMenu.classList.remove("open");
+            navToggle.classList.remove("open");
+            navToggle.setAttribute("aria-expanded", "false");
           }
         });
       }
-    });
 
-    // 7. Keyboard Easter Eggs
+      // MAGNETIC BUTTONS
+      const magneticElements = document.querySelectorAll("button, .btn, .back-top, .nav-menu a");
+      magneticElements.forEach(element => {
+        element.addEventListener("mousemove", event => {
+          const rect = element.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const distanceX = event.clientX - centerX;
+          const distanceY = event.clientY - centerY;
+          element.style.transform = `translate3d(${distanceX * 0.3}px, ${distanceY * 0.3}px, 0)`;
+        });
+        element.addEventListener("mouseleave", () => {
+          element.style.transform = "";
+        });
+      });
+
+      // 3D TILT CARDS
+      const tiltElements = document.querySelectorAll(
+        ".project-card, .skill-card, .profile-card, .contact-card, .timeline-content, .hero-card, [style*='#1dbf73']"
+      );
+
+      tiltElements.forEach(card => {
+        card.style.transformStyle = "preserve-3d";
+        card.addEventListener("mousemove", event => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateY = ((x - centerX) / centerX) * 6;
+          const rotateX = ((centerY - y) / centerY) * 6;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+
+          if (card.matches("[style*='#1dbf73']")) {
+            card.style.setProperty("--spotlight-x", `${x}px`);
+            card.style.setProperty("--spotlight-y", `${y}px`);
+          }
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+          card.style.removeProperty("--spotlight-x");
+          card.style.removeProperty("--spotlight-y");
+        });
+      });
+    })();
+
+    // EASTER EGGS (kept separate so they run on CV page too)
     document.addEventListener("keydown", function(e) {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (!window._keyBuffer) window._keyBuffer = "";
@@ -204,16 +157,16 @@
       }
       if (window._keyBuffer.includes("job")) {
         window._keyBuffer = "";
-        var toast = document.createElement('div');
+        var toast = document.createElement("div");
         toast.style.cssText = "position:fixed; bottom:20px; right:20px; background:#1a1a1a; color:#fff; padding:16px 24px; border-radius:8px; z-index:99999; box-shadow:0 4px 12px rgba(0,0,0,0.3); font-family:monospace; border-left:4px solid #ff7b00;";
         toast.innerHTML = "<strong>💼 Secret Job Offer!</strong><br>Check the Developer Console (F12).";
         document.body.appendChild(toast);
-        setTimeout(function() { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.5s'; }, 3000);
+        setTimeout(function() { toast.style.opacity = "0"; toast.style.transition = "opacity 0.5s"; }, 3000);
         setTimeout(function() { toast.remove(); }, 3500);
       }
       if (window._keyBuffer.includes("hire")) {
         window._keyBuffer = "";
-        var title = document.querySelector('h1');
+        var title = document.querySelector("h1");
         if (title) {
           var originalText = title.innerText;
           title.innerText = "Hire Me? Let's Talk!";
@@ -223,23 +176,21 @@
       }
       if (window._keyBuffer.includes("matrix")) {
         window._keyBuffer = "";
-        document.body.style.transition = 'filter 1s ease';
-        document.body.style.filter = 'invert(1) hue-rotate(180deg)';
-        setTimeout(function() { document.body.style.filter = 'none'; }, 3000);
+        document.body.style.transition = "filter 1s ease";
+        document.body.style.filter = "invert(1) hue-rotate(180deg)";
+        setTimeout(function() { document.body.style.filter = "none"; }, 3000);
       }
     });
 
-    // 8. Maintenance Auto-Redirect (LOCALHOST ONLY)
-    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (isLocal && !window.location.pathname.includes('maintenance.html')) {
+    // MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
+    var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (isLocal && !window.location.pathname.includes("maintenance.html")) {
       setInterval(function() {
-        fetch('/api/site', { cache: 'no-store' })
+        fetch("/api/site", { cache: "no-store" })
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
-            if (isMaint) {
-              window.location.href = '/maintenance.html';
-            }
+            if (isMaint) window.location.href = "/maintenance.html";
           }).catch(function() {});
       }, 3000);
     }
