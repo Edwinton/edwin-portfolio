@@ -149,8 +149,16 @@ def prepare(site):
     for skill in cv.get("skills", []): skill["tags_html"] = tags_html(skill["tags"])
     for project in cv.get("projects", []):
         project["tags_html"] = tags_html(project["tags"])
-        if project.get("href"): project["title_html"] = f'<a href="{project["href"]}" target="_blank" rel="noopener">{project["title"]}</a>'
-        else: project["title_html"] = project["title"]
+        title = project["title"]
+        if project.get("live") and project.get("source"):
+            title_html = f'<a href="{project["live"]}" target="_blank" rel="noopener">{title}</a> <span style="font-size:0.75rem; font-weight:normal; color:#555;">(<a href="{project["live"]}" target="_blank" rel="noopener" style="color:#555;">Live</a> | <a href="{project["source"]}" target="_blank" rel="noopener" style="color:#555;">Source</a>)</span>'
+        elif project.get("live"):
+            title_html = f'<a href="{project["live"]}" target="_blank" rel="noopener">{title}</a> <span style="font-size:0.75rem; font-weight:normal; color:#555;">(<a href="{project["live"]}" target="_blank" rel="noopener" style="color:#555;">Live</a>)</span>'
+        elif project.get("source"):
+            title_html = f'<a href="{project["source"]}" target="_blank" rel="noopener">{title}</a> <span style="font-size:0.75rem; font-weight:normal; color:#555;">(<a href="{project["source"]}" target="_blank" rel="noopener" style="color:#555;">Source</a>)</span>'
+        else:
+            title_html = title
+        project["title_html"] = title_html
     
     if "cv" in pages and "interests" in pages["cv"]:
         pages["cv"]["interests_html"] = "".join(f"<li>{item}</li>" for item in pages["cv"]["interests"])
