@@ -27,6 +27,26 @@
       input, textarea, select { cursor: text !important; }
     }
   </style>
+  <style>
+    /* HIDE WEBSITE CHROME ON CV PAGE */
+    body.is-cv .site-header,
+    body.is-cv .site-footer,
+    body.is-cv .cursor-swarm {
+      display: none !important;
+    }
+    body.is-cv {
+      background: #f5f5f5 !important; /* Grey background for the paper to stand out */
+    }
+    /* Ensure the CV document fills the screen width nicely */
+    body.is-cv .cv-page {
+      padding: 40px 24px !important;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
 
@@ -190,6 +210,13 @@
             if (isMaint) window.location.href = "/maintenance.html";
           }).catch(function() {});
       }, 3000);
+    }
+  </script>
+  <script>
+    if (window.location.pathname.includes('cv.html')) {
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("is-cv");
+      });
     }
   </script>
 </body>
