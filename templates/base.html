@@ -196,23 +196,22 @@
       }
     });
 
-    // 5. MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
-    var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    if (isLocal) {
+
+    }
+  </script>
+    // 5. MAINTENANCE REDIRECT (Works on both Localhost and GitHub Pages)
+    if (!window.location.pathname.includes("maintenance.html")) {
       setInterval(function() {
-        fetch("/api/site", { cache: "no-store" })
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
-            if (isMaint && !window.location.pathname.includes("maintenance.html")) {
-              window.location.href = "/maintenance.html";
-            }
-            if (!isMaint && window.location.pathname.includes("maintenance.html")) {
-              window.location.href = "/index.html";
+        // Check for a static file called "maintenance.txt"
+        // We add a timestamp to prevent browser caching
+        fetch('/edwin-portfolio/maintenance.txt?t=' + Date.now(), { method: 'HEAD' })
+          .then(function(r) {
+            // If the file exists (status 200), redirect to the maintenance page
+            if (r.status === 200) {
+              window.location.href = '/edwin-portfolio/maintenance.html';
             }
           }).catch(function() {});
       }, 3000);
     }
-  </script>
 </body>
 </html>
