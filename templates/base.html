@@ -62,11 +62,12 @@
       var navToggle = document.getElementById("navToggle");
       var navMenu = document.getElementById("navMenu");
       if (navToggle && navMenu) {
-        navToggle.addEventListener("click", function() {
+        navToggle.addEventListener("click", function(e) {
+          e.preventDefault();
           navMenu.classList.toggle("open");
           navToggle.classList.toggle("open");
         });
-      }
+      }      }
 
       // SKIP ALL ANIMATIONS ON CV PAGE
       if (window.location.pathname.includes('cv.html')) return;
