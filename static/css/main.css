@@ -100,68 +100,60 @@ p  { color: var(--ink-soft); }
 }
 .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
 
-/* MOBILE: Horizontal Scroll Menu */
-@media (max-width: 768px) {
-  .nav {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-    padding: 16px 24px 0;
-  }
-  
-  .nav-logo {
-    margin-bottom: 16px;
-  }
-
-  .nav-menu {
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    gap: 20px;
-    /* Hide scrollbar for clean look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .nav-menu::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .nav-menu a {
-    font-size: 0.95rem;
-    padding: 8px 0;
-  }
-}
 
 /* ============================================
-   Footer
+   HERO & PROFILE LAYOUT FIX
    ============================================ */
-.site-footer {
-  background: var(--ink);
-  color: #c8c8c2;
-  padding: 32px 0;
-  font-size: 0.88rem;
-  margin-top: 96px;
+.hero {
+  padding: 96px 0;
+  background: radial-gradient(1000px 500px at 88% -15%, var(--green-50, #fffaf5), transparent 60%);
+  border-bottom: 1px solid var(--border);
 }
-.footer-inner {
-  display: flex;
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 48px;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
 }
-.footer-logo {
-  font-family: var(--mono);
-  font-weight: 700;
-  color: var(--white);
-  font-size: 1rem;
+.hero-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,0.04));
+  text-align: center;
 }
-.footer-logo span { color: var(--green-500); }
-.back-top {
-  color: var(--white);
+.profile-circle {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-700, #ff7b00), var(--green-900, #d65a00));
+  color: white;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono, monospace);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.profile-role {
+  color: var(--green-700, #ff7b00);
   font-weight: 600;
   font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  margin-bottom: 24px;
 }
-.back-top:hover { color: var(--green-500); }
+.profile-meta {
+  display: grid;
+  gap: 12px;
+  text-align: left;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.profile-meta li { display: flex; align-items: center; gap: 12px; }
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero-card { max-width: 360px; margin: 0 auto; }
+}
