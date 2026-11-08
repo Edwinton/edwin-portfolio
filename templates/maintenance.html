@@ -35,6 +35,9 @@
       text-align: center;
       position: relative;
       z-index: 10;
+      /* 3D Tilt CSS */
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
     }
 
     .maintenance-card h1 {
@@ -99,7 +102,8 @@
     ET<span>.</span>
   </a>
 
-  <main class="maintenance-card">
+  <!-- ID added for 3D Tilt targeting -->
+  <main class="maintenance-card" id="magnetic-card">
     <div class="eyebrow" style="text-align: center;">SYSTEM UPGRADE</div>
     <h1>Under Maintenance</h1>
     <p>I'm currently updating the portfolio to make it even better.<br>While you wait, play a quick game of Code Breaker!</p>
@@ -127,6 +131,9 @@
   </main>
 
   <script>
+    // ==========================================
+    // 1. GAME LOGIC (Fixed Row Selection)
+    // ==========================================
     const MAX_TRIES = 10;
     const COLORS = 4;
     let secretCode = [];
@@ -136,20 +143,17 @@
     let gameActive = false;
 
     function initGame() {
-      // Generate secret code
       secretCode = Array.from({length: COLORS}, () => Math.floor(Math.random() * 4) + 1);
       currentGuess = Array(COLORS).fill(0);
       currentRow = 0;
       currentColor = 1;
       gameActive = true;
 
-      // Reset UI
       document.getElementById('message').innerText = "";
       document.getElementById('message').className = "msg";
       document.getElementById('start-btn').classList.add('hidden');
       document.getElementById('game-container').classList.add('active');
       
-      // Update color picker
       document.querySelectorAll('.color-picker .slot').forEach((s, i) => {
         s.className = `slot c${i+1}` + (i === 0 ? ' selected' : '');
       });
@@ -170,7 +174,6 @@
         row.className = 'row';
         row.id = `row-${i}`;
 
-        // Create 4 slots
         for (let j = 0; j < COLORS; j++) {
           const slot = document.createElement('div');
           slot.className = 'slot';
@@ -184,7 +187,6 @@
           row.appendChild(slot);
         }
 
-        // Feedback area
         const feedback = document.createElement('div');
         feedback.className = 'feedback';
         feedback.id = `feedback-${i}`;
@@ -202,7 +204,8 @@
     }
 
     function fillSlot(index) {
-      if (!gameActive || currentRow !== 0) return;
+      // FIX: Allow clicking on ANY current row, not just row 0
+      if (!gameActive) return;
       currentGuess[index] = currentColor;
       const slot = document.getElementById(`slot-${currentRow}-${index}`);
       slot.className = `slot c${currentColor}`;
@@ -216,12 +219,10 @@
         return;
       }
 
-      // Calculate feedback
       let exact = 0, partial = 0;
       let tempSecret = [...secretCode];
       let tempGuess = [...currentGuess];
 
-      // First pass: exact matches
       for (let i = 0; i < COLORS; i++) {
         if (tempGuess[i] === tempSecret[i]) {
           exact++;
@@ -229,7 +230,6 @@
           tempGuess[i] = null;
         }
       }
-      // Second pass: partial matches
       for (let i = 0; i < COLORS; i++) {
         if (tempGuess[i] !== null && tempSecret.includes(tempGuess[i])) {
           partial++;
@@ -237,7 +237,6 @@
         }
       }
 
-      // Render feedback pegs
       const feedback = document.getElementById(`feedback-${currentRow}`);
       for (let i = 0; i < exact; i++) {
         const peg = document.createElement('div'); peg.className = 'fb-peg correct'; feedback.appendChild(peg);
@@ -245,12 +244,10 @@
       for (let i = 0; i < partial; i++) {
         const peg = document.createElement('div'); peg.className = 'fb-peg partial'; feedback.appendChild(peg);
       }
-      // Fill empty
       for (let i = exact + partial; i < COLORS; i++) {
         const peg = document.createElement('div'); peg.className = 'fb-peg'; feedback.appendChild(peg);
       }
 
-      // Check win/loss
       if (exact === COLORS) {
         gameActive = false;
         showMessage("You cracked the code! 🎉", "win");
@@ -270,10 +267,11 @@
         return;
       }
 
-      // Make next row active
+      // FIX: Attach click events to the NEXT row
       for (let j = 0; j < COLORS; j++) {
-        document.getElementById(`slot-${currentRow}-${j}`).style.cursor = 'pointer';
-        document.getElementById(`slot-${currentRow}-${j}`).onclick = () => fillSlot(j);
+        const nextSlot = document.getElementById(`slot-${currentRow}-${j}`);
+        nextSlot.style.cursor = 'pointer';
+        nextSlot.onclick = () => fillSlot(j);
       }
     }
 
@@ -282,6 +280,46 @@
       msg.innerText = text;
       msg.className = `msg ${type}`;
     }
+
+    // ==========================================
+    // 2. 3D TILT & MAGNETIC EFFECTS
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function() {
+      // A. Magnetic Pull for ALL Buttons
+      const magneticElements = document.querySelectorAll("button, .btn");
+      magneticElements.forEach(element => {
+        element.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        element.addEventListener("mousemove", event => {
+          const rect = element.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const distanceX = event.clientX - centerX;
+          const distanceY = event.clientY - centerY;
+          element.style.transform = `translate3d(${distanceX * 0.3}px, ${distanceY * 0.3}px, 0)`;
+        });
+        element.addEventListener("mouseleave", () => {
+          element.style.transform = "";
+        });
+      });
+
+      // B. 3D Tilt for the Main Card
+      const card = document.getElementById("magnetic-card");
+      if (card) {
+        card.addEventListener("mousemove", event => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateY = ((x - centerX) / centerX) * 4; // Max 4 degrees
+          const rotateX = ((centerY - y) / centerY) * 4;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+        });
+      }
+    });
   </script>
 </body>
 </html>
