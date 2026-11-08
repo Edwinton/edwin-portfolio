@@ -119,6 +119,9 @@
 
       tiltElements.forEach(card => {
         card.style.transformStyle = "preserve-3d";
+        // Remove any inline transition that might block the JS
+        card.style.transition = "transform 0.1s ease-out, box-shadow 0.1s ease-out"; 
+
         card.addEventListener("mousemove", event => {
           const rect = card.getBoundingClientRect();
           const x = event.clientX - rect.left;
@@ -127,6 +130,7 @@
           const centerY = rect.height / 2;
           const rotateY = ((x - centerX) / centerX) * 6;
           const rotateX = ((centerY - y) / centerY) * 6;
+
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
 
           if (card.matches("[style*='#1dbf73']")) {
@@ -137,11 +141,12 @@
 
         card.addEventListener("mouseleave", () => {
           card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+          card.style.transition = "transform 0.4s ease, box-shadow 0.4s ease";
           card.style.removeProperty("--spotlight-x");
           card.style.removeProperty("--spotlight-y");
         });
       });
-    })();
+})();
 
     // EASTER EGGS (kept separate so they run on CV page too)
     document.addEventListener("keydown", function(e) {
