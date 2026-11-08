@@ -209,6 +209,9 @@
       });
     }
   </script>
+     // Check every 3 seconds
+    }
+  <script>
     // MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
     var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
     if (isLocal) {
@@ -218,17 +221,18 @@
           .then(function(data) {
             var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
             
-            // If we are on the main site but maintenance is ON, redirect to maintenance page
+            // If maintenance is ON and we are on the main site, redirect to the game
             if (isMaint && !window.location.pathname.includes("maintenance.html")) {
               window.location.href = "/maintenance.html";
             }
             
-            // If we are on the maintenance page but maintenance is OFF, redirect back to home
+            // If maintenance is OFF and we are on the game page, redirect to the homepage
             if (!isMaint && window.location.pathname.includes("maintenance.html")) {
               window.location.href = "/index.html";
             }
           }).catch(function() {});
-      }, 3000); // Check every 3 seconds
+      }, 3000);
     }
+  </script>
 </body>
 </html>
