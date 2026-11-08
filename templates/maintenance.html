@@ -12,19 +12,17 @@
   <link rel="stylesheet" href="https://edwinton.github.io/edwin-portfolio/static/css/main.css" />
   
   <style>
-    /* Page background: Allow scrolling if the card is tall */
     body { 
       background-color: var(--surface, #faf9f7) !important; 
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 24px; /* Top and bottom padding for breathing room */
+      padding: 40px 24px;
       margin: 0;
       font-family: var(--font, 'Inter', sans-serif);
     }
 
-    /* The Card */
     .maintenance-card {
       background: var(--white, #ffffff) !important;
       border: 1px solid var(--border, #e5e5e0);
@@ -37,10 +35,9 @@
       position: relative;
       z-index: 10;
       color: var(--ink, #1a1a1a);
-      margin-top: 40px; /* Push down from top */
+      margin-top: 40px;
       margin-bottom: 40px;
       
-      /* Spotlight setup */
       overflow: hidden;
       transform-style: preserve-3d;
       transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
@@ -69,7 +66,6 @@
     
     .instructions { font-size: 0.8rem; color: var(--ink-mute) !important; margin-bottom: 12px; line-height: 1.5; }
 
-    /* Compact Game Board */
     .board { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
     .row { display: flex; justify-content: center; gap: 6px; align-items: center; }
     
@@ -80,19 +76,16 @@
     }
     .slot:hover { border-color: var(--green-500); }
     
-    /* Colors */
     .slot.c1 { background: #ff7b00; border-color: #ff7b00; } 
     .slot.c2 { background: #1a1a1a; border-color: #1a1a1a; } 
     .slot.c3 { background: #e5e5e0; border-color: #d6d6d0; } 
     .slot.c4 { background: #ffffff; border-color: #cccccc; } 
     
-    /* Feedback */
     .feedback { display: flex; gap: 2px; width: 28px; flex-wrap: wrap; justify-content: center; }
     .fb-peg { width: 6px; height: 6px; border-radius: 50%; background: transparent; border: 1px solid var(--border); }
     .fb-peg.correct { background: #1a1a1a; border-color: #1a1a1a; }
     .fb-peg.partial { background: #e5e5e0; border-color: #d6d6d0; }
 
-    /* Controls */
     .controls { display: flex; justify-content: center; gap: 12px; margin-top: 12px; }
     .color-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
     .color-picker .slot { width: 28px; height: 28px; cursor: pointer; }
@@ -116,10 +109,8 @@
     <div class="eyebrow" style="text-align: center;">SYSTEM UPGRADE</div>
     <h1>Under Maintenance</h1>
     <p>Play a quick game while I update the site!</p>
-    
-    <button class="btn btn-primary btn-small" id="reset-btn" onclick="startGame()" style="display: none; margin-bottom: 16px;">Play Again</button>
 
-    <div class="game-container" id="game-container">
+    <div class="game-container active" id="game-container">
       <p class="instructions">
         Guess the 4-color code in 6 tries.<br>
         <span style="color:#1a1a1a">■</span> Right color, right spot. 
@@ -135,16 +126,18 @@
         <div class="slot c4" onclick="selectColor(4, this)"></div>
       </div>
 
-      <div class="controls">
+      <div class="controls" id="main-controls">
         <button class="btn btn-outline btn-small" onclick="checkGuess()">Submit Guess</button>
       </div>
 
       <div class="msg" id="message"></div>
+      
+      <!-- The Play Again button is now placed at the very bottom -->
+      <button class="btn btn-primary btn-small" id="reset-btn" onclick="startGame()" style="display: none; margin-top: 16px;">Play Again</button>
     </div>
   </main>
 
   <script>
-    // Start game immediately so it's not blank
     window.onload = function() {
       startGame();
     };
@@ -166,8 +159,8 @@
 
       document.getElementById('message').innerText = "";
       document.getElementById('message').className = "msg";
-      document.getElementById('game-container').classList.add('active');
-      document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('main-controls').style.display = 'flex';
+      document.getElementById('reset-btn').style.display = 'none'; 
       
       document.querySelectorAll('.color-picker .slot').forEach((s, i) => {
         s.className = `slot c${i+1}` + (i === 0 ? ' selected' : '');
@@ -265,6 +258,7 @@
       if (exact === COLORS) {
         gameActive = false;
         showMessage("You cracked the code! 🎉", "win");
+        document.getElementById('main-controls').style.display = 'none';
         document.getElementById('reset-btn').style.display = 'inline-block';
         return;
       }
@@ -275,6 +269,7 @@
       if (currentRow >= MAX_TRIES) {
         gameActive = false;
         showMessage(`Game Over. Code: ${secretCode.join(" - ")}`, "lose");
+        document.getElementById('main-controls').style.display = 'none';
         document.getElementById('reset-btn').style.display = 'inline-block';
         return;
       }
@@ -292,7 +287,6 @@
       msg.className = `msg ${type}`;
     }
 
-    // 3D TILT & GLOW EFFECTS
     document.addEventListener("DOMContentLoaded", function() {
       const card = document.getElementById("magnetic-card");
       const buttons = document.querySelectorAll("button, .btn");
