@@ -87,8 +87,13 @@
       document.getElementById('tab-inbox').classList.add('active');
       loadMessages();
     } else if (tab === 'analytics') {
-      document.getElementById('view-analytics').style.display = 'block';
-      document.getElementById('tab-analytics').classList.add('active');
+      // Open in a new tab
+      window.open('https://edwinton.goatcounter.com', '_blank');
+      
+      // Reset to inbox visually
+      document.getElementById('view-inbox').style.display = 'block';
+      document.getElementById('tab-inbox').classList.add('active');
+      document.getElementById('tab-analytics').classList.remove('active');
     }
   }
 
