@@ -1,22 +1,27 @@
 /* ============================================
-   CV Page Design (Clean & Modern)
+   CV Page Styles
    ============================================ */
 
-/* The grey background for the page */
-body.is-cv {
+/* The grey background */
+body {
   background-color: #f0f2f5 !important;
 }
 
-/* Center the CV document on the page */
+/* Make header transparent so it blends with the grey */
+.site-header {
+  background: rgba(240, 242, 245, 0.85) !important;
+  border-bottom: 1px solid #e5e5e0 !important;
+}
+
+/* The white paper */
 .cv-page {
   padding: 60px 24px !important;
-  min-height: calc(100vh - 68px); /* Adjust based on your header height */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* The white paper */
 .cv-doc {
   background: #ffffff !important;
   border: 1px solid #e5e5e0 !important;
@@ -30,7 +35,7 @@ body.is-cv {
   line-height: 1.5 !important;
 }
 
-/* The Download Button container */
+/* Download Button */
 .cv-toolbar {
   display: flex;
   justify-content: flex-end;
@@ -39,7 +44,6 @@ body.is-cv {
   margin-bottom: 20px;
 }
 
-/* The Download Button */
 .btn-mono {
   background: #ffffff !important;
   color: #1a1a1a !important;
@@ -51,9 +55,6 @@ body.is-cv {
   cursor: pointer !important;
   transition: all 0.2s ease !important;
   text-decoration: none !important;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .btn-mono:hover {
@@ -62,55 +63,21 @@ body.is-cv {
   border-color: #1a1a1a !important;
 }
 
-/* CV Typography Adjustments */
-.cv-doc h1 {
-  font-size: 2.2rem !important;
-  font-weight: bold !important;
-  letter-spacing: -0.02em !important;
-  margin-bottom: 8px !important;
-  color: #000000 !important;
-}
+/* Typography */
+.cv-doc h1 { font-size: 2.2rem !important; font-weight: bold !important; margin-bottom: 8px !important; }
+.cv-doc h2 { font-size: 1.1rem !important; font-weight: bold !important; text-transform: uppercase !important; border-bottom: 1.5px solid #000000 !important; padding-bottom: 4px !important; margin-top: 32px !important; margin-bottom: 16px !important; }
+.cv-doc h3 { font-size: 1.1rem !important; font-weight: bold !important; margin-bottom: 4px !important; }
 
-.cv-doc h2 {
-  font-size: 1.1rem !important;
-  font-weight: bold !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  border-bottom: 1.5px solid #000000 !important;
-  padding-bottom: 4px !important;
-  margin-top: 32px !important;
-  margin-bottom: 16px !important;
-  color: #000000 !important;
-}
+/* Fix the table overlap (Live/Source links) */
+.cv-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.cv-table th, .cv-table td { text-align: left; vertical-align: top; padding: 8px 0; border-bottom: 1px solid #eeeeee; }
+.cv-table thead th { border-bottom: 1.5px solid #000000; padding-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; }
 
-.cv-doc h3 {
-  font-size: 1.1rem !important;
-  font-weight: bold !important;
-  color: #000000 !important;
-  margin-bottom: 4px !important;
-}
+/* Make the project links sit neatly under the title */
+.cv-td-project a { display: inline-block; margin-right: 4px; color: #1a1a1a; font-weight: 600; text-decoration: underline; }
+.cv-td-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; padding: 0; list-style: none; }
+.cv-td-tags li { font-size: 0.75rem; padding: 2px 6px; border: 1px solid #ccc; border-radius: 4px; }
 
-/* Adjust the tables for a cleaner look */
-.cv-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-}
-.cv-table th, .cv-table td {
-  text-align: left;
-  vertical-align: top;
-  padding: 8px 0;
-  border-bottom: 1px solid #eeeeee;
-}
-.cv-table thead th {
-  border-bottom: 1.5px solid #000000;
-  padding-bottom: 4px;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Mobile Responsiveness for CV */
 @media (max-width: 768px) {
   .cv-page { padding: 24px 12px !important; }
   .cv-doc { padding: 32px 24px !important; }
