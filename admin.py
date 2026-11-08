@@ -8,6 +8,7 @@ import json
 import secrets
 import subprocess
 import sys
+import urllib.request
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime
@@ -25,11 +26,8 @@ class Handler(SimpleHTTPRequestHandler):
 
     def translate_path(self, path):
         clean = path.split("?", 1)[0].split("#", 1)[0]
-        
-        # Remove the GitHub Pages prefix for local testing
         if clean.startswith("/edwin-portfolio/"):
             clean = clean.replace("/edwin-portfolio/", "/", 1)
-            
         if clean in ("/admin", "/admin/", "/admin.html"):
             return str(ADMIN / "index.html")
         if clean.startswith("/admin/"):
@@ -37,7 +35,7 @@ class Handler(SimpleHTTPRequestHandler):
         return super().translate_path(clean)
 
     def do_GET(self):
-        # API: Get all messages
+        # 1. API: Messages
         if self.path == "/api/messages":
             try:
                 if not MESSAGES_FILE.exists():
@@ -47,8 +45,39 @@ class Handler(SimpleHTTPRequestHandler):
             except Exception as e:
                 self._json(500, {"error": str(e)})
             return
-            
-        # API: Get site data (for the old admin interface)
+
+        # 2. API: Analytics (GoatCounter)
+        if self.path == "/api/analytics":
+            try:
+                token = "1hinkxh1horej1mb273ezdddhjta4w6acvo0gybswlk4il1lf1"
+                base_url = "https://edwinton.goatcounter.com/api/v0/stats"
+                
+                def fetch(endpoint):
+                    req = urllib.request.Request(f"{base_url}/{endpoint}?limit=5")
+                    req.add_header("Authorization", f"Bearer {token}")
+                    req.add_header("Content-Type", "application/json")
+                    try:
+                        with urllib.request.urlopen(req) as response:
+                            return json.loads(response.read().decode())
+                    except Exception:
+                        return {"hits": []}
+
+                hits = fetch("hits")
+                locations = fetch("locations")
+                browsers = fetch("browsers")
+                systems = fetch("systems")
+
+                self._json(200, {
+                    "hits": hits.get("hits", []),
+                    "locations": locations.get("hits", []),
+                    "browsers": browsers.get("hits", []),
+                    "systems": systems.get("hits", [])
+                })
+            except Exception as e:
+                self._json(500, {"error": str(e)})
+            return
+
+        # 3. API: Get site data
         if self.path == "/api/site":
             try:
                 self._json(200, json.loads(DATA_FILE.read_text(encoding="utf-8-sig")))
