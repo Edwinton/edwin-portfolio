@@ -21,6 +21,20 @@
     body { opacity: 0; animation: fadeInPage 0.8s ease-in forwards; }
     @keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
+  <style>
+    /* Fiverr Glowing Tilt Effect */
+    .fiverr-banner {
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease !important;
+      transform-style: preserve-3d;
+      will-change: transform, box-shadow;
+    }
+    
+    /* We use a class applied via JS to override the generic .contact-card hover */
+    .fiverr-banner:not(:hover) {
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) !important;
+      box-shadow: 0 10px 25px rgba(29, 191, 115, 0.2) !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -339,5 +353,41 @@
   </script>
   <!-- GoatCounter Analytics -->
   <script data-goatcounter="https://edwinton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- Fiverr Banner Glowing Tilt -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const banner = document.querySelector('.fiverr-banner');
+      if (!banner) return;
+
+      // Prevent the generic magnetic script from overriding this one
+      banner.setAttribute('data-custom-tilt', 'true');
+
+      banner.addEventListener('mousemove', (e) => {
+        const rect = banner.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Calculate rotation (-4 to 4 degrees for subtle pull)
+        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * 4;
+        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * -4; // Pull towards mouse
+        
+        // Apply the pull-tilt 3D transform
+        banner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+        banner.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
+        
+        // Dynamic glow that follows the cursor
+        banner.style.boxShadow = `
+          ${-rotateY * 2}px ${rotateX * 2}px 30px rgba(29, 191, 115, 0.5),
+          0 0 60px rgba(29, 191, 115, 0.2)
+        `;
+      });
+
+      banner.addEventListener('mouseleave', () => {
+        banner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        banner.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease';
+        banner.style.boxShadow = '0 10px 25px rgba(29, 191, 115, 0.2)'; // Default green glow
+      });
+    });
+  </script>
 </body>
 </html>
