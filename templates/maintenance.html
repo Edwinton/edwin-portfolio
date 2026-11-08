@@ -63,37 +63,31 @@
 
     .game-container { display: none; margin-top: 16px; }
     .game-container.active { display: block; }
-    
-    .instructions { font-size: 0.8rem; color: var(--ink-mute) !important; margin-bottom: 12px; line-height: 1.5; }
 
-    .board { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .row { display: flex; justify-content: center; gap: 6px; align-items: center; }
-    
-    .slot {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: var(--surface); border: 2px solid var(--border);
-      cursor: pointer; transition: all 0.2s;
+    /* Memory Game Grid */
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+    .card-slot {
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
     }
-    .slot:hover { border-color: var(--green-500); }
-    
-    .slot.c1 { background: #ff7b00; border-color: #ff7b00; } 
-    .slot.c2 { background: #1a1a1a; border-color: #1a1a1a; } 
-    .slot.c3 { background: #e5e5e0; border-color: #d6d6d0; } 
-    .slot.c4 { background: #ffffff; border-color: #cccccc; } 
-    
-    .feedback { display: flex; gap: 2px; width: 28px; flex-wrap: wrap; justify-content: center; }
-    .fb-peg { width: 6px; height: 6px; border-radius: 50%; background: transparent; border: 1px solid var(--border); }
-    .fb-peg.correct { background: #1a1a1a; border-color: #1a1a1a; }
-    .fb-peg.partial { background: #e5e5e0; border-color: #d6d6d0; }
+    .card-slot:hover { border-color: var(--green-500); }
+    .card-slot.flipped { background: var(--white); border-color: var(--green-500); box-shadow: 0 4px 12px rgba(255,123,0,0.15); }
+    .card-slot.matched { background: var(--green-100); border-color: var(--green-500); cursor: default; }
+    .card-slot .content { opacity: 0; transition: opacity 0.2s; }
+    .card-slot.flipped .content, .card-slot.matched .content { opacity: 1; }
 
     .controls { display: flex; justify-content: center; gap: 12px; margin-top: 12px; }
-    .color-picker { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; }
-    .color-picker .slot { width: 28px; height: 28px; cursor: pointer; }
-    .color-picker .slot.selected { transform: scale(1.15); box-shadow: 0 0 0 3px var(--green-100); }
-
     .msg { font-size: 0.95rem; font-weight: bold; height: 20px; margin-top: 8px; }
     .win { color: var(--green-700); }
-    .lose { color: #d65a00; }
 
     .hidden { display: none !important; }
     .btn-small { padding: 8px 16px !important; font-size: 0.85rem !important; }
@@ -110,185 +104,97 @@
     <h1>Under Maintenance</h1>
     <p>Play a quick game while I update the site!</p>
 
-    <!-- 1. Start Button (Middle) -->
     <button class="btn btn-primary" id="start-btn" onclick="startGame()">Start Game</button>
 
-    <!-- 2. Game Board (Hidden initially) -->
     <div class="game-container" id="game-container">
-      <p class="instructions">
-        Guess the 4-color code in 6 tries.<br>
-        <span style="color:#1a1a1a">■</span> Right color, right spot. 
-        <span style="color:#d6d6d0">■</span> Right color, wrong spot.
-      </p>
+      <p style="font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 12px;">Find all 6 matching pairs.</p>
       
-      <div class="board" id="board"></div>
-      
-      <div class="color-picker">
-        <div class="slot c1 selected" onclick="selectColor(1, this)"></div>
-        <div class="slot c2" onclick="selectColor(2, this)"></div>
-        <div class="slot c3" onclick="selectColor(3, this)"></div>
-        <div class="slot c4" onclick="selectColor(4, this)"></div>
-      </div>
-
-      <div class="controls" id="main-controls">
-        <button class="btn btn-outline btn-small" onclick="checkGuess()">Submit Guess</button>
-      </div>
+      <div class="grid" id="grid"></div>
 
       <div class="msg" id="message"></div>
       
-      <!-- 3. Play Again Button (Bottom) -->
       <button class="btn btn-primary btn-small" id="reset-btn" onclick="startGame()" style="display: none; margin-top: 16px;">Play Again</button>
     </div>
   </main>
 
   <script>
-    const MAX_TRIES = 6;
-    const COLORS = 4;
-    let secretCode = [];
-    let currentGuess = [];
-    let currentRow = 0;
-    let currentColor = 1;
-    let gameActive = false;
+    const ICONS = ["🚀", "💻", "⚙️", "🎨", "🧠", "🔒"];
+    let cards = [];
+    let flipped = [];
+    let matched = 0;
+    let lockBoard = false;
 
     function initGame() {
-      secretCode = Array.from({length: COLORS}, () => Math.floor(Math.random() * 4) + 1);
-      currentGuess = Array(COLORS).fill(0);
-      currentRow = 0;
-      currentColor = 1;
-      gameActive = true;
+      // Duplicate icons to make pairs
+      cards = [...ICONS, ...ICONS].sort(() => Math.random() - 0.5);
+      flipped = [];
+      matched = 0;
+      lockBoard = false;
 
-      document.getElementById('message').innerText = "";
-      document.getElementById('message').className = "msg";
-      
-      // Hide Start Button, Show Game
       document.getElementById('start-btn').classList.add('hidden');
       document.getElementById('game-container').classList.add('active');
-      document.getElementById('main-controls').style.display = 'flex';
-      document.getElementById('reset-btn').style.display = 'none'; 
+      document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('message').innerText = "";
       
-      document.querySelectorAll('.color-picker .slot').forEach((s, i) => {
-        s.className = `slot c${i+1}` + (i === 0 ? ' selected' : '');
-      });
-
-      buildBoard();
+      buildGrid();
     }
 
     function startGame() {
       initGame();
     }
 
-    function buildBoard() {
-      const board = document.getElementById('board');
-      board.innerHTML = '';
+    function buildGrid() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
       
-      for (let i = 0; i < MAX_TRIES; i++) {
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.id = `row-${i}`;
+      cards.forEach((icon, index) => {
+        const card = document.createElement('div');
+        card.className = 'card-slot';
+        card.dataset.index = index;
+        card.dataset.icon = icon;
+        card.innerHTML = `<span class="content">${icon}</span>`;
+        card.onclick = () => flipCard(card);
+        grid.appendChild(card);
+      });
+    }
 
-        for (let j = 0; j < COLORS; j++) {
-          const slot = document.createElement('div');
-          slot.className = 'slot';
-          slot.id = `slot-${i}-${j}`;
-          if (i === 0) {
-            slot.style.cursor = 'pointer';
-            slot.onclick = () => fillSlot(j);
-          } else {
-            slot.style.cursor = 'default';
-          }
-          row.appendChild(slot);
+    function flipCard(card) {
+      if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+      card.classList.add('flipped');
+      flipped.push(card);
+
+      if (flipped.length === 2) {
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      lockBoard = true;
+      const [card1, card2] = flipped;
+
+      if (card1.dataset.icon === card2.dataset.icon) {
+        // Match
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matched++;
+        flipped = [];
+        lockBoard = false;
+
+        if (matched === ICONS.length) {
+          document.getElementById('message').innerText = "You found all pairs! 🎉";
+          document.getElementById('message').className = "msg win";
+          document.getElementById('reset-btn').style.display = 'inline-block';
         }
-
-        const feedback = document.createElement('div');
-        feedback.className = 'feedback';
-        feedback.id = `feedback-${i}`;
-        row.appendChild(feedback);
-
-        board.appendChild(row);
+      } else {
+        // No match
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          flipped = [];
+          lockBoard = false;
+        }, 800);
       }
-    }
-
-    function selectColor(c, el) {
-      if (!gameActive) return;
-      currentColor = c;
-      document.querySelectorAll('.color-picker .slot').forEach(s => s.classList.remove('selected'));
-      el.classList.add('selected');
-    }
-
-    function fillSlot(index) {
-      if (!gameActive) return;
-      currentGuess[index] = currentColor;
-      const slot = document.getElementById(`slot-${currentRow}-${index}`);
-      slot.className = `slot c${currentColor}`;
-    }
-
-    function checkGuess() {
-      if (!gameActive) return;
-      
-      if (currentGuess.includes(0)) {
-        showMessage("Please fill all 4 slots.", "lose");
-        return;
-      }
-
-      let exact = 0, partial = 0;
-      let tempSecret = [...secretCode];
-      let tempGuess = [...currentGuess];
-
-      for (let i = 0; i < COLORS; i++) {
-        if (tempGuess[i] === tempSecret[i]) {
-          exact++;
-          tempSecret[i] = null;
-          tempGuess[i] = null;
-        }
-      }
-      for (let i = 0; i < COLORS; i++) {
-        if (tempGuess[i] !== null && tempSecret.includes(tempGuess[i])) {
-          partial++;
-          tempSecret[tempSecret.indexOf(tempGuess[i])] = null;
-        }
-      }
-
-      const feedback = document.getElementById(`feedback-${currentRow}`);
-      for (let i = 0; i < exact; i++) {
-        const peg = document.createElement('div'); peg.className = 'fb-peg correct'; feedback.appendChild(peg);
-      }
-      for (let i = 0; i < partial; i++) {
-        const peg = document.createElement('div'); peg.className = 'fb-peg partial'; feedback.appendChild(peg);
-      }
-      for (let i = exact + partial; i < COLORS; i++) {
-        const peg = document.createElement('div'); peg.className = 'fb-peg'; feedback.appendChild(peg);
-      }
-
-      if (exact === COLORS) {
-        gameActive = false;
-        showMessage("You cracked the code! 🎉", "win");
-        document.getElementById('main-controls').style.display = 'none';
-        document.getElementById('reset-btn').style.display = 'inline-block';
-        return;
-      }
-
-      currentRow++;
-      currentGuess = Array(COLORS).fill(0);
-
-      if (currentRow >= MAX_TRIES) {
-        gameActive = false;
-        showMessage(`Game Over. Code: ${secretCode.join(" - ")}`, "lose");
-        document.getElementById('main-controls').style.display = 'none';
-        document.getElementById('reset-btn').style.display = 'inline-block';
-        return;
-      }
-
-      for (let j = 0; j < COLORS; j++) {
-        const nextSlot = document.getElementById(`slot-${currentRow}-${j}`);
-        nextSlot.style.cursor = 'pointer';
-        nextSlot.onclick = () => fillSlot(j);
-      }
-    }
-
-    function showMessage(text, type) {
-      const msg = document.getElementById('message');
-      msg.innerText = text;
-      msg.className = `msg ${type}`;
     }
 
     document.addEventListener("DOMContentLoaded", function() {
