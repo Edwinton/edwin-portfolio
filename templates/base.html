@@ -199,17 +199,7 @@
       }
     });
 
-    // MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
-    var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    if (isLocal && !window.location.pathname.includes("maintenance.html")) {
-      setInterval(function() {
-        fetch("/api/site", { cache: "no-store" })
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
-            if (isMaint) window.location.href = "/maintenance.html";
-          }).catch(function() {});
-      }, 3000);
+
     }
   </script>
   <script>
@@ -219,5 +209,26 @@
       });
     }
   </script>
+    // MAINTENANCE AUTO-REDIRECT (LOCALHOST ONLY)
+    var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (isLocal) {
+      setInterval(function() {
+        fetch("/api/site", { cache: "no-store" })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var isMaint = data.site_config && data.site_config.maintenance_mode || data.maintenance_mode;
+            
+            // If we are on the main site but maintenance is ON, redirect to maintenance page
+            if (isMaint && !window.location.pathname.includes("maintenance.html")) {
+              window.location.href = "/maintenance.html";
+            }
+            
+            // If we are on the maintenance page but maintenance is OFF, redirect back to home
+            if (!isMaint && window.location.pathname.includes("maintenance.html")) {
+              window.location.href = "/index.html";
+            }
+          }).catch(function() {});
+      }, 3000); // Check every 3 seconds
+    }
 </body>
 </html>

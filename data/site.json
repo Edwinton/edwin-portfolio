@@ -730,6 +730,6 @@
   },
   "fiverr_url": "https://www.fiverr.com/edwintony141",
   "site_config": {
-    "maintenance_mode": true
+    "maintenance_mode": false
   }
 }
