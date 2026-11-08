@@ -52,15 +52,26 @@
 <body>
   <!-- CV PAGE CSS -->
   <style>
+  /* CV PAGE SPECIFIC STYLES */
   body.is-cv { background-color: #f0f2f5 !important; }
-  body.is-cv .site-header, body.is-cv .site-footer { display: none !important; }
+  
+  /* Make header/footer blend with the grey background */
+  body.is-cv .site-header { background: rgba(240, 242, 245, 0.9) !important; border-bottom: 1px solid #e5e5e0 !important; }
+  body.is-cv .site-footer { background: #e5e5e0 !important; color: #4a4a4a !important; margin-top: 40px !important; }
+  body.is-cv .footer-logo { color: #1a1a1a !important; }
+  body.is-cv .back-top { color: #1a1a1a !important; }
+
+  /* The CV Paper */
   body.is-cv .cv-page { padding: 60px 24px !important; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
   body.is-cv .cv-doc {
     background: #ffffff !important; border: 1px solid #e5e5e0 !important;
     border-radius: 8px !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
     padding: 64px 72px !important; max-width: 850px !important; width: 100%;
     font-family: 'Arial', 'Helvetica', sans-serif !important; color: #000000 !important; line-height: 1.5 !important;
+    margin-top: 20px;
   }
+
+  /* The CV Typography */
   body.is-cv .cv-toolbar { display: flex; justify-content: flex-end; max-width: 850px; width: 100%; margin-bottom: 20px; }
   body.is-cv .btn-mono {
     background: #ffffff !important; color: #1a1a1a !important;
@@ -77,13 +88,13 @@
   body.is-cv .cv-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
   body.is-cv .cv-table th, body.is-cv .cv-table td { text-align: left; vertical-align: top; padding: 8px 0; border-bottom: 1px solid #eeeeee; }
   body.is-cv .cv-table thead th { border-bottom: 1.5px solid #000000; padding-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
   @media (max-width: 768px) {
     body.is-cv .cv-page { padding: 24px 12px !important; }
     body.is-cv .cv-doc { padding: 32px 24px !important; }
     body.is-cv .cv-toolbar { justify-content: center; }
   }
 </style>
-
   <header class="site-header">
     <nav class="nav container">
       <a href="index.html" class="nav-logo">{{ site.brand.wordmark }}<span>{{ site.brand.wordmark_accent }}</span></a>
