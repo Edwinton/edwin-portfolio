@@ -522,7 +522,9 @@
           "href": "https://github.com/Edwinton/omni-share",
           "external": true
         }
-      ]
+      ],
+      "live": "https://omni-share-5ua4.onrender.com/",
+      "source": "https://github.com/Edwinton/omni-share"
     },
     {
       "badge": "Full-stack",
@@ -549,7 +551,9 @@
           "href": "https://github.com/Edwinton/leavemail",
           "external": true
         }
-      ]
+      ],
+      "live": "https://leavemail-bz0z.onrender.com/",
+      "source": "https://github.com/Edwinton/leavemail"
     }
   ],
   "education": [
@@ -665,7 +669,7 @@
           "Tailwind CSS",
           "Gunicorn"
         ],
-        "live": "https://omni-share.onrender.com/",
+        "live": "https://omni-share-5ua4.onrender.com/",
         "source": "https://github.com/Edwinton/omni-share"
       },
       {
@@ -677,7 +681,7 @@
           "JavaScript",
           "Web Speech API"
         ],
-        "live": "https://leavemail.onrender.com",
+        "live": "https://leavemail-bz0z.onrender.com/",
         "source": "https://github.com/Edwinton/leavemail"
       },
       {
@@ -730,6 +734,6 @@
   },
   "fiverr_url": "https://www.fiverr.com/edwintony141",
   "site_config": {
-    "maintenance_mode": true
+    "maintenance_mode": false
   }
 }
