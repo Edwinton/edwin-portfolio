@@ -524,7 +524,6 @@
     {
       "badge": "Full-stack",
       "title": "OmniShare — Secure Share Portal",
-      "status": "",
       "problem": "Three common sharing tasks (QR codes, shortened URLs, secure file/text sharing) each require separate tools, most of which want an account. Built one app that does all three without registration.",
       "contribution": "Built end-to-end: Flask backend with QR generation (qrcode + Pillow), URL shortener with click tracking and 96-hour expiry, secure share with password protection and automatic cleanup, plus an HTMX + Tailwind frontend. Deployed with Gunicorn.",
       "learned": "How to structure a multi-feature Flask app, manage in-memory vs. on-disk state, run background cleanup with threading, use HTMX for partial-page updates, and ship a Python web app to production.",
@@ -539,7 +538,7 @@
       "links": [
         {
           "label": "Live Demo",
-          "href": "https://omni-share.onrender.com",
+          "href": "https://omni-share-5ua4.onrender.com/",
           "external": true
         },
         {
@@ -547,14 +546,11 @@
           "href": "https://github.com/Edwinton/omni-share",
           "external": true
         }
-      ],
-      "live": "https://omni-share-5ua4.onrender.com/",
-      "source": "https://github.com/Edwinton/omni-share"
+      ]
     },
     {
       "badge": "Full-stack",
       "title": "LeaveMail — Smart Leave Assistant",
-      "status": "",
       "problem": "Parents often struggle to write formal leave emails — mobile typing is slow, formatting is unclear, and email clients are complex. Existing tools assume desktop use and English fluency.",
       "contribution": "Built a mobile-first Flask app with four email templates, six visual themes, Web Speech API voice input, quick presets, and a full accessibility layer (high contrast, large text, reduced motion). Includes settings, local history, and PIN/password/pattern lock with server-side hashing.",
       "learned": "How to design for accessibility-first use, handle session-cookie limits safely, hash credentials before storage, escape user input to prevent XSS in previews, and ship a Flask app on Render.",
@@ -568,7 +564,7 @@
       "links": [
         {
           "label": "Live Demo",
-          "href": "https://leavemail.onrender.com",
+          "href": "https://leavemail-bz0z.onrender.com/",
           "external": true
         },
         {
@@ -576,9 +572,7 @@
           "href": "https://github.com/Edwinton/leavemail",
           "external": true
         }
-      ],
-      "live": "https://leavemail-bz0z.onrender.com/",
-      "source": "https://github.com/Edwinton/leavemail"
+      ]
     }
   ],
   "education": [
@@ -703,7 +697,7 @@
         "tags": [
           "Flask",
           "Python",
-          "Tailwind CSS",
+          "Tailwind",
           "Gunicorn"
         ],
         "live": "https://omni-share-5ua4.onrender.com/",
@@ -718,7 +712,7 @@
           "JavaScript",
           "Web Speech API"
         ],
-        "live": "https://leavemail-bz0z.onrender.com/",
+        "live": "https://leavemail-bz0z.onrender.com",
         "source": "https://github.com/Edwinton/leavemail"
       },
       {
