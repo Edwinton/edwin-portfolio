@@ -456,6 +456,31 @@
   ],
   "projects": [
     {
+      "badge": "UI/UX & Frontend",
+      "title": "Product Studio",
+      "problem": "Design assignments often stop at static Figma wireframes. The assignment required designing an animal-care MVP, an AI education landing page, and an AI content workflow, but I wanted to prove I could actually build the final, interactive product instead of just drawing it.",
+      "contribution": "Built the entire 5-page interactive site from scratch using pure HTML, CSS, and Vanilla JavaScript. Designed three distinct visual identities (Emerald for Practo, Violet for Education, Coral for Carousel) unified by a shared design system. Wrote a custom JavaScript engine to handle 3D card tilting, mouse-tracking spotlight glows, and magnetic button physics. Built a settings drawer that uses localStorage to persist theme, density, and motion preferences. Built dynamic rendering using HTML <template> tags for provider cards, programme cards, and carousel slides.",
+      "learned": "How to engineer CSS 3D transforms and JavaScript pointer events to create tactile, premium micro-interactions. I also learned how to build a robust design system using CSS custom properties, manage state across multiple pages via local storage, and ship a fully responsive, accessible frontend without relying on external frameworks.",
+      "tags": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Vercel"
+      ],
+      "links": [
+        {
+          "label": "Live Demo",
+          "href": "https://product-studio-pink.vercel.app/",
+          "external": true
+        },
+        {
+          "label": "Source Code",
+          "href": "https://github.com/Edwinton/product-studio",
+          "external": true
+        }
+      ]
+    },
+    {
       "badge": "Featured",
       "title": "THE EXEMPTION",
       "problem": "A college event project exploring public data, hidden trackers, data aggregation, location tracking, behavioural analysis, and digital privacy.",
@@ -660,6 +685,18 @@
       }
     ],
     "projects": [
+      {
+        "title": "Product Studio",
+        "description": "Built a 5-page interactive site with pure HTML, CSS, and JS. Engineered 3D tilt, spotlight glows, and a dynamic theme system.",
+        "tags": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Vercel"
+        ],
+        "live": "https://product-studio-pink.vercel.app/",
+        "source": "https://github.com/Edwinton/product-studio"
+      },
       {
         "title": "OmniShare — Secure Share Portal",
         "description": "Built and deployed a full-stack app replacing three paid tools: QR generation, URL shortening with click tracking and 96-hour expiry, and password-protected file sharing — no sign-up required.",
