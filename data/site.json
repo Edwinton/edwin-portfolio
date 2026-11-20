@@ -215,7 +215,7 @@
                              "eyebrow":  "Curriculum Vitae",
                              "heading":  "Edwin Tony",
                              "subtitle":  "Web Designer & Developer — Available weekdays from 3 PM (15–20 hrs/week); weekends flexible.",
-                             "contact_line":  "Aruvithura, Kottayam, Kerala | <a href=\"mailto:edwinveedon@gmail.com\" style=\"color: inherit; text-decoration: underline;\">edwinveedon@gmail.com</a> | 9061054750 | <a href=\"https://github.com/Edwinton\" target=\"_blank\" rel=\"noopener\" style=\"color: inherit; text-decoration: underline;\">github.com/Edwinton</a> | <a href=\"https://www.linkedin.com/in/edwin-tony-267977393/\" target=\"_blank\" rel=\"noopener\" style=\"color: inherit; text-decoration: underline;\">linkedin.com/in/edwin-tony-267977393</a> | <a href=\"https://edwinton.github.io/edwin-portfolio/\" target=\"_blank\" rel=\"noopener\" style=\"color: inherit; text-decoration: underline;\">edwinton.github.io/edwin-portfolio</a>",
+                             "contact_line":  "Aruvithura, Kottayam, Kerala | <a href=\"mailto:edwinveedon@gmail.com\" color=\"#1a2332\">edwinveedon@gmail.com</a> | 9061054750 | <a href=\"https://github.com/Edwinton\" color=\"#1a2332\">github.com/Edwinton</a> | <a href=\"https://www.linkedin.com/in/edwin-tony-267977393/\" color=\"#1a2332\">linkedin.com/in/edwin-tony-267977393</a> | <a href=\"https://edwinton.github.io/edwin-portfolio/\" color=\"#1a2332\">edwinton.github.io/edwin-portfolio</a>",
                              "sections":  [
                                               "cv"
                                           ],
@@ -456,6 +456,27 @@
                ],
     "projects":  [
                      {
+                         "badge":  "3D / WebGL",
+                         "title":  "Immersive 3D Chair — Scroll & Hover Experience",
+                         "problem":  "Most product pages show a chair as a flat image. I wanted to see whether a single, dependency-light HTML file could make a physical object feel present - one that responds to the visitor's scroll and cursor instead of just sitting on the page.",
+                         "contribution":  "Built a single-page 3D experience with Three.js. Rendered a CC0 GLB folding outdoor chair, wired scroll position to a full 360-degree Y-axis rotation using GSAP-inspired easing, and added a localized point/area light that tracks the cursor in screen space and highlights only the surface directly beneath it. Responsive resize handling, no build step, one HTML file.",
+                         "learned":  "How Three.js scene graphs, GLB loaders, and screen-space raycasting fit together; how to map scroll progress to rotation without jank; how to project a cursor position into world space so a light lands on the surface under it.",
+                         "tags":  [
+                                      "Three.js",
+                                      "WebGL",
+                                      "JavaScript",
+                                      "HTML",
+                                      "GLB"
+                                  ],
+                         "links":  [
+                                       {
+                                           "label":  "Live Demo",
+                                           "href":  "https://super-kleicha-f5d29b.netlify.app/",
+                                           "external":  true
+                                       }
+                                   ]
+                     },
+                     {
                          "badge":  "UI/UX & Frontend",
                          "title":  "Product Studio",
                          "problem":  "Design assignments often stop at static Figma wireframes. The assignment required designing an animal-care MVP, an AI education landing page, and an AI content workflow, but I wanted to prove I could actually build the final, interactive product instead of just drawing it.",
@@ -679,6 +700,19 @@
                               }
                           ],
                "projects":  [
+                                {
+                                    "title":  "Immersive 3D Chair — Scroll & Hover Experience",
+                                    "description":  "Single-file Three.js experience: a CC0 GLB folding chair rotates 360 degrees on scroll, with a cursor-tracked area light that highlights only the surface under the pointer.",
+                                    "tags":  [
+                                                 "Three.js",
+                                                 "WebGL",
+                                                 "JavaScript",
+                                                 "HTML",
+                                                 "GLB"
+                                             ],
+                                    "live":  "https://super-kleicha-f5d29b.netlify.app/",
+                                    "source":  ""
+                                },
                                 {
                                     "title":  "Product Studio",
                                     "description":  "Built a 5-page interactive site with pure HTML, CSS, and JS. Engineered 3D tilt, spotlight glows, and a dynamic theme system.",

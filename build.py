@@ -357,13 +357,15 @@ def build_all():
     print("Copying static assets...")
     shutil.copytree(STATIC, OUT / "static", dirs_exist_ok=True)
 
-    print("Generating CV PDF...")
-    try:
-        import build_pdf
-        importlib.reload(build_pdf)
-        build_pdf.build()
-    except Exception as e:
-        print(f"  WARN: PDF generation failed: {e}")
+    # PDF is uploaded manually to public/Edwin_Tony_CV.pdf - no auto-generation.
+    # To re-enable, uncomment below and make sure build_pdf.py works:
+    # print("Generating CV PDF...")
+    # try:
+    #     import build_pdf
+    #     importlib.reload(build_pdf)
+    #     build_pdf.build()
+    # except Exception as e:
+    #     print(f"  WARN: PDF generation failed: {e}")
 
     print(f"\nDone -> {OUT}")
 
