@@ -50,15 +50,19 @@
       }
     }
   </style>
-  <!-- Maintenance Redirect -->
+    <!-- Maintenance Redirect (relative - works on Netlify AND GitHub Pages) -->
   <script>
-    if (window.location.pathname !== '/maintenance.html' && window.location.pathname !== '/edwin-portfolio/maintenance.html') {
-      fetch('/api/site').then(r => r.json()).then(data => {
-        if (data.site_config && data.site_config.maintenance_mode) {
-          window.location.href = '/edwin-portfolio/maintenance.html';
-        }
-      }).catch(() => {});
-    }
+    (function () {
+      if (/maintenance\.html$/.test(location.pathname)) return;
+      fetch('/api/site')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (data) {
+          if (data && data.site_config && data.site_config.maintenance_mode) {
+            location.replace('maintenance.html');
+          }
+        })
+        .catch(function () {});
+    })();
   </script>
 </head>
 <body>

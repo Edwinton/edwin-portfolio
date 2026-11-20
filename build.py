@@ -334,11 +334,21 @@ def build_all():
         outputs.add(build_page(page_key, page_data, site))
 
     # STANDALONE-MAINTENANCE: emit maintenance.html without base.html wrapper
+    # Always emit it, even if the template is missing, so no redirect 404s.
     _maint = TEMPLATES / "maintenance.html"
+    _maint_out = OUT / "maintenance.html"
     if _maint.exists():
-        (OUT / "maintenance.html").write_text(_maint.read_text(encoding="utf-8"), encoding="utf-8")
-        outputs.add("maintenance.html")
-        print("  ok maintenance.html (standalone)")
+        _maint_out.write_text(_maint.read_text(encoding="utf-8"), encoding="utf-8")
+    else:
+        _maint_out.write_text(
+            '<!doctype html><html lang="en"><meta charset="utf-8">'
+            '<title>Maintenance</title>'
+            '<div style="font-family:system-ui;text-align:center;padding:4rem">'
+            '<h1>We will be right back</h1></div>',
+            encoding="utf-8")
+        print("  WARN: templates/maintenance.html missing - wrote fallback")
+    outputs.add("maintenance.html")
+    print("  ok maintenance.html (standalone)")
     for existing in OUT.glob("*.html"):
         if existing.name not in outputs:
             try: existing.unlink()

@@ -27,3 +27,6 @@ desktop.ini
 .venv/
 venv/
 public/
+
+# Backup files from fix-portfolio.ps1
+*.bak-*
